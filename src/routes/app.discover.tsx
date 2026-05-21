@@ -2,16 +2,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "motion/react";
 import { useMemo, useState } from "react";
 import { Heart, X, Star, MapPin, Sparkles, Users, Briefcase, Home } from "lucide-react";
+import { useLang } from "@/i18n";
 
 export const Route = createFileRoute("/app/discover")({
   component: Discover,
 });
 
 const intentions = [
-  { key: "romance", label: "Romance", icon: Heart, color: "var(--color-romantic)" },
-  { key: "friendship", label: "Friendship", icon: Users, color: "var(--color-friends)" },
-  { key: "networking", label: "Networking", icon: Briefcase, color: "var(--color-pro)" },
-  { key: "community", label: "Family & Community", icon: Home, color: "var(--color-family)" },
+  { key: "romance", labelKey: "discover.intent.romance", icon: Heart, color: "var(--color-romantic)" },
+  { key: "friendship", labelKey: "discover.intent.friendship", icon: Users, color: "var(--color-friends)" },
+  { key: "networking", labelKey: "discover.intent.networking", icon: Briefcase, color: "var(--color-pro)" },
+  { key: "community", labelKey: "discover.intent.community", icon: Home, color: "var(--color-family)" },
 ] as const;
 
 type Person = {
@@ -40,6 +41,7 @@ const cards: Person[] = [
 ];
 
 function Discover() {
+  const { t } = useLang();
   const [intent, setIntent] = useState<(typeof intentions)[number]["key"]>("romance");
   const [index, setIndex] = useState(0);
   const [decisions, setDecisions] = useState<{ name: string; action: "like" | "pass" | "super" }[]>([]);
@@ -56,14 +58,14 @@ function Discover() {
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
         <div>
-          <div className="text-sm text-muted-foreground">Discover</div>
+          <div className="text-sm text-muted-foreground">{t("discover.subtitle")}</div>
           <h1 className="font-display text-3xl sm:text-4xl font-medium mt-1">
-            Connections, curated by <span className="text-gradient-coral">emotional resonance</span>.
+            <span className="text-gradient-coral">{t("discover.title")}</span>
           </h1>
         </div>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <MapPin className="h-3.5 w-3.5" />
-          <span>Local · Global · Travel mode active</span>
+          <span>{t("discover.mode.local")}</span>
         </div>
       </div>
 
@@ -82,7 +84,7 @@ function Discover() {
               }`}
               style={active ? { background: i.color } : undefined}
             >
-              <i.icon className="h-4 w-4" /> {i.label}
+              <i.icon className="h-4 w-4" /> {t(i.labelKey)}
             </button>
           );
         })}
@@ -121,22 +123,21 @@ function Discover() {
         <aside className="space-y-5">
           <div className="rounded-3xl border border-border/70 bg-card p-5">
             <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
-              <Sparkles className="h-3.5 w-3.5" /> Why this person
+              <Sparkles className="h-3.5 w-3.5" /> {t("discover.why")}
             </div>
             <div className="mt-4 space-y-3">
-              <Bar label="Emotional compatibility" value={current.compatibility} color="var(--color-romantic)" />
-              <Bar label="Relationship depth" value={current.depth} color="var(--color-inner)" />
-              <Bar label="Lifestyle alignment" value={77} color="var(--color-pro)" />
-              <Bar label="Communication rhythm" value={82} color="var(--color-friends)" />
+              <Bar label={t("discover.compat")} value={current.compatibility} color="var(--color-romantic)" />
+              <Bar label={t("discover.depth")} value={current.depth} color="var(--color-inner)" />
+              <Bar label={t("discover.lifestyle")} value={77} color="var(--color-pro)" />
+              <Bar label={t("discover.rhythm")} value={82} color="var(--color-friends)" />
             </div>
             <div className="mt-5 text-xs text-muted-foreground leading-relaxed">
-              You share <span className="text-foreground font-medium">3 mutual interests</span>, similar emotional pacing,
-              and complementary attachment styles.
+              <span className="text-foreground font-medium">3</span> {t("discover.mutual")}.
             </div>
           </div>
 
           <div className="rounded-3xl border border-border/70 bg-card p-5">
-            <div className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Daily likes</div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground mb-3">{t("discover.daily")}</div>
             <div className="flex items-end justify-between">
               <div className="font-display text-3xl">7<span className="text-base text-muted-foreground"> / 10</span></div>
               <div className="text-[11px] text-muted-foreground">Resets in 6h</div>
@@ -145,20 +146,20 @@ function Discover() {
               <div className="h-full rounded-full bg-gradient-coral" style={{ width: "70%" }} />
             </div>
             <button className="mt-4 w-full rounded-full bg-gradient-hero text-ivory text-xs py-2.5 font-medium">
-              Go Premium · Unlimited
+              {t("discover.upgrade")}
             </button>
           </div>
 
           {decisions.length > 0 && (
             <div className="rounded-3xl border border-border/70 bg-card p-5">
-              <div className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Recent</div>
+              <div className="text-xs uppercase tracking-widest text-muted-foreground mb-3">{t("discover.recent")}</div>
               <ul className="space-y-2 text-sm">
                 {decisions.map((d, i) => (
                   <li key={i} className="flex items-center justify-between">
                     <span>{d.name}</span>
                     <span className={`text-[10px] uppercase tracking-widest ${
                       d.action === "like" ? "text-coral" : d.action === "super" ? "text-gold" : "text-muted-foreground"
-                    }`}>{d.action === "super" ? "super bond" : d.action}</span>
+                    }`}>{d.action === "super" ? t("discover.action.super") : d.action === "like" ? t("discover.action.bond") : t("discover.action.pass")}</span>
                   </li>
                 ))}
               </ul>
