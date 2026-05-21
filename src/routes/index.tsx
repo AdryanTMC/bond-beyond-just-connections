@@ -7,6 +7,7 @@ import {
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CinematicHero } from "@/components/cinematic-hero";
+import { useLang } from "@/i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,25 +21,24 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-const categories = [
-  { name: "Romantic", color: "var(--color-romantic)", desc: "Love & intimacy" },
-  { name: "Family", color: "var(--color-family)", desc: "Home & warmth" },
-  { name: "Friendships", color: "var(--color-friends)", desc: "Trust & lightness" },
-  { name: "Professional", color: "var(--color-pro)", desc: "Growth & opportunity" },
-  { name: "Inner Circle", color: "var(--color-inner)", desc: "Rare & exclusive" },
-  { name: "Memories", color: "var(--color-memory)", desc: "Timeless & preserved" },
-];
-
-const features = [
-  { icon: Clock, title: "Relationship Timeline", body: "Memories, photos, voice notes and milestones — woven into a living timeline for every person who matters." },
-  { icon: Users, title: "Inner Circles", body: "Private spaces for family, couples, and your closest friends. Calm, intimate, ad-free." },
-  { icon: Sparkles, title: "AI Relationship Assistant", body: "Gentle reminders, thoughtful nudges, and emotional message drafts — so no one is forgotten." },
-  { icon: Lock, title: "Memory Capsules", body: "Time-locked messages, anniversaries, and emotional archives sent to your future self or loved ones." },
-  { icon: MapPin, title: "Relationship Map", body: "See your strongest bonds, circles, and the natural evolution of your human network." },
-  { icon: Bell, title: "Emotionally Smart Notifications", body: "‘You haven’t spoken to Sarah in 42 days.’ Soft signals, never noise." },
-];
-
 function Landing() {
+  const { t } = useLang();
+  const categories = [
+    { name: t("landing.cat.romantic"), color: "var(--color-romantic)", desc: t("landing.cat.romantic.desc") },
+    { name: t("landing.cat.friendships"), color: "var(--color-friends)", desc: t("landing.cat.friendships.desc") },
+    { name: t("landing.cat.community"), color: "var(--color-family)", desc: t("landing.cat.community.desc") },
+    { name: t("landing.cat.professional"), color: "var(--color-pro)", desc: t("landing.cat.professional.desc") },
+    { name: t("landing.cat.inner"), color: "var(--color-inner)", desc: t("landing.cat.inner.desc") },
+    { name: t("landing.cat.memories"), color: "var(--color-memory)", desc: t("landing.cat.memories.desc") },
+  ];
+  const features = [
+    { icon: Clock, title: t("landing.f1.t"), body: t("landing.f1.b") },
+    { icon: Users, title: t("landing.f2.t"), body: t("landing.f2.b") },
+    { icon: Sparkles, title: t("landing.f3.t"), body: t("landing.f3.b") },
+    { icon: Lock, title: t("landing.f4.t"), body: t("landing.f4.b") },
+    { icon: MapPin, title: t("landing.f5.t"), body: t("landing.f5.b") },
+    { icon: Bell, title: t("landing.f6.t"), body: t("landing.f6.b") },
+  ];
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SiteHeader />
@@ -48,12 +48,12 @@ function Landing() {
       <section id="circles" className="py-28 bg-gradient-soft">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="max-w-2xl">
-            <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Six worlds, one platform</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{t("landing.categories.eyebrow")}</span>
             <h2 className="mt-4 font-display text-4xl sm:text-5xl font-medium">
-              Every relationship has its own emotional color.
+              {t("landing.categories.title")}
             </h2>
             <p className="mt-5 text-muted-foreground text-lg">
-              Bond organizes your human network into six living categories — each with its own identity, rituals, and rhythm.
+              {t("landing.categories.body")}
             </p>
           </div>
 
@@ -92,14 +92,14 @@ function Landing() {
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="flex flex-wrap items-end justify-between gap-6 mb-14">
             <div className="max-w-2xl">
-              <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">The continuity layer</span>
+              <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{t("landing.features.eyebrow")}</span>
               <h2 className="mt-4 font-display text-4xl sm:text-5xl font-medium">
-                Tinder solves discovery. <br />
-                <span className="text-gradient-gold">Bond solves continuity.</span>
+                {t("landing.features.title1")} <br />
+                <span className="text-gradient-gold">{t("landing.features.title2")}</span>
               </h2>
             </div>
             <p className="max-w-sm text-muted-foreground">
-              The longer you live inside Bond, the more emotionally valuable it becomes. Your memories are the product.
+              {t("landing.features.body")}
             </p>
           </div>
 
@@ -132,9 +132,9 @@ function Landing() {
         <div className="mx-auto max-w-4xl px-6 text-center text-ivory">
           <MessageCircleHeart className="h-10 w-10 mx-auto mb-6 opacity-80" strokeWidth={1.5} />
           <p className="font-display text-3xl sm:text-5xl leading-tight font-medium">
-            “This is where my real relationships live now. Not in a feed — in a place that remembers.”
+            {t("landing.quote")}
           </p>
-          <p className="mt-6 text-sm tracking-widest uppercase opacity-70">Bond · Early member, São Paulo</p>
+          <p className="mt-6 text-sm tracking-widest uppercase opacity-70">{t("landing.quote.cite")}</p>
         </div>
       </section>
 
@@ -142,28 +142,36 @@ function Landing() {
       <section id="pricing" className="py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Plans</span>
-            <h2 className="mt-4 font-display text-4xl sm:text-5xl font-medium">Built to grow with you.</h2>
+            <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{t("landing.pricing.eyebrow")}</span>
+            <h2 className="mt-4 font-display text-4xl sm:text-5xl font-medium">{t("landing.pricing.title")}</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             <PriceCard
-              tier="Free"
+              tier={t("landing.price.free")}
               price="$0"
-              tagline="Begin your bonds"
-              features={["Up to 25 relationships", "Basic timelines", "1 inner circle", "Smart reminders"]}
+              tagline={t("landing.price.free.tag")}
+              features={[t("landing.free.1"), t("landing.free.2"), t("landing.free.3"), t("landing.free.4")]}
+              monthLabel={t("landing.price.month")}
+              chooseLabel={t("landing.price.choose")}
             />
             <PriceCard
-              tier="Premium"
+              tier={t("landing.price.premium")}
               price="$9"
-              tagline="For the emotionally intentional"
+              tagline={t("landing.price.premium.tag")}
               featured
-              features={["Unlimited relationships & memories", "AI Relationship Assistant", "Memory Capsules", "Emotional analytics", "Custom themes"]}
+              features={[t("landing.prem.1"), t("landing.prem.2"), t("landing.prem.3"), t("landing.prem.4"), t("landing.prem.5")]}
+              monthLabel={t("landing.price.month")}
+              chooseLabel={t("landing.price.choose")}
+              mostLoved={t("landing.price.mostLoved")}
             />
             <PriceCard
-              tier="Organizations"
-              price="Custom"
-              tagline="Culture & community at scale"
-              features={["Private internal communities", "Team bonding rituals", "Culture analytics", "SSO & admin"]}
+              tier={t("landing.price.org")}
+              price={t("landing.price.custom")}
+              tagline={t("landing.price.org.tag")}
+              features={[t("landing.org.1"), t("landing.org.2"), t("landing.org.3"), t("landing.org.4")]}
+              monthLabel={t("landing.price.month")}
+              chooseLabel={t("landing.price.talk")}
+              isCustom
             />
           </div>
         </div>
@@ -174,13 +182,13 @@ function Landing() {
         <div className="mx-auto max-w-5xl px-6">
           <div className="relative rounded-[2.5rem] overflow-hidden p-12 sm:p-16 text-center text-ivory bg-gradient-hero shadow-elegant">
             <h3 className="font-display text-4xl sm:text-5xl font-medium leading-tight">
-              The people who matter <br /> deserve a place that remembers.
+              {t("landing.cta.title1")} <br /> {t("landing.cta.title2")}
             </h3>
             <Link
               to="/app"
               className="mt-9 inline-flex items-center gap-2 rounded-full bg-ivory text-midnight px-7 py-4 text-sm font-medium hover:opacity-95 transition-opacity"
             >
-              Enter Bond
+              {t("landing.cta.button")}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -193,21 +201,21 @@ function Landing() {
 }
 
 function PriceCard({
-  tier, price, tagline, features, featured,
-}: { tier: string; price: string; tagline: string; features: string[]; featured?: boolean }) {
+  tier, price, tagline, features, featured, monthLabel, chooseLabel, mostLoved, isCustom,
+}: { tier: string; price: string; tagline: string; features: string[]; featured?: boolean; monthLabel: string; chooseLabel: string; mostLoved?: string; isCustom?: boolean }) {
   return (
     <div className={`relative rounded-3xl p-8 transition-all ${
       featured ? "bg-foreground text-background shadow-elegant scale-[1.02]" : "bg-card border border-border/70 shadow-soft"
     }`}>
-      {featured && (
+      {featured && mostLoved && (
         <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-coral px-3 py-1 text-[10px] uppercase tracking-widest text-white">
-          Most loved
+          {mostLoved}
         </span>
       )}
       <div className="text-sm opacity-80">{tier}</div>
       <div className="mt-3 flex items-baseline gap-1.5">
         <span className="font-display text-4xl font-medium">{price}</span>
-        {price !== "Custom" && <span className="text-sm opacity-60">/ month</span>}
+        {!isCustom && <span className="text-sm opacity-60">{monthLabel}</span>}
       </div>
       <div className="mt-1.5 text-sm opacity-70">{tagline}</div>
       <ul className="mt-7 space-y-3 text-sm">
@@ -221,7 +229,7 @@ function PriceCard({
       <button className={`mt-8 w-full rounded-full py-3 text-sm font-medium transition-opacity hover:opacity-90 ${
         featured ? "bg-background text-foreground" : "bg-foreground text-background"
       }`}>
-        {tier === "Organizations" ? "Talk to us" : "Choose " + tier}
+        {chooseLabel} {!isCustom && tier}
       </button>
     </div>
   );
