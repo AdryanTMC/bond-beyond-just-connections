@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, Globe, Lock, Infinity as InfinityIcon, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n";
-import romance from "@/assets/banner-romance.jpg";
-import friends from "@/assets/banner-friends.jpg";
-import family from "@/assets/banner-family.jpg";
+import romance from "@/assets/banner-romance.webp";
+import friends from "@/assets/banner-friends.webp";
+import family from "@/assets/banner-family.webp";
 
 const banners = [romance, friends, family];
 
@@ -30,6 +30,9 @@ export function CinematicHero() {
             key={i}
             src={banners[i]}
             alt=""
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+            fetchPriority={i === 0 ? "high" : "low"}
             initial={{ opacity: 0, scale: 1.02 }}
             animate={{ opacity: 1, scale: 1.12 }}
             exit={{ opacity: 0 }}
@@ -114,7 +117,7 @@ export function CinematicHero() {
 }
 
 function Particles() {
-  const dots = Array.from({ length: 22 });
+  const dots = Array.from({ length: 10 });
   return (
     <div className="pointer-events-none absolute inset-0 -z-0 overflow-hidden">
       {dots.map((_, i) => {
