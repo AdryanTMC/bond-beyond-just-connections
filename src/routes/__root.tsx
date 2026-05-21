@@ -77,10 +77,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Bond — Relationships that stay." },
       { name: "description", content: "Bond is the social layer for real human connections. Preserve memories, nurture circles, and stay close to the people who matter." },
       { property: "og:title", content: "Bond — Relationships that stay." },
-      { property: "og:description", content: "The social layer for real human connections." },
+      { property: "og:description", content: "Bond is the social layer for real human connections. Preserve memories, nurture circles, and stay close to the people who matter." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Bond — Relationships that stay." },
+      { name: "twitter:description", content: "Bond is the social layer for real human connections. Preserve memories, nurture circles, and stay close to the people who matter." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/79d6d884-9967-4e1b-b367-5cd7b3fa9abd/id-preview-7f1455ba--b85016e3-9396-4a23-a82f-78c0dbd0c618.lovable.app-1779407370606.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/79d6d884-9967-4e1b-b367-5cd7b3fa9abd/id-preview-7f1455ba--b85016e3-9396-4a23-a82f-78c0dbd0c618.lovable.app-1779407370606.png" },
     ],
     links: [
       {
