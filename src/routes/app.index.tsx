@@ -1,52 +1,60 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Sparkles, Clock } from "lucide-react";
+import { useLang } from "@/i18n";
+import marianaImg from "@/assets/person-mariana.jpg";
+import lucasImg from "@/assets/person-lucas.jpg";
+import sofiaImg from "@/assets/person-sofia.jpg";
+import danielImg from "@/assets/person-daniel.jpg";
+import yumiImg from "@/assets/person-yumi.jpg";
+import theoImg from "@/assets/person-theo.jpg";
 
 export const Route = createFileRoute("/app/")({
   component: AppHome,
 });
 
 const people = [
-  { name: "Mariana", note: "Last memory · 12 days ago", color: "var(--color-romantic)", strength: 96 },
-  { name: "Mom", note: "Birthday in 2 weeks", color: "var(--color-family)", strength: 88 },
-  { name: "Sarah", note: "You haven't talked in 42 days", color: "var(--color-friends)", strength: 54 },
-  { name: "Lucas", note: "Shared a new memory", color: "var(--color-inner)", strength: 91 },
-  { name: "Carla", note: "3-year friendship anniversary today", color: "var(--color-memory)", strength: 72 },
-  { name: "Daniel", note: "Capsule unlocks in 9 days", color: "var(--color-pro)", strength: 60 },
+  { name: "Mariana", note: "Last memory · 12 days ago", color: "var(--color-romantic)", strength: 96, photo: marianaImg },
+  { name: "Yumi", note: "Sent you a voice note", color: "var(--color-inner)", strength: 88, photo: yumiImg },
+  { name: "Sarah", note: "You haven't talked in 42 days", color: "var(--color-friends)", strength: 54, photo: sofiaImg },
+  { name: "Lucas", note: "Shared a new memory", color: "var(--color-inner)", strength: 91, photo: lucasImg },
+  { name: "Théo", note: "3-year friendship anniversary today", color: "var(--color-memory)", strength: 72, photo: theoImg },
+  { name: "Daniel", note: "Capsule unlocks in 9 days", color: "var(--color-pro)", strength: 60, photo: danielImg },
 ];
 
 const timeline = [
   { when: "Today", title: "Anniversary unlocked", body: "3 years since your trip to Lisbon with Mariana.", color: "var(--color-romantic)" },
-  { when: "Yesterday", title: "Mom shared a memory", body: "A photo from your graduation.", color: "var(--color-family)" },
+  { when: "Yesterday", title: "Yumi shared a memory", body: "A photo from your last city walk.", color: "var(--color-inner)" },
   { when: "2 days ago", title: "Capsule sealed", body: "A voice note for Lucas, unlocks in 1 year.", color: "var(--color-memory)" },
   { when: "Last week", title: "New bond", body: "You added Daniel to your Work circle.", color: "var(--color-pro)" },
 ];
 
 function AppHome() {
+  const { t } = useLang();
   return (
     <>
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-        <div className="text-sm text-muted-foreground">Good evening</div>
+        <div className="text-sm text-muted-foreground">{t("home.greeting")}</div>
         <h1 className="font-display text-4xl sm:text-5xl font-medium mt-1.5">
-          Some bonds are <span className="text-gradient-coral">whispering to you</span>.
+          {t("home.title1")} <span className="text-gradient-coral">{t("home.title2")}</span>
         </h1>
       </motion.div>
 
       <div className="mt-9 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard label="Active bonds" value="52" hint="+3 this month" />
-        <StatCard label="Memories preserved" value="284" hint="12 this week" />
-        <StatCard label="Capsules sealed" value="7" hint="2 unlock soon" />
-        <StatCard label="Emotional health" value="84" hint="+6 vs last month" highlight />
+        <StatCard label={t("home.stat.bonds")} value="52" hint={t("home.stat.bonds.hint")} />
+        <StatCard label={t("home.stat.memories")} value="284" hint={t("home.stat.memories.hint")} />
+        <StatCard label={t("home.stat.capsules")} value="7" hint={t("home.stat.capsules.hint")} />
+        <StatCard label={t("home.stat.health")} value="84" hint={t("home.stat.health.hint")} highlight />
       </div>
 
       <div className="mt-10 grid lg:grid-cols-3 gap-6">
         <section className="lg:col-span-2">
           <div className="flex items-end justify-between mb-5">
             <div>
-              <h2 className="font-display text-2xl font-medium">People who matter</h2>
-              <p className="text-sm text-muted-foreground mt-1">Sorted by emotional rhythm.</p>
+              <h2 className="font-display text-2xl font-medium">{t("home.people.title")}</h2>
+              <p className="text-sm text-muted-foreground mt-1">{t("home.people.sub")}</p>
             </div>
-            <Link to="/app/discover" className="text-sm text-muted-foreground hover:text-foreground">Discover →</Link>
+            <Link to="/app/discover" className="text-sm text-muted-foreground hover:text-foreground">{t("home.people.cta")}</Link>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
@@ -63,12 +71,13 @@ function AppHome() {
                   style={{ background: p.color }}
                 />
                 <div className="relative flex items-center gap-4">
-                  <div
-                    className="h-12 w-12 rounded-full flex items-center justify-center font-display text-lg"
-                    style={{ background: `color-mix(in oklab, ${p.color} 22%, transparent)`, color: p.color }}
-                  >
-                    {p.name[0]}
-                  </div>
+                  <img
+                    src={p.photo}
+                    alt={p.name}
+                    loading="lazy"
+                    className="h-12 w-12 rounded-full object-cover ring-2"
+                    style={{ boxShadow: `0 0 0 2px color-mix(in oklab, ${p.color} 30%, transparent)` }}
+                  />
                   <div className="flex-1 min-w-0">
                     <div className="font-medium">{p.name}</div>
                     <div className="text-xs text-muted-foreground truncate">{p.note}</div>
@@ -76,7 +85,7 @@ function AppHome() {
                 </div>
                 <div className="relative mt-5">
                   <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1.5">
-                    <span>Bond strength</span>
+                    <span>{t("home.bond.strength")}</span>
                     <span>{p.strength}%</span>
                   </div>
                   <div className="h-1.5 rounded-full bg-foreground/5 overflow-hidden">
@@ -91,20 +100,20 @@ function AppHome() {
         <aside className="space-y-6">
           <div className="rounded-3xl p-6 bg-gradient-hero text-ivory shadow-elegant">
             <div className="flex items-center gap-2 text-xs uppercase tracking-widest opacity-80">
-              <Sparkles className="h-3.5 w-3.5" /> AI Assistant
+              <Sparkles className="h-3.5 w-3.5" /> {t("home.ai.title")}
             </div>
             <p className="mt-4 font-display text-lg leading-snug">
-              “Sarah's been quiet for a while. Want me to draft a soft hello with a memory from last summer?”
+              {t("home.ai.body")}
             </p>
             <div className="mt-5 flex gap-2">
-              <button className="rounded-full bg-ivory text-midnight text-xs px-3.5 py-2 font-medium">Draft message</button>
-              <button className="rounded-full bg-white/10 border border-white/15 text-xs px-3.5 py-2 font-medium">Later</button>
+              <button className="rounded-full bg-ivory text-midnight text-xs px-3.5 py-2 font-medium">{t("home.ai.draft")}</button>
+              <button className="rounded-full bg-white/10 border border-white/15 text-xs px-3.5 py-2 font-medium">{t("home.ai.later")}</button>
             </div>
           </div>
 
           <div className="rounded-3xl border border-border/70 bg-card p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-display text-lg font-medium">Recent timeline</h3>
+              <h3 className="font-display text-lg font-medium">{t("home.timeline.title")}</h3>
               <Clock className="h-4 w-4 text-muted-foreground" />
             </div>
             <ol className="space-y-4">
