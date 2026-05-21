@@ -5,9 +5,9 @@ import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n";
 import romance from "@/assets/banner-romance.webp";
 import friends from "@/assets/banner-friends.webp";
-import family from "@/assets/banner-family.webp";
+import community from "@/assets/banner-community.jpg";
 
-const banners = [romance, friends, family];
+const banners = [romance, friends, community];
 
 export function CinematicHero() {
   const { t } = useLang();
@@ -92,9 +92,9 @@ export function CinematicHero() {
           </div>
 
           <div className="mt-10 flex flex-wrap items-center gap-6 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" /> EN · PT · ES · FR · DE · IT</span>
-            <span className="inline-flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> Private by design</span>
-            <span className="inline-flex items-center gap-1.5"><InfinityIcon className="h-3.5 w-3.5" /> Memories for life</span>
+            <span className="inline-flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" /> {t("landing.trust.langs")}</span>
+            <span className="inline-flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> {t("landing.trust.private")}</span>
+            <span className="inline-flex items-center gap-1.5"><InfinityIcon className="h-3.5 w-3.5" /> {t("landing.trust.memories")}</span>
           </div>
         </motion.div>
 

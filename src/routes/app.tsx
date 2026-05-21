@@ -3,6 +3,7 @@ import {
   Heart, Home, Compass, MessageCircle, User, Crown, Search, Bell, Plus, Sparkles, Fingerprint,
 } from "lucide-react";
 import { useLang, LANGUAGES, type Lang } from "@/i18n";
+import { usePremium } from "@/hooks/use-premium";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
@@ -28,6 +29,7 @@ const nav = [
 
 function AppLayout() {
   const { t, lang, setLang } = useLang();
+  const { premium, toggle } = usePremium();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
@@ -84,6 +86,18 @@ function AppLayout() {
                 />
               </div>
               <AppLangSelector lang={lang} onChange={setLang} />
+              <button
+                onClick={toggle}
+                title={t("premium.toggle.hint")}
+                className={`hidden sm:inline-flex items-center gap-1.5 h-10 rounded-full px-3 text-xs font-medium transition-all ${
+                  premium
+                    ? "bg-gradient-coral text-white shadow-glow"
+                    : "bg-muted text-muted-foreground"
+                }`}
+              >
+                <Crown className="h-3.5 w-3.5" />
+                {premium ? t("premium.toggle.on") : t("premium.toggle.off")}
+              </button>
               <button className="relative h-10 w-10 rounded-full bg-muted flex items-center justify-center">
                 <Bell className="h-4 w-4" />
                 <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-coral" />

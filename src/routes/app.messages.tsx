@@ -2,6 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "motion/react";
 import { Send, Mic, Image as ImageIcon, Sparkles, Heart, Lock } from "lucide-react";
+import { useLang } from "@/i18n";
+import marianaImg from "@/assets/person-mariana.jpg";
+import lucasImg from "@/assets/person-lucas.jpg";
+import yumiImg from "@/assets/person-yumi.jpg";
+import sofiaImg from "@/assets/person-sofia.jpg";
+import theoImg from "@/assets/person-theo.jpg";
 
 export const Route = createFileRoute("/app/messages")({
   component: Messages,
@@ -10,11 +16,11 @@ export const Route = createFileRoute("/app/messages")({
 type Msg = { from: "me" | "them"; text: string; at: string; reaction?: string; memory?: { title: string; tone: string } };
 
 const threads = [
-  { id: "mariana", name: "Mariana", color: "var(--color-romantic)", last: "I still remember Lisbon…", unread: 2, online: true },
-  { id: "lucas", name: "Lucas", color: "var(--color-inner)", last: "Coffee Sunday?", unread: 0, online: true },
-  { id: "mom", name: "Mom", color: "var(--color-family)", last: "Voice note", unread: 1, online: false },
-  { id: "sarah", name: "Sarah", color: "var(--color-friends)", last: "It's been a while ❤️", unread: 0, online: false },
-  { id: "theo", name: "Théo", color: "var(--color-pro)", last: "Let's collaborate", unread: 0, online: true },
+  { id: "mariana", name: "Mariana", color: "var(--color-romantic)", last: "I still remember Lisbon…", unread: 2, online: true, photo: marianaImg },
+  { id: "lucas", name: "Lucas", color: "var(--color-inner)", last: "Coffee Sunday?", unread: 0, online: true, photo: lucasImg },
+  { id: "yumi", name: "Yumi", color: "var(--color-memory)", last: "Voice note", unread: 1, online: false, photo: yumiImg },
+  { id: "sarah", name: "Sarah", color: "var(--color-friends)", last: "It's been a while ❤️", unread: 0, online: false, photo: sofiaImg },
+  { id: "theo", name: "Théo", color: "var(--color-pro)", last: "Let's collaborate", unread: 0, online: true, photo: theoImg },
 ];
 
 const initialMessages: Record<string, Msg[]> = {
@@ -26,12 +32,13 @@ const initialMessages: Record<string, Msg[]> = {
     { from: "me", text: "Sealing it as a capsule for our 5-year anniversary.", at: "20:15" },
   ],
   lucas: [{ from: "them", text: "Coffee Sunday?", at: "11:02" }],
-  mom: [{ from: "them", text: "🎙️ Voice note · 0:32", at: "09:45" }],
+  yumi: [{ from: "them", text: "🎙️ Voice note · 0:32", at: "09:45" }],
   sarah: [{ from: "them", text: "It's been a while ❤️", at: "Yesterday" }],
   theo: [{ from: "them", text: "Let's collaborate", at: "Mon" }],
 };
 
 function Messages() {
+  const { t } = useLang();
   const [active, setActive] = useState("mariana");
   const [draft, setDraft] = useState("");
   const [convo, setConvo] = useState<Record<string, Msg[]>>(initialMessages);
@@ -47,9 +54,9 @@ function Messages() {
   return (
     <div>
       <div className="mb-6">
-        <div className="text-sm text-muted-foreground">Messages</div>
+        <div className="text-sm text-muted-foreground">{t("msg.title")}</div>
         <h1 className="font-display text-3xl sm:text-4xl font-medium mt-1">
-          Conversations that <span className="text-gradient-coral">remember themselves</span>.
+          {t("msg.h1a")} <span className="text-gradient-coral">{t("msg.h1b")}</span>.
         </h1>
       </div>
 
@@ -57,7 +64,7 @@ function Messages() {
         {/* Threads */}
         <aside className="lg:col-span-4 border-r border-border/60 overflow-y-auto">
           <div className="p-4 border-b border-border/60 text-xs uppercase tracking-widest text-muted-foreground">
-            Inner circle
+            {t("msg.inner")}
           </div>
           {threads.map((t) => (
             <button
@@ -67,10 +74,9 @@ function Messages() {
                 active === t.id ? "bg-foreground/[0.04]" : ""
               }`}
             >
-              <div className="relative h-11 w-11 rounded-full flex items-center justify-center font-display"
-                   style={{ background: `color-mix(in oklab, ${t.color} 22%, transparent)`, color: t.color }}>
-                {t.name[0]}
-                {t.online && <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-pro border-2 border-card" style={{ background: "var(--color-pro)" }} />}
+              <div className="relative h-11 w-11 shrink-0">
+                <img src={t.photo} alt={t.name} loading="lazy" className="h-11 w-11 rounded-full object-cover" />
+                {t.online && <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-card" style={{ background: "var(--color-pro)" }} />}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
@@ -87,19 +93,16 @@ function Messages() {
         <section className="lg:col-span-8 flex flex-col min-w-0">
           <div className="px-5 py-4 border-b border-border/60 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full flex items-center justify-center font-display"
-                   style={{ background: `color-mix(in oklab, ${thread.color} 22%, transparent)`, color: thread.color }}>
-                {thread.name[0]}
-              </div>
+              <img src={thread.photo} alt={thread.name} loading="lazy" className="h-10 w-10 rounded-full object-cover" />
               <div>
                 <div className="font-medium">{thread.name}</div>
                 <div className="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                  <Heart className="h-3 w-3" style={{ color: thread.color }} /> Bond strength · 96%
+                  <Heart className="h-3 w-3" style={{ color: thread.color }} /> {t("home.bond.strength")} · 96%
                 </div>
               </div>
             </div>
             <button className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5">
-              <Lock className="h-3.5 w-3.5" /> Couple space
+              <Lock className="h-3.5 w-3.5" /> {t("msg.couple")}
             </button>
           </div>
 
@@ -118,7 +121,7 @@ function Messages() {
                   {m.text}
                   {m.memory && (
                     <div className="mt-2.5 rounded-xl p-3 border" style={{ borderColor: m.memory.tone, background: `color-mix(in oklab, ${m.memory.tone} 12%, transparent)` }}>
-                      <div className="text-[10px] uppercase tracking-widest opacity-70">Shared memory</div>
+                      <div className="text-[10px] uppercase tracking-widest opacity-70">{t("msg.shared")}</div>
                       <div className="font-display text-sm mt-0.5">{m.memory.title}</div>
                     </div>
                   )}
@@ -131,12 +134,12 @@ function Messages() {
 
             <div className="rounded-2xl bg-gradient-hero text-ivory p-4 mx-auto max-w-md">
               <div className="text-[10px] uppercase tracking-widest opacity-80 flex items-center gap-1.5">
-                <Sparkles className="h-3 w-3" /> AI suggestion
+                <Sparkles className="h-3 w-3" /> {t("msg.ai")}
               </div>
               <div className="text-sm mt-1.5">“Send the photo from your Lisbon trip — it would land warmly right now.”</div>
               <div className="mt-3 flex gap-2">
-                <button className="rounded-full bg-ivory text-midnight text-[11px] px-3 py-1.5 font-medium">Use it</button>
-                <button className="rounded-full bg-white/10 border border-white/15 text-[11px] px-3 py-1.5 font-medium">Skip</button>
+                <button className="rounded-full bg-ivory text-midnight text-[11px] px-3 py-1.5 font-medium">{t("msg.ai.use")}</button>
+                <button className="rounded-full bg-white/10 border border-white/15 text-[11px] px-3 py-1.5 font-medium">{t("msg.ai.skip")}</button>
               </div>
             </div>
           </div>
@@ -152,7 +155,7 @@ function Messages() {
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
-              placeholder="Write something they'll remember…"
+              placeholder={t("msg.placeholder")}
               className="flex-1 bg-muted rounded-full px-4 py-2.5 text-sm outline-none"
             />
             <button onClick={send} className="h-10 w-10 rounded-full bg-gradient-coral text-white flex items-center justify-center shadow-glow">

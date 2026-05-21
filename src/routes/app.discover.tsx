@@ -3,6 +3,12 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from "motion/re
 import { useMemo, useState } from "react";
 import { Heart, X, Star, MapPin, Sparkles, Users, Briefcase, Home } from "lucide-react";
 import { useLang } from "@/i18n";
+import marianaImg from "@/assets/person-mariana.jpg";
+import lucasImg from "@/assets/person-lucas.jpg";
+import sofiaImg from "@/assets/person-sofia.jpg";
+import theoImg from "@/assets/person-theo.jpg";
+import yumiImg from "@/assets/person-yumi.jpg";
+import danielImg from "@/assets/person-daniel.jpg";
 
 export const Route = createFileRoute("/app/discover")({
   component: Discover,
@@ -18,26 +24,34 @@ const intentions = [
 type Person = {
   name: string; age: number; city: string; distance: string;
   bio: string; interests: string[]; compatibility: number; depth: number;
-  gradient: string;
+  gradient: string; photo: string;
 };
 
 const cards: Person[] = [
   { name: "Mariana", age: 28, city: "Lisbon", distance: "2 km away",
     bio: "Architect, slow mornings, vinyl, candlelit dinners. Believes that paying attention is the highest form of love.",
     interests: ["Architecture", "Vinyl", "Travel", "Cooking"], compatibility: 94, depth: 86,
-    gradient: "linear-gradient(135deg, #FF7A8A, #D6B36A)" },
+    gradient: "linear-gradient(135deg, #FF7A8A, #D6B36A)", photo: marianaImg },
   { name: "Lucas", age: 31, city: "São Paulo", distance: "5 km away",
     bio: "Founder · climbing · quiet introvert that lights up with the right people. Building a life that doesn't need a vacation from itself.",
     interests: ["Startups", "Climbing", "Books", "Espresso"], compatibility: 88, depth: 79,
-    gradient: "linear-gradient(135deg, #69A7FF, #8B5CF6)" },
+    gradient: "linear-gradient(135deg, #69A7FF, #8B5CF6)", photo: lucasImg },
   { name: "Sofia", age: 26, city: "Barcelona", distance: "Travel mode · ES",
-    bio: "Filmmaker capturing real moments. Family is religion. Looking for friendships that feel like home.",
-    interests: ["Cinema", "Family", "Sunsets", "Slow food"], compatibility: 91, depth: 92,
-    gradient: "linear-gradient(135deg, #F4B860, #FF7A8A)" },
+    bio: "Filmmaker capturing real moments. Looking for friendships that feel like home and conversations that last past midnight.",
+    interests: ["Cinema", "Sunsets", "Slow food", "Letters"], compatibility: 91, depth: 92,
+    gradient: "linear-gradient(135deg, #F4B860, #FF7A8A)", photo: sofiaImg },
   { name: "Théo", age: 33, city: "Paris", distance: "Global mode",
     bio: "Composer · learning to be present. Late-night walks, long letters, intentional friendships.",
     interests: ["Music", "Walks", "Philosophy"], compatibility: 83, depth: 88,
-    gradient: "linear-gradient(135deg, #8B5CF6, #3FB98E)" },
+    gradient: "linear-gradient(135deg, #8B5CF6, #3FB98E)", photo: theoImg },
+  { name: "Yumi", age: 27, city: "Tokyo", distance: "Travel mode · JP",
+    bio: "Designer & ramen evangelist. Loves quiet bookstores, neon walks and people who write long messages.",
+    interests: ["Design", "Books", "Tea", "Cinema"], compatibility: 89, depth: 85,
+    gradient: "linear-gradient(135deg, #FF7A8A, #8B5CF6)", photo: yumiImg },
+  { name: "Daniel", age: 29, city: "Lagos", distance: "Global mode",
+    bio: "Photographer chasing golden light. Believes friendship is the most romantic thing two humans can build.",
+    interests: ["Photography", "Nature", "Jazz", "Travel"], compatibility: 87, depth: 90,
+    gradient: "linear-gradient(135deg, #3FB98E, #D6B36A)", photo: danielImg },
 ];
 
 function Discover() {
@@ -195,7 +209,13 @@ function SwipeCard({ person, onDecide }: { person: Person; onDecide: (a: "like" 
       className="absolute inset-0 rounded-[2rem] overflow-hidden shadow-elegant cursor-grab active:cursor-grabbing z-20"
       transition={{ type: "spring", stiffness: 280, damping: 28 }}
     >
-      <div className="absolute inset-0" style={{ background: person.gradient }} />
+      <img
+        src={person.photo}
+        alt={person.name}
+        loading="lazy"
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
       {/* Badges */}

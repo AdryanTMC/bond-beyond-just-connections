@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Check, Crown, Infinity as InfinityIcon, Sparkles } from "lucide-react";
+import { usePremium } from "@/hooks/use-premium";
+import { useLang } from "@/i18n";
 
 export const Route = createFileRoute("/app/premium")({
   component: Premium,
@@ -35,18 +37,30 @@ const tiers = [
 ];
 
 function Premium() {
+  const { premium, toggle } = usePremium();
+  const { t } = useLang();
   return (
     <div>
       <div className="text-center max-w-2xl mx-auto mb-12">
         <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground mb-5">
-          <Crown className="h-3 w-3" /> Premium
+          <Crown className="h-3 w-3" /> {t("premium.badge")}
         </div>
         <h1 className="font-display text-4xl sm:text-5xl font-medium leading-tight">
-          A platform that grows <span className="text-gradient-coral">emotionally</span> with you.
+          {t("premium.h1a")} <span className="text-gradient-coral">{t("premium.h1b")}</span> {t("premium.h1c")}
         </h1>
         <p className="mt-5 text-muted-foreground">
-          Bond's premium tiers are not features. They're rituals — designed to deepen the relationships you already cherish.
+          {t("premium.sub")}
         </p>
+        <button
+          onClick={toggle}
+          className={`mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all ${
+            premium ? "bg-gradient-coral text-white shadow-glow" : "bg-muted text-foreground"
+          }`}
+        >
+          <Crown className="h-4 w-4" />
+          {premium ? t("premium.toggle.on") : t("premium.toggle.off")}
+        </button>
+        <p className="mt-2 text-xs text-muted-foreground">{t("premium.toggle.hint")}</p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-5">
@@ -64,7 +78,12 @@ function Premium() {
             <div className="absolute -top-20 -right-20 h-56 w-56 rounded-full bg-white/30 blur-3xl" />
             {t.featured && (
               <div className="absolute top-5 right-5 text-[10px] uppercase tracking-widest rounded-full bg-white/15 backdrop-blur px-2.5 py-1">
-                Most loved
+                {t.featured ? "Most loved" : ""}
+              </div>
+            )}
+            {premium && (
+              <div className="absolute top-5 left-5 text-[10px] uppercase tracking-widest rounded-full bg-white/15 backdrop-blur px-2.5 py-1 inline-flex items-center gap-1">
+                <Check className="h-3 w-3" /> Active
               </div>
             )}
             <div className="relative">
@@ -86,16 +105,14 @@ function Premium() {
                 ))}
               </ul>
               <button className="mt-8 w-full rounded-full bg-white text-midnight py-3 text-sm font-medium hover:opacity-95 transition-opacity">
-                Choose {t.name.split(" ")[1]}
+                {premium ? "Active · demo" : "Choose " + t.name.split(" ")[1]}
               </button>
             </div>
           </motion.div>
         ))}
       </div>
 
-      <p className="mt-10 text-center text-xs text-muted-foreground">
-        Cancel anytime · Refunded within 14 days · Memories you create are yours forever.
-      </p>
+      <p className="mt-10 text-center text-xs text-muted-foreground">{t("premium.disclaimer")}</p>
     </div>
   );
 }
