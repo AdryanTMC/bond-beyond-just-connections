@@ -1,7 +1,11 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import {
-  Heart, Home, Compass, MessageCircle, User, Crown, Search, Bell, Plus, Sparkles,
+  Heart, Home, Compass, MessageCircle, User, Crown, Search, Bell, Plus, Sparkles, Fingerprint,
 } from "lucide-react";
+import { useLang, LANGUAGES, type Lang } from "@/i18n";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/app")({
   head: () => ({
@@ -14,14 +18,16 @@ export const Route = createFileRoute("/app")({
 });
 
 const nav = [
-  { to: "/app", label: "Home", icon: Home, exact: true },
-  { to: "/app/discover", label: "Discover", icon: Compass },
-  { to: "/app/messages", label: "Messages", icon: MessageCircle },
-  { to: "/app/profile", label: "Profile", icon: User },
-  { to: "/app/premium", label: "Premium", icon: Crown },
+  { to: "/app", labelKey: "app.nav.home", icon: Home, exact: true },
+  { to: "/app/discover", labelKey: "app.nav.discover", icon: Compass },
+  { to: "/app/identity", labelKey: "app.nav.identity", icon: Fingerprint },
+  { to: "/app/messages", labelKey: "app.nav.messages", icon: MessageCircle },
+  { to: "/app/profile", labelKey: "app.nav.profile", icon: User },
+  { to: "/app/premium", labelKey: "app.nav.premium", icon: Crown },
 ] as const;
 
 function AppLayout() {
+  const { t, lang, setLang } = useLang();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
@@ -50,7 +56,7 @@ function AppLayout() {
                   }`}
                 >
                   <n.icon className="h-4 w-4" strokeWidth={1.75} />
-                  {n.label}
+                  {t(n.labelKey)}
                 </Link>
               );
             })}
@@ -73,16 +79,17 @@ function AppLayout() {
               <div className="flex-1 max-w-md flex items-center gap-2 rounded-full bg-muted px-4 py-2.5">
                 <Search className="h-4 w-4 text-muted-foreground" />
                 <input
-                  placeholder="Search people, memories, moments…"
+                  placeholder={t("app.search")}
                   className="bg-transparent outline-none text-sm flex-1 placeholder:text-muted-foreground"
                 />
               </div>
+              <AppLangSelector lang={lang} onChange={setLang} />
               <button className="relative h-10 w-10 rounded-full bg-muted flex items-center justify-center">
                 <Bell className="h-4 w-4" />
                 <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-coral" />
               </button>
               <button className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-foreground text-background px-4 py-2.5 text-sm font-medium">
-                <Plus className="h-4 w-4" /> New bond
+                <Plus className="h-4 w-4" /> {t("app.newBond")}
               </button>
             </div>
           </div>
@@ -95,7 +102,7 @@ function AppLayout() {
 
       {/* Mobile bottom nav */}
       <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 border-t border-border/60 bg-background/85 backdrop-blur-xl">
-        <div className="grid grid-cols-5">
+        <div className="grid grid-cols-6">
           {nav.map((n) => {
             const active = isActive(n.to, "exact" in n ? n.exact : false);
             return (
@@ -107,12 +114,63 @@ function AppLayout() {
                 }`}
               >
                 <n.icon className="h-5 w-5" strokeWidth={active ? 2.25 : 1.75} />
-                {n.label}
+                {t(n.labelKey)}
               </Link>
             );
           })}
         </div>
       </nav>
+    </div>
+  );
+}
+
+function AppLangSelector({ lang, onChange }: { lang: Lang; onChange: (l: Lang) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const current = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    window.addEventListener("click", onClick);
+    return () => window.removeEventListener("click", onClick);
+  }, []);
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-1.5 h-10 rounded-full bg-muted px-3 text-xs"
+        aria-label="Change language"
+      >
+        <span className="text-base leading-none">{current.flag}</span>
+        <span className="hidden md:inline font-medium uppercase tracking-wider">{current.code}</span>
+        <ChevronDown className={`h-3 w-3 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.97 }}
+            transition={{ duration: 0.18 }}
+            className="absolute right-0 mt-2 w-52 rounded-2xl glass shadow-elegant p-1.5 z-50"
+          >
+            {LANGUAGES.map((l) => (
+              <button
+                key={l.code}
+                onClick={() => { onChange(l.code); setOpen(false); }}
+                className={`w-full flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors ${
+                  l.code === lang ? "bg-foreground/5 text-foreground" : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
+                }`}
+              >
+                <span className="text-base">{l.flag}</span>
+                <span className="flex-1 text-left">{l.label}</span>
+                <span className="text-[10px] uppercase tracking-wider opacity-60">{l.country}</span>
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
