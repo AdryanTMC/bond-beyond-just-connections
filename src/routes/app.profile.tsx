@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Mic, MapPin, Heart, Sparkles, Camera, Calendar } from "lucide-react";
+import { useLang } from "@/i18n";
+import avatar from "@/assets/person-sofia.jpg";
 
 export const Route = createFileRoute("/app/profile")({
   component: Profile,
@@ -8,7 +10,7 @@ export const Route = createFileRoute("/app/profile")({
 
 const moments = [
   { title: "Lisbon · summer", tone: "var(--color-romantic)", when: "2022" },
-  { title: "Sister's wedding", tone: "var(--color-family)", when: "2023" },
+  { title: "Friends reunion", tone: "var(--color-friends)", when: "2023" },
   { title: "Mountain trail", tone: "var(--color-friends)", when: "2024" },
   { title: "Studio opening", tone: "var(--color-pro)", when: "2024" },
   { title: "Birthday letter", tone: "var(--color-memory)", when: "2025" },
@@ -16,6 +18,7 @@ const moments = [
 ];
 
 function Profile() {
+  const { t } = useLang();
   return (
     <div>
       {/* Cover */}
@@ -26,19 +29,15 @@ function Profile() {
       </div>
 
       <div className="-mt-16 px-2 sm:px-6 flex flex-col sm:flex-row sm:items-end gap-5">
-        <div className="h-28 w-28 rounded-full ring-4 ring-background bg-gradient-coral flex items-center justify-center font-display text-4xl text-white shadow-elegant">
-          A
-        </div>
+        <img src={avatar} alt="Profile" className="h-28 w-28 rounded-full object-cover ring-4 ring-background shadow-elegant" />
         <div className="flex-1">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground"><MapPin className="h-3 w-3" /> Lisbon, PT · Global mode</div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground"><MapPin className="h-3 w-3" /> {t("profile.location")}</div>
           <h1 className="font-display text-3xl sm:text-4xl font-medium mt-1">Alex Moreira, 29</h1>
-          <p className="text-sm text-muted-foreground mt-1.5 max-w-xl">
-            Architect & quiet romantic. I believe in long letters, soft mornings, and friendships that age like wine.
-          </p>
+          <p className="text-sm text-muted-foreground mt-1.5 max-w-xl">{t("profile.bio")}</p>
         </div>
         <div className="flex gap-2">
           <button className="rounded-full bg-foreground text-background text-sm px-4 py-2.5 inline-flex items-center gap-1.5">
-            <Camera className="h-4 w-4" /> Edit profile
+            <Camera className="h-4 w-4" /> {t("profile.edit")}
           </button>
         </div>
       </div>
@@ -48,7 +47,7 @@ function Profile() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
           className="rounded-3xl border border-border/70 bg-card p-6">
           <div className="flex items-center justify-between">
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">Voice intro</div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">{t("profile.voice")}</div>
             <Mic className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="mt-4 flex items-center gap-3">
@@ -69,28 +68,28 @@ function Profile() {
         </motion.div>
 
         <div className="rounded-3xl border border-border/70 bg-card p-6">
-          <div className="text-xs uppercase tracking-widest text-muted-foreground">Relationship intent</div>
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">{t("profile.intent")}</div>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {["Romance", "Friendship", "Networking", "Community"].map((g, i) => (
+            {[t("discover.intent.romance"), t("discover.intent.friendship"), t("discover.intent.networking"), t("discover.intent.community")].map((g, i) => (
               <span key={g} className={`text-xs rounded-full px-3 py-1.5 border ${i < 2 ? "bg-foreground text-background border-transparent" : "text-muted-foreground"}`}>
                 {g}
               </span>
             ))}
           </div>
-          <div className="text-xs uppercase tracking-widest text-muted-foreground mt-5">Interests</div>
+          <div className="text-xs uppercase tracking-widest text-muted-foreground mt-5">{t("profile.interests")}</div>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {["Architecture", "Vinyl", "Slow food", "Cinema", "Mountains", "Letters", "Espresso"].map((t) => (
-              <span key={t} className="text-xs rounded-full px-3 py-1.5 bg-muted">{t}</span>
+            {["Architecture", "Vinyl", "Slow food", "Cinema", "Mountains", "Letters", "Espresso"].map((tag) => (
+              <span key={tag} className="text-xs rounded-full px-3 py-1.5 bg-muted">{tag}</span>
             ))}
           </div>
         </div>
 
         <div className="rounded-3xl bg-gradient-gold text-midnight p-6">
           <div className="flex items-center gap-2 text-xs uppercase tracking-widest opacity-80">
-            <Sparkles className="h-3.5 w-3.5" /> Emotional health
+            <Sparkles className="h-3.5 w-3.5" /> {t("profile.health")}
           </div>
           <div className="mt-3 font-display text-5xl">84</div>
-          <div className="text-xs mt-2 opacity-80">Your relational rhythm is calm and intentional. Reach out to 1 dormant bond this week.</div>
+          <div className="text-xs mt-2 opacity-80">{t("profile.health.body")}</div>
         </div>
       </div>
 
@@ -98,11 +97,11 @@ function Profile() {
       <div className="mt-10">
         <div className="flex items-end justify-between mb-5">
           <div>
-            <h2 className="font-display text-2xl font-medium">Memory highlights</h2>
-            <p className="text-sm text-muted-foreground">A cinematic timeline of moments worth keeping.</p>
+            <h2 className="font-display text-2xl font-medium">{t("profile.memories.title")}</h2>
+            <p className="text-sm text-muted-foreground">{t("profile.memories.sub")}</p>
           </div>
           <button className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5">
-            <Calendar className="h-4 w-4" /> View timeline
+            <Calendar className="h-4 w-4" /> {t("profile.timeline")}
           </button>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
