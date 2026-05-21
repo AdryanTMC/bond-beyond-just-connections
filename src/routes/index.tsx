@@ -2,11 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import {
   Heart, Users, Sparkles, Clock, MapPin, Lock, Bell,
-  ArrowRight, Check, Globe, MessageCircleHeart, Infinity as InfinityIcon,
+  ArrowRight, Check, MessageCircleHeart,
 } from "lucide-react";
-import heroImg from "@/assets/hero-bond.jpg";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { CinematicHero } from "@/components/cinematic-hero";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -42,62 +42,7 @@ function Landing() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SiteHeader />
-
-      {/* HERO */}
-      <section className="relative min-h-[100vh] flex items-center pt-32 pb-20">
-        <div className="absolute inset-0 -z-10">
-          <img src={heroImg} alt="" width={1920} height={1080} className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/60 to-background" />
-        </div>
-
-        <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-12 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-7"
-          >
-            <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground mb-7">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-coral animate-pulse" />
-              Bond · Laço — now in private beta
-            </div>
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-medium leading-[1.02] tracking-tight">
-              Relationships <br />
-              <span className="text-gradient-coral">that stay.</span>
-            </h1>
-            <p className="mt-7 max-w-xl text-lg text-muted-foreground leading-relaxed">
-              Bond is the social layer for real human connections. Preserve memories, nurture your inner circles,
-              and never lose touch with the people who matter most.
-            </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Link
-                to="/app"
-                className="group inline-flex items-center gap-2 rounded-full bg-foreground text-background px-6 py-3.5 text-sm font-medium hover:opacity-90 transition-all"
-              >
-                Begin your bonds
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-              <a href="#features" className="inline-flex items-center gap-2 rounded-full glass px-6 py-3.5 text-sm font-medium">
-                Discover the platform
-              </a>
-            </div>
-            <div className="mt-10 flex items-center gap-6 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" /> EN · PT-BR · ES · FR</span>
-              <span className="inline-flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> Private by design</span>
-              <span className="inline-flex items-center gap-1.5"><InfinityIcon className="h-3.5 w-3.5" /> Memories for life</span>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1.1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-5"
-          >
-            <FloatingCard />
-          </motion.div>
-        </div>
-      </section>
+      <CinematicHero />
 
       {/* CATEGORIES */}
       <section id="circles" className="py-28 bg-gradient-soft">
@@ -243,57 +188,6 @@ function Landing() {
       </section>
 
       <SiteFooter />
-    </div>
-  );
-}
-
-function FloatingCard() {
-  const items = [
-    { name: "Mom", note: "3 years since the trip to Bahia", color: "var(--color-family)" },
-    { name: "Sarah", note: "Birthday in 4 days", color: "var(--color-friends)" },
-    { name: "Lucas", note: "Capsule unlocks tomorrow", color: "var(--color-memory)" },
-  ];
-  return (
-    <div className="relative mx-auto max-w-md">
-      <div className="absolute -inset-10 bg-gradient-coral opacity-30 blur-3xl rounded-full -z-10" />
-      <div className="glass-dark rounded-3xl p-6 shadow-elegant text-ivory">
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <div className="text-xs uppercase tracking-widest opacity-60">Today</div>
-            <div className="font-display text-2xl mt-1">Your bonds</div>
-          </div>
-          <div className="h-9 w-9 rounded-full bg-gradient-coral flex items-center justify-center">
-            <Heart className="h-4 w-4" />
-          </div>
-        </div>
-        <div className="space-y-3">
-          {items.map((it, i) => (
-            <motion.div
-              key={it.name}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 + i * 0.15, duration: 0.7 }}
-              className="flex items-center gap-4 rounded-2xl bg-white/5 border border-white/10 p-3.5"
-            >
-              <div className="h-10 w-10 rounded-full flex items-center justify-center font-display text-base"
-                   style={{ background: `color-mix(in oklab, ${it.color} 30%, transparent)` }}>
-                {it.name[0]}
-              </div>
-              <div className="flex-1">
-                <div className="text-sm font-medium">{it.name}</div>
-                <div className="text-xs opacity-70">{it.note}</div>
-              </div>
-              <span className="h-2 w-2 rounded-full" style={{ background: it.color }} />
-            </motion.div>
-          ))}
-        </div>
-        <div className="mt-5 rounded-2xl bg-white/5 border border-white/10 p-4">
-          <div className="text-xs opacity-70">AI Assistant</div>
-          <div className="text-sm mt-1.5 leading-relaxed">
-            “You haven’t spoken to your sister in 38 days. Want me to draft a soft hello?”
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
