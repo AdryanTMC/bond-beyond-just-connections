@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import {
-  Heart, Home, Compass, MessageCircle, User, Crown, Search, Bell, Plus, Sparkles, Fingerprint,
+  Heart, Home, Compass, MessageCircle, User, Crown, Bell, Plus, Sparkles, Fingerprint, Settings as SettingsIcon,
 } from "lucide-react";
 import { useLang, LANGUAGES, type Lang } from "@/i18n";
 import { usePremium } from "@/hooks/use-premium";
@@ -24,6 +24,7 @@ const nav = [
   { to: "/app/identity", labelKey: "app.nav.identity", icon: Fingerprint },
   { to: "/app/messages", labelKey: "app.nav.messages", icon: MessageCircle },
   { to: "/app/profile", labelKey: "app.nav.profile", icon: User },
+  { to: "/app/settings", labelKey: "app.nav.settings", icon: SettingsIcon },
   { to: "/app/premium", labelKey: "app.nav.premium", icon: Crown },
 ] as const;
 
@@ -43,7 +44,7 @@ function AppLayout() {
             <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-coral shadow-glow">
               <Heart className="h-4 w-4 text-white" strokeWidth={2.5} />
             </span>
-            <span className="font-display text-xl font-semibold">Bond</span>
+            <span className="font-display text-xl font-semibold">{t("brand.name")}</span>
           </Link>
 
           <nav className="space-y-1 text-sm">
@@ -78,13 +79,7 @@ function AppLayout() {
           {/* Topbar */}
           <div className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/60">
             <div className="px-4 sm:px-6 lg:px-10 py-3.5 flex items-center gap-3">
-              <div className="flex-1 max-w-md flex items-center gap-2 rounded-full bg-muted px-4 py-2.5">
-                <Search className="h-4 w-4 text-muted-foreground" />
-                <input
-                  placeholder={t("app.search")}
-                  className="bg-transparent outline-none text-sm flex-1 placeholder:text-muted-foreground"
-                />
-              </div>
+              <div className="flex-1" />
               <AppLangSelector lang={lang} onChange={setLang} />
               <button
                 onClick={toggle}
@@ -116,7 +111,7 @@ function AppLayout() {
 
       {/* Mobile bottom nav */}
       <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 border-t border-border/60 bg-background/85 backdrop-blur-xl">
-        <div className="grid grid-cols-6">
+        <div className="grid grid-cols-7">
           {nav.map((n) => {
             const active = isActive(n.to, "exact" in n ? n.exact : false);
             return (
