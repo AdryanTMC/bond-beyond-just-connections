@@ -378,6 +378,7 @@ const pt: Dict = {
 };
 
 const es: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "Funciones", "nav.circles": "Círculos", "nav.pricing": "Planes",
   "nav.openApp": "Abrir app", "nav.login": "Iniciar sesión", "nav.cta": "Acceso anticipado", "nav.identity": "Identidad",
   "hero.badge": "Bond · Laço — en beta privado",
@@ -389,6 +390,7 @@ const es: Dict = {
   "hero.rot.4": "Tu mundo emocional, conectado.",
   "app.nav.home": "Inicio", "app.nav.discover": "Descubrir", "app.nav.messages": "Mensajes",
   "app.nav.profile": "Perfil", "app.nav.premium": "Premium", "app.nav.identity": "Identidad",
+  "app.nav.settings": "Ajustes",
   "app.search": "Buscar personas, recuerdos, momentos…", "app.newBond": "Nuevo vínculo",
   "discover.title": "Conexiones, curadas por la resonancia emocional.",
   "discover.subtitle": "Descubrir",
@@ -414,6 +416,7 @@ const es: Dict = {
 };
 
 const fr: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "Fonctions", "nav.circles": "Cercles", "nav.pricing": "Tarifs",
   "nav.openApp": "Ouvrir l'app", "nav.login": "Connexion", "nav.cta": "Accès anticipé", "nav.identity": "Identité",
   "hero.badge": "Bond · Laço — en bêta privée",
@@ -425,6 +428,7 @@ const fr: Dict = {
   "hero.rot.4": "Votre monde émotionnel, connecté.",
   "app.nav.home": "Accueil", "app.nav.discover": "Découvrir", "app.nav.messages": "Messages",
   "app.nav.profile": "Profil", "app.nav.premium": "Premium", "app.nav.identity": "Identité",
+  "app.nav.settings": "Réglages",
   "app.search": "Rechercher personnes, souvenirs, moments…", "app.newBond": "Nouveau lien",
   "discover.title": "Des connexions, choisies par résonance émotionnelle.",
   "discover.subtitle": "Découvrir",
@@ -450,6 +454,7 @@ const fr: Dict = {
 };
 
 const de: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "Funktionen", "nav.circles": "Kreise", "nav.pricing": "Preise",
   "nav.openApp": "App öffnen", "nav.login": "Anmelden", "nav.cta": "Früher Zugang", "nav.identity": "Identität",
   "hero.badge": "Bond · Laço — jetzt in privater Beta",
@@ -461,6 +466,7 @@ const de: Dict = {
   "hero.rot.4": "Deine emotionale Welt, verbunden.",
   "app.nav.home": "Start", "app.nav.discover": "Entdecken", "app.nav.messages": "Nachrichten",
   "app.nav.profile": "Profil", "app.nav.premium": "Premium", "app.nav.identity": "Identität",
+  "app.nav.settings": "Einstellungen",
   "app.search": "Menschen, Erinnerungen, Momente suchen…", "app.newBond": "Neue Bindung",
   "discover.title": "Verbindungen, kuratiert nach emotionaler Resonanz.",
   "discover.subtitle": "Entdecken",
@@ -486,6 +492,7 @@ const de: Dict = {
 };
 
 const it: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "Funzioni", "nav.circles": "Cerchie", "nav.pricing": "Prezzi",
   "nav.openApp": "Apri app", "nav.login": "Accedi", "nav.cta": "Accesso anticipato", "nav.identity": "Identità",
   "hero.badge": "Bond · Laço — ora in beta privata",
@@ -497,6 +504,7 @@ const it: Dict = {
   "hero.rot.4": "Il tuo mondo emotivo, connesso.",
   "app.nav.home": "Home", "app.nav.discover": "Scopri", "app.nav.messages": "Messaggi",
   "app.nav.profile": "Profilo", "app.nav.premium": "Premium", "app.nav.identity": "Identità",
+  "app.nav.settings": "Impostazioni",
   "app.search": "Cerca persone, ricordi, momenti…", "app.newBond": "Nuovo legame",
   "discover.title": "Connessioni, curate dalla risonanza emotiva.",
   "discover.subtitle": "Scopri",
@@ -522,6 +530,7 @@ const it: Dict = {
 };
 
 const ja: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "機能", "nav.circles": "サークル", "nav.pricing": "料金",
   "nav.openApp": "アプリを開く", "nav.login": "ログイン", "nav.cta": "先行アクセス", "nav.identity": "アイデンティティ",
   "hero.badge": "Bond · Laço — プライベートベータ公開中",
@@ -533,6 +542,7 @@ const ja: Dict = {
   "hero.rot.4": "あなたの感情世界、つながる。",
   "app.nav.home": "ホーム", "app.nav.discover": "発見", "app.nav.messages": "メッセージ",
   "app.nav.profile": "プロフィール", "app.nav.premium": "プレミアム", "app.nav.identity": "アイデンティティ",
+  "app.nav.settings": "設定",
   "app.search": "人・思い出・瞬間を検索…", "app.newBond": "新しい絆",
   "discover.title": "感情の共鳴で導かれる、出会い。",
   "discover.subtitle": "発見",
@@ -558,6 +568,7 @@ const ja: Dict = {
 };
 
 const ko: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "기능", "nav.circles": "서클", "nav.pricing": "요금제",
   "nav.openApp": "앱 열기", "nav.login": "로그인", "nav.cta": "사전 액세스", "nav.identity": "정체성",
   "hero.badge": "Bond · Laço — 비공개 베타",
@@ -569,6 +580,7 @@ const ko: Dict = {
   "hero.rot.4": "당신의 감정 세계, 연결되다.",
   "app.nav.home": "홈", "app.nav.discover": "발견", "app.nav.messages": "메시지",
   "app.nav.profile": "프로필", "app.nav.premium": "프리미엄", "app.nav.identity": "정체성",
+  "app.nav.settings": "설정",
   "app.search": "사람·추억·순간 검색…", "app.newBond": "새 유대",
   "discover.title": "감정의 공명으로 큐레이션된 인연.",
   "discover.subtitle": "발견",
