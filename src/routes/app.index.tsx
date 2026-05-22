@@ -8,6 +8,11 @@ import sofiaImg from "@/assets/person-sofia.jpg";
 import danielImg from "@/assets/person-daniel.jpg";
 import yumiImg from "@/assets/person-yumi.jpg";
 import theoImg from "@/assets/person-theo.jpg";
+import sceneRomance from "@/assets/scene-romance-evening.jpg";
+import sceneFriends from "@/assets/scene-friends-rooftop.jpg";
+import sceneNetworking from "@/assets/scene-networking-cafe.jpg";
+import sceneCommunity from "@/assets/scene-community-dinner.jpg";
+import sceneMemory from "@/assets/scene-memory-polaroid.jpg";
 
 export const Route = createFileRoute("/app/")({
   component: AppHome,

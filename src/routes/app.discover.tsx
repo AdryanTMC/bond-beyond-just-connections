@@ -9,6 +9,11 @@ import sofiaImg from "@/assets/person-sofia.jpg";
 import theoImg from "@/assets/person-theo.jpg";
 import yumiImg from "@/assets/person-yumi.jpg";
 import danielImg from "@/assets/person-daniel.jpg";
+import isabelaImg from "@/assets/person-isabela.jpg";
+import noahImg from "@/assets/person-noah.jpg";
+import priyaImg from "@/assets/person-priya.jpg";
+import camilaImg from "@/assets/person-camila.jpg";
+import kenjiImg from "@/assets/person-kenji.jpg";
 
 export const Route = createFileRoute("/app/discover")({
   component: Discover,
@@ -52,6 +57,26 @@ const cards: Person[] = [
     bio: "Photographer chasing golden light. Believes friendship is the most romantic thing two humans can build.",
     interests: ["Photography", "Nature", "Jazz", "Travel"], compatibility: 87, depth: 90,
     gradient: "linear-gradient(135deg, #3FB98E, #D6B36A)", photo: danielImg },
+  { name: "Isabela", age: 30, city: "Porto", distance: "Travel mode · PT",
+    bio: "Sommelier and slow-living advocate. Long dinners, handwritten notes, and people who remember the small things.",
+    interests: ["Wine", "Slow living", "Letters", "Jazz"], compatibility: 92, depth: 88,
+    gradient: "linear-gradient(135deg, #FF7A8A, #F4B860)", photo: isabelaImg },
+  { name: "Noah", age: 32, city: "Brooklyn", distance: "8 km away",
+    bio: "Product designer turning ideas into rituals. Curious, calm, and unreasonably loyal to long friendships.",
+    interests: ["Design", "Coffee", "Running", "Books"], compatibility: 90, depth: 84,
+    gradient: "linear-gradient(135deg, #69A7FF, #3FB98E)", photo: noahImg },
+  { name: "Priya", age: 28, city: "Mumbai", distance: "Global mode",
+    bio: "Storyteller building a community for women in tech. Believes the best networks feel like chosen family.",
+    interests: ["Mentorship", "Yoga", "Cinema", "Tea"], compatibility: 93, depth: 91,
+    gradient: "linear-gradient(135deg, #FF7A8A, #8B5CF6)", photo: priyaImg },
+  { name: "Camila", age: 35, city: "Mexico City", distance: "Travel mode · MX",
+    bio: "Editor-in-chief, minimalist by design. Looking for thoughtful conversations and quiet, lasting bonds.",
+    interests: ["Editorial", "Architecture", "Mezcal", "Poetry"], compatibility: 85, depth: 93,
+    gradient: "linear-gradient(135deg, #8B5CF6, #D6B36A)", photo: camilaImg },
+  { name: "Kenji", age: 29, city: "Kyoto", distance: "Travel mode · JP",
+    bio: "Tea maker and amateur film photographer. Quiet mornings, long walks, and friendships that aren't in a hurry.",
+    interests: ["Tea", "Film", "Cycling", "Bookshops"], compatibility: 88, depth: 87,
+    gradient: "linear-gradient(135deg, #3FB98E, #69A7FF)", photo: kenjiImg },
 ];
 
 function Discover() {
