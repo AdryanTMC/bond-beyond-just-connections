@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { Sparkles, Clock } from "lucide-react";
+import { Sparkles, Clock, Heart, X, Star, Flame } from "lucide-react";
 import { useLang } from "@/i18n";
 import marianaImg from "@/assets/person-mariana.jpg";
 import lucasImg from "@/assets/person-lucas.jpg";
@@ -39,6 +39,59 @@ function AppHome() {
           {t("home.title1")} <span className="text-gradient-coral">{t("home.title2")}</span>
         </h1>
       </motion.div>
+
+      {/* Match bar — quick discover access */}
+      <motion.section
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="mt-8 rounded-3xl border border-border/70 bg-card p-5 shadow-soft overflow-hidden relative"
+      >
+        <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-gradient-coral opacity-20 blur-3xl" />
+        <div className="flex items-center justify-between mb-4 relative">
+          <div className="flex items-center gap-2">
+            <Flame className="h-4 w-4 text-coral" />
+            <h2 className="font-display text-lg font-medium">Match Bar</h2>
+          </div>
+          <Link to="/app/discover" className="text-xs text-muted-foreground hover:text-foreground">
+            Open Discover →
+          </Link>
+        </div>
+        <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory relative">
+          {people.map((p) => (
+            <Link
+              key={p.name}
+              to="/app/discover"
+              className="group relative shrink-0 snap-start w-32 sm:w-36 rounded-2xl overflow-hidden border border-border/60 bg-background hover:shadow-glow transition-all"
+            >
+              <div className="relative h-40 w-full">
+                <img src={p.photo} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                <div
+                  className="absolute top-2 right-2 text-[10px] uppercase tracking-widest rounded-full px-2 py-0.5 text-white backdrop-blur"
+                  style={{ background: `color-mix(in oklab, ${p.color} 70%, transparent)` }}
+                >
+                  {p.strength}%
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-2.5 text-white">
+                  <div className="text-sm font-medium leading-tight">{p.name}</div>
+                </div>
+              </div>
+              <div className="flex items-center justify-around py-2 bg-card">
+                <span className="h-7 w-7 rounded-full flex items-center justify-center bg-foreground/5 text-muted-foreground group-hover:text-foreground transition-colors">
+                  <X className="h-3.5 w-3.5" />
+                </span>
+                <span className="h-7 w-7 rounded-full flex items-center justify-center bg-gradient-gold text-midnight">
+                  <Star className="h-3.5 w-3.5" />
+                </span>
+                <span className="h-7 w-7 rounded-full flex items-center justify-center bg-gradient-coral text-white shadow-glow">
+                  <Heart className="h-3.5 w-3.5" />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </motion.section>
 
       <div className="mt-9 grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard label={t("home.stat.bonds")} value="52" hint={t("home.stat.bonds.hint")} />
