@@ -8,6 +8,11 @@ import sofiaImg from "@/assets/person-sofia.jpg";
 import danielImg from "@/assets/person-daniel.jpg";
 import yumiImg from "@/assets/person-yumi.jpg";
 import theoImg from "@/assets/person-theo.jpg";
+import sceneRomance from "@/assets/scene-romance-evening.jpg";
+import sceneFriends from "@/assets/scene-friends-rooftop.jpg";
+import sceneNetworking from "@/assets/scene-networking-cafe.jpg";
+import sceneCommunity from "@/assets/scene-community-dinner.jpg";
+import sceneMemory from "@/assets/scene-memory-polaroid.jpg";
 
 export const Route = createFileRoute("/app/")({
   component: AppHome,
@@ -184,6 +189,44 @@ function AppHome() {
           </div>
         </aside>
       </div>
+
+      {/* Demo gallery — visual moments across all bond categories */}
+      <section className="mt-12">
+        <div className="flex items-end justify-between mb-5">
+          <div>
+            <h2 className="font-display text-2xl font-medium">Moments across your circles</h2>
+            <p className="text-sm text-muted-foreground mt-1">Romance · Friendship · Networking · Community · Memory</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          {[
+            { src: sceneRomance, label: "Romance", tone: "var(--color-romantic)" },
+            { src: sceneFriends, label: "Friendship", tone: "var(--color-friends)" },
+            { src: sceneNetworking, label: "Networking", tone: "var(--color-pro)" },
+            { src: sceneCommunity, label: "Community", tone: "var(--color-family)" },
+            { src: sceneMemory, label: "Memory", tone: "var(--color-memory)" },
+          ].map((s, i) => (
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.05 }}
+              className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-border/60 shadow-soft"
+            >
+              <img src={s.src} alt={s.label} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-3 text-white">
+                <span
+                  className="text-[10px] uppercase tracking-widest rounded-full px-2 py-0.5 backdrop-blur"
+                  style={{ background: `color-mix(in oklab, ${s.tone} 70%, transparent)` }}
+                >
+                  {s.label}
+                </span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
     </>
   );
 }
