@@ -22,8 +22,8 @@ export function SiteHeader() {
             <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-coral shadow-glow">
               <Heart className="h-4 w-4 text-white" strokeWidth={2.5} />
             </span>
-            <span className="font-display text-xl font-semibold tracking-tight">Bond</span>
-            <span className="hidden sm:inline text-xs text-muted-foreground ml-1">/ Laço</span>
+            <span className="font-display text-xl font-semibold tracking-tight">{t("brand.name")}</span>
+            <span className="hidden sm:inline text-xs text-muted-foreground ml-1">{t("brand.tagline")}</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">

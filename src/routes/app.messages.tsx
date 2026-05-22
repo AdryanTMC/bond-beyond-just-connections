@@ -15,33 +15,31 @@ export const Route = createFileRoute("/app/messages")({
 
 type Msg = { from: "me" | "them"; text: string; at: string; reaction?: string; memory?: { title: string; tone: string } };
 
-const threads = [
-  { id: "mariana", name: "Mariana", color: "var(--color-romantic)", last: "I still remember Lisbon…", unread: 2, online: true, photo: marianaImg },
-  { id: "lucas", name: "Lucas", color: "var(--color-inner)", last: "Coffee Sunday?", unread: 0, online: true, photo: lucasImg },
-  { id: "yumi", name: "Yumi", color: "var(--color-memory)", last: "Voice note", unread: 1, online: false, photo: yumiImg },
-  { id: "sarah", name: "Sarah", color: "var(--color-friends)", last: "It's been a while ❤️", unread: 0, online: false, photo: sofiaImg },
-  { id: "theo", name: "Théo", color: "var(--color-pro)", last: "Let's collaborate", unread: 0, online: true, photo: theoImg },
-];
-
-const initialMessages: Record<string, Msg[]> = {
-  mariana: [
-    { from: "them", text: "I was listening to that vinyl you sent. It still makes me cry.", at: "20:11" },
-    { from: "me", text: "It's been three years already. Lisbon feels like yesterday.", at: "20:12", reaction: "❤️" },
-    { from: "them", text: "Can we add it to our album?", at: "20:14",
-      memory: { title: "Lisbon · Summer", tone: "var(--color-romantic)" } },
-    { from: "me", text: "Sealing it as a capsule for our 5-year anniversary.", at: "20:15" },
-  ],
-  lucas: [{ from: "them", text: "Coffee Sunday?", at: "11:02" }],
-  yumi: [{ from: "them", text: "🎙️ Voice note · 0:32", at: "09:45" }],
-  sarah: [{ from: "them", text: "It's been a while ❤️", at: "Yesterday" }],
-  theo: [{ from: "them", text: "Let's collaborate", at: "Mon" }],
-};
-
 function Messages() {
   const { t } = useLang();
   const [active, setActive] = useState("mariana");
   const [draft, setDraft] = useState("");
-  const [convo, setConvo] = useState<Record<string, Msg[]>>(initialMessages);
+  const threads = [
+    { id: "mariana", name: "Mariana", color: "var(--color-romantic)", last: t("msg.thread.mariana.last"), unread: 2, online: true, photo: marianaImg, when: "20:15" },
+    { id: "lucas", name: "Lucas", color: "var(--color-inner)", last: t("msg.thread.lucas.last"), unread: 0, online: true, photo: lucasImg, when: t("msg.thread.lucas.when") },
+    { id: "yumi", name: "Yumi", color: "var(--color-memory)", last: t("msg.thread.yumi.last"), unread: 1, online: false, photo: yumiImg, when: t("msg.thread.yumi.when") },
+    { id: "sarah", name: "Sarah", color: "var(--color-friends)", last: t("msg.thread.sarah.last"), unread: 0, online: false, photo: sofiaImg, when: t("msg.thread.sarah.when") },
+    { id: "theo", name: "Théo", color: "var(--color-pro)", last: t("msg.thread.theo.last"), unread: 0, online: true, photo: theoImg, when: t("msg.thread.theo.when") },
+  ];
+  const initial: Record<string, Msg[]> = {
+    mariana: [
+      { from: "them", text: t("msg.m.mariana.1"), at: "20:11" },
+      { from: "me", text: t("msg.m.mariana.2"), at: "20:12", reaction: "❤️" },
+      { from: "them", text: t("msg.m.mariana.3"), at: "20:14",
+        memory: { title: t("msg.memory.lisbon"), tone: "var(--color-romantic)" } },
+      { from: "me", text: t("msg.m.mariana.4"), at: "20:15" },
+    ],
+    lucas: [{ from: "them", text: t("msg.thread.lucas.last"), at: t("msg.thread.lucas.when") }],
+    yumi: [{ from: "them", text: t("msg.thread.yumi.voice"), at: t("msg.thread.yumi.when") }],
+    sarah: [{ from: "them", text: t("msg.thread.sarah.last"), at: t("msg.thread.sarah.when") }],
+    theo: [{ from: "them", text: t("msg.thread.theo.last"), at: t("msg.thread.theo.when") }],
+  };
+  const [convo, setConvo] = useState<Record<string, Msg[]>>(initial);
   const thread = threads.find((t) => t.id === active)!;
   const list = convo[active] ?? [];
 
@@ -136,7 +134,7 @@ function Messages() {
               <div className="text-[10px] uppercase tracking-widest opacity-80 flex items-center gap-1.5">
                 <Sparkles className="h-3 w-3" /> {t("msg.ai")}
               </div>
-              <div className="text-sm mt-1.5">“Send the photo from your Lisbon trip — it would land warmly right now.”</div>
+            <div className="text-sm mt-1.5">{t("msg.ai.body")}</div>
               <div className="mt-3 flex gap-2">
                 <button className="rounded-full bg-ivory text-midnight text-[11px] px-3 py-1.5 font-medium">{t("msg.ai.use")}</button>
                 <button className="rounded-full bg-white/10 border border-white/15 text-[11px] px-3 py-1.5 font-medium">{t("msg.ai.skip")}</button>

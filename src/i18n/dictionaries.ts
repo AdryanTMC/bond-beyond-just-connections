@@ -3,6 +3,8 @@ export type Lang = "en" | "pt" | "es" | "fr" | "de" | "it" | "ja" | "ko";
 type Dict = Record<string, string>;
 
 const en: Dict = {
+  "brand.name": "Bond",
+  "brand.tagline": "/ Laço",
   // Nav
   "nav.features": "Features",
   "nav.circles": "Circles",
@@ -29,6 +31,7 @@ const en: Dict = {
   "app.nav.profile": "Profile",
   "app.nav.premium": "Premium",
   "app.nav.identity": "Identity",
+  "app.nav.settings": "Settings",
   "app.search": "Search people, memories, moments…",
   "app.newBond": "New bond",
   // Discover
@@ -129,6 +132,42 @@ const en: Dict = {
   "msg.ai": "AI suggestion",
   "msg.ai.use": "Use it", "msg.ai.skip": "Skip",
   "msg.placeholder": "Write something they'll remember…",
+  "msg.thread.mariana.last": "I still remember Lisbon…",
+  "msg.thread.lucas.last": "Coffee on Sunday?",
+  "msg.thread.yumi.last": "Voice note",
+  "msg.thread.sarah.last": "It's been a while ❤️",
+  "msg.thread.theo.last": "Let's collaborate",
+  "msg.thread.lucas.when": "11:02",
+  "msg.thread.yumi.when": "09:45",
+  "msg.thread.sarah.when": "Yesterday",
+  "msg.thread.theo.when": "Mon",
+  "msg.thread.yumi.voice": "🎙️ Voice note · 0:32",
+  "msg.m.mariana.1": "I was listening to that vinyl you sent. It still makes me cry.",
+  "msg.m.mariana.2": "It's been three years already. Lisbon feels like yesterday.",
+  "msg.m.mariana.3": "Can we add it to our album?",
+  "msg.m.mariana.4": "Sealing it as a capsule for our 5-year anniversary.",
+  "msg.memory.lisbon": "Lisbon · Summer",
+  "msg.ai.body": "“Send the photo from your Lisbon trip — it would land warmly right now.”",
+  // Settings
+  "settings.title": "Settings",
+  "settings.subtitle": "Tune Bond to find your perfect match.",
+  "settings.tab.distance": "Distance",
+  "settings.tab.countries": "Other countries",
+  "settings.tab.match": "Match preferences",
+  "settings.distance.label": "Search radius",
+  "settings.distance.hint": "We'll show people within this distance from you.",
+  "settings.distance.global": "Global mode — see profiles worldwide",
+  "settings.countries.label": "Open me to other countries",
+  "settings.countries.hint": "Pick the countries where you'd love to discover people.",
+  "settings.match.gender": "I'm interested in",
+  "settings.match.age": "Age range",
+  "settings.match.likes": "Things I love",
+  "settings.match.likes.hint": "Used to find your perfect match.",
+  "settings.save": "Save preferences",
+  "settings.gender.women": "Women",
+  "settings.gender.men": "Men",
+  "settings.gender.nonbinary": "Non-binary",
+  "settings.gender.everyone": "Everyone",
   // Profile
   "profile.location": "Lisbon, PT · Global mode",
   "profile.bio": "Architect & quiet romantic. I believe in long letters, soft mornings, and friendships that age like wine.",
@@ -157,6 +196,8 @@ const en: Dict = {
 };
 
 const pt: Dict = {
+  "brand.name": "Laços",
+  "brand.tagline": "/ Bond",
   "nav.features": "Recursos",
   "nav.circles": "Círculos",
   "nav.pricing": "Planos",
@@ -180,6 +221,7 @@ const pt: Dict = {
   "app.nav.profile": "Perfil",
   "app.nav.premium": "Premium",
   "app.nav.identity": "Identidade",
+  "app.nav.settings": "Ajustes",
   "app.search": "Buscar pessoas, memórias, momentos…",
   "app.newBond": "Novo laço",
   "discover.title": "Conexões, curadas pela ressonância emocional.",
@@ -276,6 +318,41 @@ const pt: Dict = {
   "msg.ai": "Sugestão da IA",
   "msg.ai.use": "Usar", "msg.ai.skip": "Pular",
   "msg.placeholder": "Escreva algo que ela vai lembrar…",
+  "msg.thread.mariana.last": "Ainda lembro de Lisboa…",
+  "msg.thread.lucas.last": "Café no domingo?",
+  "msg.thread.yumi.last": "Áudio",
+  "msg.thread.sarah.last": "Faz um tempo ❤️",
+  "msg.thread.theo.last": "Vamos colaborar",
+  "msg.thread.lucas.when": "11:02",
+  "msg.thread.yumi.when": "09:45",
+  "msg.thread.sarah.when": "Ontem",
+  "msg.thread.theo.when": "Seg",
+  "msg.thread.yumi.voice": "🎙️ Áudio · 0:32",
+  "msg.m.mariana.1": "Estava ouvindo aquele vinil que você mandou. Ainda me faz chorar.",
+  "msg.m.mariana.2": "Já fazem três anos. Lisboa parece ontem.",
+  "msg.m.mariana.3": "Podemos adicionar ao nosso álbum?",
+  "msg.m.mariana.4": "Selando como uma cápsula para o nosso aniversário de 5 anos.",
+  "msg.memory.lisbon": "Lisboa · Verão",
+  "msg.ai.body": "“Mande a foto da viagem a Lisboa — ela cairia bem agora.”",
+  "settings.title": "Ajustes",
+  "settings.subtitle": "Ajuste o Laço para encontrar seu par perfeito.",
+  "settings.tab.distance": "Distância",
+  "settings.tab.countries": "Outros países",
+  "settings.tab.match": "Preferências de par",
+  "settings.distance.label": "Raio de busca",
+  "settings.distance.hint": "Mostraremos pessoas dentro dessa distância de você.",
+  "settings.distance.global": "Modo global — veja perfis do mundo todo",
+  "settings.countries.label": "Abra-me para outros países",
+  "settings.countries.hint": "Escolha os países onde você adoraria descobrir pessoas.",
+  "settings.match.gender": "Tenho interesse em",
+  "settings.match.age": "Faixa etária",
+  "settings.match.likes": "Coisas que eu amo",
+  "settings.match.likes.hint": "Usado para encontrar seu par perfeito.",
+  "settings.save": "Salvar preferências",
+  "settings.gender.women": "Mulheres",
+  "settings.gender.men": "Homens",
+  "settings.gender.nonbinary": "Não-binárie",
+  "settings.gender.everyone": "Todos",
   "profile.location": "Lisboa, PT · Modo global",
   "profile.bio": "Arquiteto & romântico silencioso. Acredito em cartas longas, manhãs lentas e amizades que envelhecem como vinho.",
   "profile.edit": "Editar perfil",
@@ -301,6 +378,7 @@ const pt: Dict = {
 };
 
 const es: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "Funciones", "nav.circles": "Círculos", "nav.pricing": "Planes",
   "nav.openApp": "Abrir app", "nav.login": "Iniciar sesión", "nav.cta": "Acceso anticipado", "nav.identity": "Identidad",
   "hero.badge": "Bond · Laço — en beta privado",
@@ -312,6 +390,7 @@ const es: Dict = {
   "hero.rot.4": "Tu mundo emocional, conectado.",
   "app.nav.home": "Inicio", "app.nav.discover": "Descubrir", "app.nav.messages": "Mensajes",
   "app.nav.profile": "Perfil", "app.nav.premium": "Premium", "app.nav.identity": "Identidad",
+  "app.nav.settings": "Ajustes",
   "app.search": "Buscar personas, recuerdos, momentos…", "app.newBond": "Nuevo vínculo",
   "discover.title": "Conexiones, curadas por la resonancia emocional.",
   "discover.subtitle": "Descubrir",
@@ -337,6 +416,7 @@ const es: Dict = {
 };
 
 const fr: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "Fonctions", "nav.circles": "Cercles", "nav.pricing": "Tarifs",
   "nav.openApp": "Ouvrir l'app", "nav.login": "Connexion", "nav.cta": "Accès anticipé", "nav.identity": "Identité",
   "hero.badge": "Bond · Laço — en bêta privée",
@@ -348,6 +428,7 @@ const fr: Dict = {
   "hero.rot.4": "Votre monde émotionnel, connecté.",
   "app.nav.home": "Accueil", "app.nav.discover": "Découvrir", "app.nav.messages": "Messages",
   "app.nav.profile": "Profil", "app.nav.premium": "Premium", "app.nav.identity": "Identité",
+  "app.nav.settings": "Réglages",
   "app.search": "Rechercher personnes, souvenirs, moments…", "app.newBond": "Nouveau lien",
   "discover.title": "Des connexions, choisies par résonance émotionnelle.",
   "discover.subtitle": "Découvrir",
@@ -373,6 +454,7 @@ const fr: Dict = {
 };
 
 const de: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "Funktionen", "nav.circles": "Kreise", "nav.pricing": "Preise",
   "nav.openApp": "App öffnen", "nav.login": "Anmelden", "nav.cta": "Früher Zugang", "nav.identity": "Identität",
   "hero.badge": "Bond · Laço — jetzt in privater Beta",
@@ -384,6 +466,7 @@ const de: Dict = {
   "hero.rot.4": "Deine emotionale Welt, verbunden.",
   "app.nav.home": "Start", "app.nav.discover": "Entdecken", "app.nav.messages": "Nachrichten",
   "app.nav.profile": "Profil", "app.nav.premium": "Premium", "app.nav.identity": "Identität",
+  "app.nav.settings": "Einstellungen",
   "app.search": "Menschen, Erinnerungen, Momente suchen…", "app.newBond": "Neue Bindung",
   "discover.title": "Verbindungen, kuratiert nach emotionaler Resonanz.",
   "discover.subtitle": "Entdecken",
@@ -409,6 +492,7 @@ const de: Dict = {
 };
 
 const it: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "Funzioni", "nav.circles": "Cerchie", "nav.pricing": "Prezzi",
   "nav.openApp": "Apri app", "nav.login": "Accedi", "nav.cta": "Accesso anticipato", "nav.identity": "Identità",
   "hero.badge": "Bond · Laço — ora in beta privata",
@@ -420,6 +504,7 @@ const it: Dict = {
   "hero.rot.4": "Il tuo mondo emotivo, connesso.",
   "app.nav.home": "Home", "app.nav.discover": "Scopri", "app.nav.messages": "Messaggi",
   "app.nav.profile": "Profilo", "app.nav.premium": "Premium", "app.nav.identity": "Identità",
+  "app.nav.settings": "Impostazioni",
   "app.search": "Cerca persone, ricordi, momenti…", "app.newBond": "Nuovo legame",
   "discover.title": "Connessioni, curate dalla risonanza emotiva.",
   "discover.subtitle": "Scopri",
@@ -445,6 +530,7 @@ const it: Dict = {
 };
 
 const ja: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "機能", "nav.circles": "サークル", "nav.pricing": "料金",
   "nav.openApp": "アプリを開く", "nav.login": "ログイン", "nav.cta": "先行アクセス", "nav.identity": "アイデンティティ",
   "hero.badge": "Bond · Laço — プライベートベータ公開中",
@@ -456,6 +542,7 @@ const ja: Dict = {
   "hero.rot.4": "あなたの感情世界、つながる。",
   "app.nav.home": "ホーム", "app.nav.discover": "発見", "app.nav.messages": "メッセージ",
   "app.nav.profile": "プロフィール", "app.nav.premium": "プレミアム", "app.nav.identity": "アイデンティティ",
+  "app.nav.settings": "設定",
   "app.search": "人・思い出・瞬間を検索…", "app.newBond": "新しい絆",
   "discover.title": "感情の共鳴で導かれる、出会い。",
   "discover.subtitle": "発見",
@@ -481,6 +568,7 @@ const ja: Dict = {
 };
 
 const ko: Dict = {
+  "brand.name": "Bond", "brand.tagline": "/ Laço",
   "nav.features": "기능", "nav.circles": "서클", "nav.pricing": "요금제",
   "nav.openApp": "앱 열기", "nav.login": "로그인", "nav.cta": "사전 액세스", "nav.identity": "정체성",
   "hero.badge": "Bond · Laço — 비공개 베타",
@@ -492,6 +580,7 @@ const ko: Dict = {
   "hero.rot.4": "당신의 감정 세계, 연결되다.",
   "app.nav.home": "홈", "app.nav.discover": "발견", "app.nav.messages": "메시지",
   "app.nav.profile": "프로필", "app.nav.premium": "프리미엄", "app.nav.identity": "정체성",
+  "app.nav.settings": "설정",
   "app.search": "사람·추억·순간 검색…", "app.newBond": "새 유대",
   "discover.title": "감정의 공명으로 큐레이션된 인연.",
   "discover.subtitle": "발견",
