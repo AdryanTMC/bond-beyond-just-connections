@@ -12,9 +12,9 @@ import { useLang } from "@/i18n";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Bond — Relationships that stay." },
-      { name: "description", content: "The social layer for real human connections. Preserve memories, nurture circles, never lose touch with the people who matter." },
-      { property: "og:title", content: "Bond — Relationships that stay." },
+      { title: "Bond · Capture page — Relationships that stay." },
+      { name: "description", content: "Lead capture page · join the Bond waitlist. The social layer for real human connections." },
+      { property: "og:title", content: "Bond · Capture page" },
       { property: "og:description", content: "The social layer for real human connections." },
     ],
   }),
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
-  const { t } = useLang();
+  const { t, price } = useLang();
   const categories = [
     { name: t("landing.cat.romantic"), color: "var(--color-romantic)", desc: t("landing.cat.romantic.desc") },
     { name: t("landing.cat.friendships"), color: "var(--color-friends)", desc: t("landing.cat.friendships.desc") },
@@ -148,7 +148,7 @@ function Landing() {
           <div className="grid md:grid-cols-3 gap-5">
             <PriceCard
               tier={t("landing.price.free")}
-              price="$0"
+              price={price(0)}
               tagline={t("landing.price.free.tag")}
               features={[t("landing.free.1"), t("landing.free.2"), t("landing.free.3"), t("landing.free.4")]}
               monthLabel={t("landing.price.month")}
@@ -156,7 +156,7 @@ function Landing() {
             />
             <PriceCard
               tier={t("landing.price.premium")}
-              price="$9"
+              price={price(9)}
               tagline={t("landing.price.premium.tag")}
               featured
               features={[t("landing.prem.1"), t("landing.prem.2"), t("landing.prem.3"), t("landing.prem.4"), t("landing.prem.5")]}

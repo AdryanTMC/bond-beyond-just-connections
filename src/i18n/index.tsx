@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { dictionaries, type Lang } from "./dictionaries";
+import { dictionaries, formatPrice, type Lang } from "./dictionaries";
 
 export type { Lang } from "./dictionaries";
 
@@ -19,6 +19,7 @@ type Ctx = {
   country: string;
   setLang: (l: Lang) => void;
   t: (k: string) => string;
+  price: (usd: number) => string;
 };
 const LanguageContext = createContext<Ctx | null>(null);
 
@@ -89,6 +90,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     country,
     setLang,
     t: (k) => dictionaries[lang][k] ?? dictionaries.en[k] ?? k,
+    price: (usd) => formatPrice(usd, country),
   }), [lang, country]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
@@ -101,6 +103,7 @@ export function useLang() {
     country: "US",
     setLang: () => {},
     t: (k: string) => dictionaries.en[k] ?? k,
+    price: (usd: number) => formatPrice(usd, "US"),
   };
   return ctx;
 }
