@@ -7,8 +7,9 @@ import romance from "@/assets/banner-romance.webp";
 import friends from "@/assets/banner-friends.webp";
 import community from "@/assets/banner-community.jpg";
 import couple from "@/assets/banner-couple.jpg";
+import coupleHappy from "@/assets/banner-couple-happy.jpg";
 
-const banners = [couple, romance, friends, community];
+const banners = [coupleHappy, couple, romance, friends, community];
 
 export function CinematicHero() {
   const { t } = useLang();
