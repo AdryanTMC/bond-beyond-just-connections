@@ -1,7 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "motion/react";
-import { useMemo, useState } from "react";
-import { Heart, X, Star, MapPin, Sparkles, Users, Briefcase, Home } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Heart, X, Star, MapPin, Sparkles, Users, Briefcase, Home, SlidersHorizontal } from "lucide-react";
 import { useLang } from "@/i18n";
 import marianaImg from "@/assets/person-mariana.jpg";
 import lucasImg from "@/assets/person-lucas.jpg";
@@ -30,65 +30,115 @@ type Person = {
   name: string; age: number; city: string; distance: string;
   bio: string; interests: string[]; compatibility: number; depth: number;
   gradient: string; photo: string;
+  gender: "women" | "men" | "nonbinary"; country: string; km: number;
 };
 
 const cards: Person[] = [
-  { name: "Mariana", age: 28, city: "Lisbon", distance: "2 km away",
+  { name: "Mariana", age: 28, city: "Lisbon", distance: "2 km away", gender: "women", country: "PT", km: 2,
     bio: "Architect, slow mornings, vinyl, candlelit dinners. Believes that paying attention is the highest form of love.",
     interests: ["Architecture", "Vinyl", "Travel", "Cooking"], compatibility: 94, depth: 86,
     gradient: "linear-gradient(135deg, #FF7A8A, #D6B36A)", photo: marianaImg },
-  { name: "Lucas", age: 31, city: "São Paulo", distance: "5 km away",
+  { name: "Lucas", age: 31, city: "São Paulo", distance: "5 km away", gender: "men", country: "BR", km: 5,
     bio: "Founder · climbing · quiet introvert that lights up with the right people. Building a life that doesn't need a vacation from itself.",
     interests: ["Startups", "Climbing", "Books", "Espresso"], compatibility: 88, depth: 79,
     gradient: "linear-gradient(135deg, #69A7FF, #8B5CF6)", photo: lucasImg },
-  { name: "Sofia", age: 26, city: "Barcelona", distance: "Travel mode · ES",
+  { name: "Sofia", age: 26, city: "Barcelona", distance: "Travel mode · ES", gender: "women", country: "ES", km: 1800,
     bio: "Filmmaker capturing real moments. Looking for friendships that feel like home and conversations that last past midnight.",
     interests: ["Cinema", "Sunsets", "Slow food", "Letters"], compatibility: 91, depth: 92,
     gradient: "linear-gradient(135deg, #F4B860, #FF7A8A)", photo: sofiaImg },
-  { name: "Théo", age: 33, city: "Paris", distance: "Global mode",
+  { name: "Théo", age: 33, city: "Paris", distance: "Global mode", gender: "men", country: "FR", km: 2400,
     bio: "Composer · learning to be present. Late-night walks, long letters, intentional friendships.",
     interests: ["Music", "Walks", "Philosophy"], compatibility: 83, depth: 88,
     gradient: "linear-gradient(135deg, #8B5CF6, #3FB98E)", photo: theoImg },
-  { name: "Yumi", age: 27, city: "Tokyo", distance: "Travel mode · JP",
+  { name: "Yumi", age: 27, city: "Tokyo", distance: "Travel mode · JP", gender: "women", country: "JP", km: 9700,
     bio: "Designer & ramen evangelist. Loves quiet bookstores, neon walks and people who write long messages.",
     interests: ["Design", "Books", "Tea", "Cinema"], compatibility: 89, depth: 85,
     gradient: "linear-gradient(135deg, #FF7A8A, #8B5CF6)", photo: yumiImg },
-  { name: "Daniel", age: 29, city: "Lagos", distance: "Global mode",
+  { name: "Daniel", age: 29, city: "Lagos", distance: "Global mode", gender: "men", country: "PT", km: 320,
     bio: "Photographer chasing golden light. Believes friendship is the most romantic thing two humans can build.",
     interests: ["Photography", "Nature", "Jazz", "Travel"], compatibility: 87, depth: 90,
     gradient: "linear-gradient(135deg, #3FB98E, #D6B36A)", photo: danielImg },
-  { name: "Isabela", age: 30, city: "Porto", distance: "Travel mode · PT",
+  { name: "Isabela", age: 30, city: "Porto", distance: "Travel mode · PT", gender: "women", country: "PT", km: 280,
     bio: "Sommelier and slow-living advocate. Long dinners, handwritten notes, and people who remember the small things.",
     interests: ["Wine", "Slow living", "Letters", "Jazz"], compatibility: 92, depth: 88,
     gradient: "linear-gradient(135deg, #FF7A8A, #F4B860)", photo: isabelaImg },
-  { name: "Noah", age: 32, city: "Brooklyn", distance: "8 km away",
+  { name: "Noah", age: 32, city: "Brooklyn", distance: "8 km away", gender: "men", country: "US", km: 8,
     bio: "Product designer turning ideas into rituals. Curious, calm, and unreasonably loyal to long friendships.",
     interests: ["Design", "Coffee", "Running", "Books"], compatibility: 90, depth: 84,
     gradient: "linear-gradient(135deg, #69A7FF, #3FB98E)", photo: noahImg },
-  { name: "Priya", age: 28, city: "Mumbai", distance: "Global mode",
+  { name: "Priya", age: 28, city: "Mumbai", distance: "Global mode", gender: "women", country: "IN", km: 7400,
     bio: "Storyteller building a community for women in tech. Believes the best networks feel like chosen family.",
     interests: ["Mentorship", "Yoga", "Cinema", "Tea"], compatibility: 93, depth: 91,
     gradient: "linear-gradient(135deg, #FF7A8A, #8B5CF6)", photo: priyaImg },
-  { name: "Camila", age: 35, city: "Mexico City", distance: "Travel mode · MX",
+  { name: "Camila", age: 35, city: "Mexico City", distance: "Travel mode · MX", gender: "women", country: "MX", km: 9200,
     bio: "Editor-in-chief, minimalist by design. Looking for thoughtful conversations and quiet, lasting bonds.",
     interests: ["Editorial", "Architecture", "Mezcal", "Poetry"], compatibility: 85, depth: 93,
     gradient: "linear-gradient(135deg, #8B5CF6, #D6B36A)", photo: camilaImg },
-  { name: "Kenji", age: 29, city: "Kyoto", distance: "Travel mode · JP",
+  { name: "Kenji", age: 29, city: "Kyoto", distance: "Travel mode · JP", gender: "men", country: "JP", km: 9600,
     bio: "Tea maker and amateur film photographer. Quiet mornings, long walks, and friendships that aren't in a hurry.",
     interests: ["Tea", "Film", "Cycling", "Bookshops"], compatibility: 88, depth: 87,
     gradient: "linear-gradient(135deg, #3FB98E, #69A7FF)", photo: kenjiImg },
 ];
 
+type Settings = {
+  distance: number; global: boolean; countries: string[];
+  gender: string; ageMin: number; ageMax: number; likes: string[];
+};
+const DEFAULT_SETTINGS: Settings = {
+  distance: 500, global: true, countries: ["BR", "PT", "US", "ES", "FR", "JP", "MX", "IN"],
+  gender: "everyone", ageMin: 18, ageMax: 80, likes: [],
+};
+
+function useSettings(): Settings {
+  const [s, setS] = useState<Settings>(DEFAULT_SETTINGS);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.localStorage.getItem("bond.settings");
+      if (raw) setS({ ...DEFAULT_SETTINGS, ...JSON.parse(raw) });
+    } catch {}
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "bond.settings" && e.newValue) {
+        try { setS({ ...DEFAULT_SETTINGS, ...JSON.parse(e.newValue) }); } catch {}
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+  return s;
+}
+
 function Discover() {
   const { t } = useLang();
+  const settings = useSettings();
   const [intent, setIntent] = useState<(typeof intentions)[number]["key"]>("romance");
   const [index, setIndex] = useState(0);
   const [decisions, setDecisions] = useState<{ name: string; action: "like" | "pass" | "super" }[]>([]);
 
-  const current = cards[index % cards.length];
-  const next = cards[(index + 1) % cards.length];
+  const filtered = useMemo(() => {
+    return cards.filter((p) => {
+      if (settings.gender !== "everyone" && p.gender !== settings.gender) return false;
+      if (p.age < settings.ageMin || p.age > settings.ageMax) return false;
+      if (!settings.global && p.km > settings.distance) return false;
+      if (!settings.global && settings.countries.length > 0 && !settings.countries.includes(p.country)) return false;
+      if (settings.likes.length > 0) {
+        const lower = p.interests.map((x) => x.toLowerCase());
+        const has = settings.likes.some((l) => lower.includes(l.toLowerCase()));
+        if (!has) return false;
+      }
+      return true;
+    });
+  }, [settings]);
+
+  // Reset index when filters change
+  useEffect(() => { setIndex(0); }, [filtered.length]);
+
+  const hasMatches = filtered.length > 0;
+  const current = hasMatches ? filtered[index % filtered.length] : null;
+  const next = hasMatches ? filtered[(index + 1) % filtered.length] : null;
 
   const decide = (action: "like" | "pass" | "super") => {
+    if (!current) return;
     setDecisions((d) => [{ name: current.name, action }, ...d].slice(0, 5));
     setIndex((i) => i + 1);
   };
@@ -102,10 +152,14 @@ function Discover() {
             <span className="text-gradient-coral">{t("discover.title")}</span>
           </h1>
         </div>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <MapPin className="h-3.5 w-3.5" />
-          <span>{t("discover.mode.local")}</span>
-        </div>
+        <Link
+          to="/app/settings"
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2 text-xs text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
+        >
+          <SlidersHorizontal className="h-3.5 w-3.5" />
+          {t("discover.filters")} ·{" "}
+          {settings.global ? "∞" : `${settings.distance}km`} · {settings.ageMin}-{settings.ageMax}
+        </Link>
       </div>
 
       {/* Intention selector */}
@@ -133,28 +187,39 @@ function Discover() {
         {/* Swipe stack */}
         <div className="lg:col-span-2 flex justify-center">
           <div className="relative w-full max-w-md h-[560px]">
-            {/* Next card preview */}
-            <div className="absolute inset-x-4 top-4 bottom-0 rounded-[2rem] bg-card border border-border/60 shadow-soft scale-[0.97] opacity-70" />
-            <AnimatePresence initial={false}>
-              <SwipeCard key={index} person={current} onDecide={decide} />
-            </AnimatePresence>
-
-            {/* Action bar */}
-            <div className="absolute -bottom-6 inset-x-0 flex justify-center gap-4 z-30">
-              <ActionBtn onClick={() => decide("pass")} aria="Pass" tone="bg-card text-foreground border border-border">
-                <X className="h-5 w-5" />
-              </ActionBtn>
-              <ActionBtn onClick={() => decide("super")} aria="Super bond" tone="bg-gradient-gold text-midnight">
-                <Star className="h-5 w-5" />
-              </ActionBtn>
-              <ActionBtn onClick={() => decide("like")} aria="Bond" tone="bg-gradient-coral text-white shadow-glow">
-                <Heart className="h-5 w-5" />
-              </ActionBtn>
-            </div>
-
-            <div className="pointer-events-none absolute -inset-12 -z-10 bg-gradient-coral opacity-20 blur-3xl rounded-full" />
-            {/* preload next image color */}
-            <div className="sr-only">{next.name}</div>
+            {current ? (
+              <>
+                <div className="absolute inset-x-4 top-4 bottom-0 rounded-[2rem] bg-card border border-border/60 shadow-soft scale-[0.97] opacity-70" />
+                <AnimatePresence initial={false}>
+                  <SwipeCard key={`${current.name}-${index}`} person={current} onDecide={decide} />
+                </AnimatePresence>
+                <div className="absolute -bottom-6 inset-x-0 flex justify-center gap-4 z-30">
+                  <ActionBtn onClick={() => decide("pass")} aria="Pass" tone="bg-card text-foreground border border-border">
+                    <X className="h-5 w-5" />
+                  </ActionBtn>
+                  <ActionBtn onClick={() => decide("super")} aria="Super bond" tone="bg-gradient-gold text-midnight">
+                    <Star className="h-5 w-5" />
+                  </ActionBtn>
+                  <ActionBtn onClick={() => decide("like")} aria="Bond" tone="bg-gradient-coral text-white shadow-glow">
+                    <Heart className="h-5 w-5" />
+                  </ActionBtn>
+                </div>
+                <div className="pointer-events-none absolute -inset-12 -z-10 bg-gradient-coral opacity-20 blur-3xl rounded-full" />
+                {next && <div className="sr-only">{next.name}</div>}
+              </>
+            ) : (
+              <div className="absolute inset-0 rounded-[2rem] border border-dashed border-border/70 bg-card/50 flex flex-col items-center justify-center text-center p-8">
+                <Sparkles className="h-8 w-8 text-muted-foreground mb-4" />
+                <div className="font-display text-xl">{t("discover.empty.title")}</div>
+                <p className="text-sm text-muted-foreground mt-2 max-w-xs">{t("discover.empty.body")}</p>
+                <Link
+                  to="/app/settings"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:opacity-90"
+                >
+                  <SlidersHorizontal className="h-4 w-4" /> {t("discover.openSettings")}
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
@@ -165,13 +230,13 @@ function Discover() {
               <Sparkles className="h-3.5 w-3.5" /> {t("discover.why")}
             </div>
             <div className="mt-4 space-y-3">
-              <Bar label={t("discover.compat")} value={current.compatibility} color="var(--color-romantic)" />
-              <Bar label={t("discover.depth")} value={current.depth} color="var(--color-inner)" />
+              <Bar label={t("discover.compat")} value={current?.compatibility ?? 0} color="var(--color-romantic)" />
+              <Bar label={t("discover.depth")} value={current?.depth ?? 0} color="var(--color-inner)" />
               <Bar label={t("discover.lifestyle")} value={77} color="var(--color-pro)" />
               <Bar label={t("discover.rhythm")} value={82} color="var(--color-friends)" />
             </div>
             <div className="mt-5 text-xs text-muted-foreground leading-relaxed">
-              <span className="text-foreground font-medium">3</span> {t("discover.mutual")}.
+              <span className="text-foreground font-medium">{filtered.length}</span> {t("discover.based")}.
             </div>
           </div>
 
@@ -265,8 +330,8 @@ function SwipeCard({ person, onDecide }: { person: Person; onDecide: (a: "like" 
           ))}
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3">
-          <Mini label="Compatibility" value={person.compatibility} />
-          <Mini label="Depth" value={person.depth} />
+          <Mini label={person.compatLabel ?? "Compatibility"} value={person.compatibility} />
+          <Mini label={person.depthLabel ?? "Depth"} value={person.depth} />
         </div>
       </div>
     </motion.div>
