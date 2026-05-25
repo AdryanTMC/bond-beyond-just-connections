@@ -101,18 +101,56 @@ export function CinematicHero() {
           </div>
         </motion.div>
 
-        {/* Indicator dots */}
-        <div className="hidden lg:flex lg:col-span-5 justify-end items-end h-full">
-          <div className="flex gap-2">
-            {banners.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setI(idx)}
-                className={`h-1 rounded-full transition-all ${idx === i ? "w-10 bg-foreground" : "w-5 bg-foreground/25"}`}
-                aria-label={`Banner ${idx + 1}`}
-              />
-            ))}
-          </div>
+        {/* Fixed couple banner card */}
+        <div className="hidden lg:flex lg:col-span-5 justify-end items-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            className="relative w-full max-w-md aspect-[4/5] rounded-[2rem] overflow-hidden shadow-elegant ring-1 ring-white/10"
+          >
+            <img
+              src={coupleHappy}
+              alt="Happy couple"
+              loading="eager"
+              fetchPriority="high"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+
+            {/* Floating heart badge */}
+            <motion.div
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-5 right-5 inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-md px-3 py-1.5 text-white text-xs"
+            >
+              <Heart className="h-3.5 w-3.5 fill-coral text-coral" />
+              <span className="font-medium">98%</span>
+            </motion.div>
+
+            <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+              <div className="text-[10px] uppercase tracking-[0.2em] opacity-80">{t("landing.cat.romantic")}</div>
+              <div className="font-display text-2xl font-medium mt-1.5 leading-tight">
+                {t("hero.rot.1")}
+              </div>
+            </div>
+
+            {/* Sparkle accents */}
+            <motion.span
+              animate={{ opacity: [0.3, 1, 0.3], scale: [1, 1.2, 1] }}
+              transition={{ duration: 2.4, repeat: Infinity }}
+              className="absolute top-10 left-6 text-gold"
+            >
+              <Sparkles className="h-5 w-5" />
+            </motion.span>
+            <motion.span
+              animate={{ opacity: [0.3, 1, 0.3], scale: [1, 1.2, 1] }}
+              transition={{ duration: 2.8, repeat: Infinity, delay: 0.8 }}
+              className="absolute bottom-24 right-8 text-coral"
+            >
+              <Heart className="h-4 w-4 fill-current" />
+            </motion.span>
+          </motion.div>
         </div>
       </div>
     </section>
