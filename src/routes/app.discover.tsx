@@ -276,6 +276,7 @@ function Discover() {
 }
 
 function SwipeCard({ person, onDecide }: { person: Person; onDecide: (a: "like" | "pass" | "super") => void }) {
+  const { t } = useLang();
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-220, 220], [-12, 12]);
   const likeOp = useTransform(x, [40, 160], [0, 1]);
@@ -330,8 +331,8 @@ function SwipeCard({ person, onDecide }: { person: Person; onDecide: (a: "like" 
           ))}
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3">
-          <Mini label={person.compatLabel ?? "Compatibility"} value={person.compatibility} />
-          <Mini label={person.depthLabel ?? "Depth"} value={person.depth} />
+          <Mini label={t("discover.compat")} value={person.compatibility} />
+          <Mini label={t("discover.depth")} value={person.depth} />
         </div>
       </div>
     </motion.div>
