@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowRight, Globe, Lock, Infinity as InfinityIcon, Sparkles } from "lucide-react";
+import { ArrowRight, Globe, Lock, Infinity as InfinityIcon, Sparkles, Heart, Star } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n";
 import romance from "@/assets/banner-romance.webp";
@@ -47,6 +47,7 @@ export function CinematicHero() {
 
       {/* Floating particles */}
       <Particles />
+      <FloatingHearts />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-10 w-full grid lg:grid-cols-12 gap-12 items-center">
         <motion.div
@@ -136,6 +137,59 @@ function Particles() {
             className="absolute rounded-full bg-white/60 mix-blend-screen blur-[1px]"
             style={{ left: `${left}%`, top: `${top}%`, width: size, height: size }}
           />
+        );
+      })}
+    </div>
+  );
+}
+
+function FloatingHearts() {
+  const items = Array.from({ length: 14 });
+  return (
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      {items.map((_, i) => {
+        const isStar = i % 5 === 0;
+        const isSpark = i % 7 === 3;
+        const left = (i * 37 + 6) % 96;
+        const top = 30 + ((i * 53) % 60);
+        const size = 14 + (i % 5) * 4;
+        const delay = (i % 11) * 0.7;
+        const dur = 8 + (i % 6);
+        const drift = i % 2 === 0 ? 18 : -22;
+        const tone =
+          i % 3 === 0
+            ? "text-coral"
+            : i % 3 === 1
+            ? "text-gold"
+            : "text-foreground/70";
+        const Icon = isStar ? Star : isSpark ? Sparkles : Heart;
+        return (
+          <motion.span
+            key={i}
+            initial={{ opacity: 0, y: 30, x: 0, rotate: -10 }}
+            animate={{
+              opacity: [0, 0.85, 0],
+              y: [30, -120, -220],
+              x: [0, drift, 0],
+              rotate: [-10, 12, -6],
+            }}
+            transition={{
+              duration: dur,
+              delay,
+              repeat: Infinity,
+              ease: "easeOut",
+            }}
+            className={`absolute ${tone} drop-shadow-[0_4px_18px_rgba(255,122,138,0.35)]`}
+            style={{ left: `${left}%`, top: `${top}%` }}
+            aria-hidden
+          >
+            <Icon
+              className="block"
+              style={{ width: size, height: size }}
+              fill={isStar ? "currentColor" : Icon === Heart ? "currentColor" : "none"}
+              strokeWidth={isStar ? 0 : 1.5}
+            />
+          </motion.span>
         );
       })}
     </div>

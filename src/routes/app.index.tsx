@@ -56,10 +56,10 @@ function AppHome() {
         <div className="flex items-center justify-between mb-4 relative">
           <div className="flex items-center gap-2">
             <Flame className="h-4 w-4 text-coral" />
-            <h2 className="font-display text-lg font-medium">Match Bar</h2>
+            <h2 className="font-display text-lg font-medium">{t("home.matchbar")}</h2>
           </div>
           <Link to="/app/discover" className="text-xs text-muted-foreground hover:text-foreground">
-            Open Discover →
+            {t("home.openDiscover")}
           </Link>
         </div>
         <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory relative">
@@ -194,17 +194,17 @@ function AppHome() {
       <section className="mt-12">
         <div className="flex items-end justify-between mb-5">
           <div>
-            <h2 className="font-display text-2xl font-medium">Moments across your circles</h2>
-            <p className="text-sm text-muted-foreground mt-1">Romance · Friendship · Networking · Community · Memory</p>
+            <h2 className="font-display text-2xl font-medium">{t("home.moments")}</h2>
+            <p className="text-sm text-muted-foreground mt-1">{t("home.moments.sub")}</p>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
           {[
-            { src: sceneRomance, label: "Romance", tone: "var(--color-romantic)" },
-            { src: sceneFriends, label: "Friendship", tone: "var(--color-friends)" },
-            { src: sceneNetworking, label: "Networking", tone: "var(--color-pro)" },
-            { src: sceneCommunity, label: "Community", tone: "var(--color-family)" },
-            { src: sceneMemory, label: "Memory", tone: "var(--color-memory)" },
+            { src: sceneRomance, label: t("discover.intent.romance"), tone: "var(--color-romantic)" },
+            { src: sceneFriends, label: t("discover.intent.friendship"), tone: "var(--color-friends)" },
+            { src: sceneNetworking, label: t("discover.intent.networking"), tone: "var(--color-pro)" },
+            { src: sceneCommunity, label: t("discover.intent.community"), tone: "var(--color-family)" },
+            { src: sceneMemory, label: t("landing.cat.memories"), tone: "var(--color-memory)" },
           ].map((s, i) => (
             <motion.div
               key={s.label}
