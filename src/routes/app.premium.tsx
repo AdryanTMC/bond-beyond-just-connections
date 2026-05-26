@@ -8,10 +8,22 @@ export const Route = createFileRoute("/app/premium")({
   component: Premium,
 });
 
-const tiers = [
+import type { PlanTier } from "@/i18n/dictionaries";
+
+type Tier = {
+  name: string;
+  tier: PlanTier;
+  tagline: string;
+  icon: typeof Sparkles;
+  gradient: string;
+  features: string[];
+  featured?: boolean;
+};
+
+const tiers: Tier[] = [
   {
     name: "Bond Plus",
-    price: "$9",
+    tier: "plus",
     tagline: "Begin the intentional life.",
     icon: Sparkles,
     gradient: "linear-gradient(135deg, #69A7FF, #8B5CF6)",
@@ -19,7 +31,7 @@ const tiers = [
   },
   {
     name: "Bond Gold",
-    price: "$19",
+    tier: "gold",
     tagline: "For the emotionally serious.",
     icon: Crown,
     gradient: "linear-gradient(135deg, #D6B36A, #FF7A8A)",
@@ -28,7 +40,7 @@ const tiers = [
   },
   {
     name: "Bond Infinity",
-    price: "$39",
+    tier: "infinity",
     tagline: "A life of curated connection.",
     icon: InfinityIcon,
     gradient: "linear-gradient(135deg, #0F172A, #FF6B6B)",
@@ -38,7 +50,7 @@ const tiers = [
 
 function Premium() {
   const { premium, toggle } = usePremium();
-  const { t } = useLang();
+  const { t, plan } = useLang();
   return (
     <div>
       <div className="text-center max-w-2xl mx-auto mb-12">
@@ -93,7 +105,7 @@ function Premium() {
               <div className="mt-5 font-display text-3xl font-medium">{t.name}</div>
               <div className="text-sm opacity-80">{t.tagline}</div>
               <div className="mt-6 flex items-baseline gap-1.5">
-                <span className="font-display text-5xl">{t.price}</span>
+                <span className="font-display text-5xl">{plan(t.tier)}</span>
                 <span className="text-sm opacity-70">/ month</span>
               </div>
               <ul className="mt-7 space-y-2.5 text-sm">
