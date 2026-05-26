@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
-import { Heart, X, Star, MapPin, Sparkles, Users, Briefcase, Home, SlidersHorizontal } from "lucide-react";
+import { Heart, X, Star, MapPin, Sparkles, Users, Briefcase, Home, SlidersHorizontal, MessageCircle } from "lucide-react";
 import { useLang } from "@/i18n";
 import marianaImg from "@/assets/person-mariana.jpg";
 import lucasImg from "@/assets/person-lucas.jpg";
@@ -114,6 +114,7 @@ function Discover() {
   const [intent, setIntent] = useState<(typeof intentions)[number]["key"]>("romance");
   const [index, setIndex] = useState(0);
   const [decisions, setDecisions] = useState<{ name: string; action: "like" | "pass" | "super" }[]>([]);
+  const [matchPerson, setMatchPerson] = useState<Person | null>(null);
 
   const filtered = useMemo(() => {
     return cards.filter((p) => {
@@ -140,6 +141,10 @@ function Discover() {
   const decide = (action: "like" | "pass" | "super") => {
     if (!current) return;
     setDecisions((d) => [{ name: current.name, action }, ...d].slice(0, 5));
+    // ~55% chance of mutual match on like/super (mocked dating-app behavior)
+    if ((action === "like" || action === "super") && Math.random() < 0.55) {
+      setMatchPerson(current);
+    }
     setIndex((i) => i + 1);
   };
 
@@ -271,6 +276,12 @@ function Discover() {
           )}
         </aside>
       </div>
+
+      <AnimatePresence>
+        {matchPerson && (
+          <MatchModal person={matchPerson} onClose={() => setMatchPerson(null)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
