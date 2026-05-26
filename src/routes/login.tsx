@@ -21,7 +21,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { t } = useLang();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -42,17 +42,23 @@ function LoginPage() {
       if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-      } else {
+      } else if (mode === "signup") {
         const { error } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/app`,
+            emailRedirectTo: `${window.location.origin}/onboarding`,
             data: { display_name: displayName || email.split("@")[0] },
           },
         });
         if (error) throw error;
-        setInfo("Check your inbox to confirm your email.");
+        setInfo("Account created! You can sign in now.");
+      } else {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        setInfo("Password reset link sent. Check your inbox.");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -64,7 +70,7 @@ function LoginPage() {
   const google = async () => {
     setError(null);
     const res = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/app`,
+      redirect_uri: `${window.location.origin}/onboarding`,
     });
     if (res.error) setError(res.error.message);
   };
@@ -85,12 +91,14 @@ function LoginPage() {
         </Link>
 
         <h1 className="font-display text-2xl text-center">
-          {mode === "signin" ? "Welcome back" : "Create your account"}
+          {mode === "signin" ? "Welcome back" : mode === "signup" ? "Create your account" : "Reset password"}
         </h1>
         <p className="text-sm text-muted-foreground text-center mt-1">
-          {mode === "signin" ? "Sign in to continue your bonds." : "Start finding people who matter."}
+          {mode === "signin" ? "Sign in to continue your bonds." : mode === "signup" ? "Start finding people who matter." : "We'll send you a reset link."}
         </p>
 
+        {mode !== "forgot" && (
+          <>
         <button
           onClick={google}
           className="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-full border border-border bg-background hover:bg-muted transition-colors px-4 py-3 text-sm font-medium"
@@ -104,6 +112,8 @@ function LoginPage() {
         <div className="my-5 flex items-center gap-3 text-[11px] uppercase tracking-widest text-muted-foreground">
           <div className="flex-1 h-px bg-border" /> or <div className="flex-1 h-px bg-border" />
         </div>
+          </>
+        )}
 
         <form onSubmit={submit} className="space-y-3">
           {mode === "signup" && (
@@ -127,18 +137,20 @@ function LoginPage() {
               className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-foreground/40"
             />
           </div>
+          {mode !== "forgot" && (
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
               type="password"
               required
-              minLength={6}
+              minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-foreground/40"
             />
           </div>
+          )}
 
           {error && <p className="text-xs text-red-500">{error}</p>}
           {info && <p className="text-xs text-emerald-600">{info}</p>}
@@ -149,16 +161,23 @@ function LoginPage() {
             className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-coral text-white py-3 text-sm font-medium shadow-glow disabled:opacity-60"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-            {mode === "signin" ? "Sign in" : "Create account"}
+            {mode === "signin" ? "Sign in" : mode === "signup" ? "Create account" : "Send reset link"}
           </button>
         </form>
 
-        <button
-          onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(null); setInfo(null); }}
-          className="mt-5 w-full text-xs text-muted-foreground hover:text-foreground"
-        >
-          {mode === "signin" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
-        </button>
+        <div className="mt-5 flex flex-col items-center gap-2 text-xs">
+          {mode === "signin" && (
+            <button onClick={() => { setMode("forgot"); setError(null); setInfo(null); }} className="text-muted-foreground hover:text-foreground">
+              Forgot password?
+            </button>
+          )}
+          <button
+            onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(null); setInfo(null); }}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            {mode === "signin" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+          </button>
+        </div>
       </motion.div>
     </div>
   );

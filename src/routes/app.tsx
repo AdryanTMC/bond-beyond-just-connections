@@ -5,6 +5,7 @@ import {
 import { useLang, LANGUAGES, type Lang } from "@/i18n";
 import { usePremium } from "@/hooks/use-premium";
 import { useAuth } from "@/hooks/use-auth";
+import { useProfile } from "@/hooks/use-profile";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
@@ -33,6 +34,7 @@ function AppLayout() {
   const { t, lang, setLang } = useLang();
   const { premium, toggle } = usePremium();
   const { user, loading, signOut } = useAuth();
+  const { profile, loading: pLoading } = useProfile();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (to: string, exact?: boolean) =>
@@ -40,9 +42,12 @@ function AppLayout() {
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login", replace: true });
-  }, [loading, user, navigate]);
+    if (!loading && user && !pLoading && profile && !profile.onboarding_completed) {
+      navigate({ to: "/onboarding", replace: true });
+    }
+  }, [loading, user, pLoading, profile, navigate]);
 
-  if (loading || !user) {
+  if (loading || !user || pLoading || (profile && !profile.onboarding_completed)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
