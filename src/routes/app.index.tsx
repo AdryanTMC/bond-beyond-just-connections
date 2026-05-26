@@ -2,40 +2,63 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Sparkles, Clock, Heart, X, Star, Flame } from "lucide-react";
 import { useLang } from "@/i18n";
-import marianaImg from "@/assets/person-mariana.jpg";
-import lucasImg from "@/assets/person-lucas.jpg";
-import sofiaImg from "@/assets/person-sofia.jpg";
-import danielImg from "@/assets/person-daniel.jpg";
-import yumiImg from "@/assets/person-yumi.jpg";
-import theoImg from "@/assets/person-theo.jpg";
-import sceneRomance from "@/assets/scene-romance-evening.jpg";
-import sceneFriends from "@/assets/scene-friends-rooftop.jpg";
-import sceneNetworking from "@/assets/scene-networking-cafe.jpg";
-import sceneCommunity from "@/assets/scene-community-dinner.jpg";
-import sceneMemory from "@/assets/scene-memory-polaroid.jpg";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/app/")({
   component: AppHome,
 });
 
-const people = [
-  { name: "Mariana", note: "Last memory · 12 days ago", color: "var(--color-romantic)", strength: 96, photo: marianaImg },
-  { name: "Yumi", note: "Sent you a voice note", color: "var(--color-inner)", strength: 88, photo: yumiImg },
-  { name: "Sarah", note: "You haven't talked in 42 days", color: "var(--color-friends)", strength: 54, photo: sofiaImg },
-  { name: "Lucas", note: "Shared a new memory", color: "var(--color-inner)", strength: 91, photo: lucasImg },
-  { name: "Théo", note: "3-year friendship anniversary today", color: "var(--color-memory)", strength: 72, photo: theoImg },
-  { name: "Daniel", note: "Capsule unlocks in 9 days", color: "var(--color-pro)", strength: 60, photo: danielImg },
-];
-
-const timeline = [
-  { when: "Today", title: "Anniversary unlocked", body: "3 years since your trip to Lisbon with Mariana.", color: "var(--color-romantic)" },
-  { when: "Yesterday", title: "Yumi shared a memory", body: "A photo from your last city walk.", color: "var(--color-inner)" },
-  { when: "2 days ago", title: "Capsule sealed", body: "A voice note for Lucas, unlocks in 1 year.", color: "var(--color-memory)" },
-  { when: "Last week", title: "New bond", body: "You added Daniel to your Work circle.", color: "var(--color-pro)" },
-];
+type Person = { id: string; name: string; note: string; color: string; strength: number; photo: string | null };
 
 function AppHome() {
   const { t } = useLang();
+  const { user } = useAuth();
+  const [people, setPeople] = useState<Person[]>([]);
+  const [stats, setStats] = useState({ matches: 0, messages: 0 });
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data: matches } = await supabase
+        .from("matches")
+        .select("id, user_a, user_b, created_at")
+        .or(`user_a.eq.${user.id},user_b.eq.${user.id}`)
+        .order("created_at", { ascending: false })
+        .limit(12);
+      const otherIds = (matches ?? []).map((m) => (m.user_a === user.id ? m.user_b : m.user_a));
+      let profilesMap = new Map<string, { display_name: string | null; photos: string[] | null }>();
+      if (otherIds.length) {
+        const { data: profs } = await supabase
+          .from("profiles")
+          .select("id, display_name, photos")
+          .in("id", otherIds);
+        profilesMap = new Map((profs ?? []).map((p) => [p.id, p]));
+      }
+      const tones = ["var(--color-romantic)", "var(--color-inner)", "var(--color-friends)", "var(--color-memory)", "var(--color-pro)"];
+      setPeople(
+        (matches ?? []).map((m, i) => {
+          const otherId = m.user_a === user.id ? m.user_b : m.user_a;
+          const p = profilesMap.get(otherId);
+          return {
+            id: otherId,
+            name: p?.display_name ?? "—",
+            note: new Date(m.created_at).toLocaleDateString(),
+            color: tones[i % tones.length],
+            strength: 70 + ((i * 7) % 30),
+            photo: p?.photos?.[0] ?? null,
+          };
+        })
+      );
+      const { count: msgCount } = await supabase
+        .from("messages")
+        .select("id", { count: "exact", head: true })
+        .eq("sender_id", user.id);
+      setStats({ matches: matches?.length ?? 0, messages: msgCount ?? 0 });
+    })();
+  }, [user]);
+
   return (
     <>
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
@@ -62,15 +85,24 @@ function AppHome() {
             {t("home.openDiscover")}
           </Link>
         </div>
+        {people.length === 0 ? (
+          <div className="text-sm text-muted-foreground py-6 text-center">
+            <Link to="/app/discover" className="underline">{t("home.openDiscover")}</Link>
+          </div>
+        ) : (
         <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory relative">
           {people.map((p) => (
             <Link
-              key={p.name}
+              key={p.id}
               to="/app/discover"
               className="group relative shrink-0 snap-start w-32 sm:w-36 rounded-2xl overflow-hidden border border-border/60 bg-background hover:shadow-glow transition-all"
             >
               <div className="relative h-40 w-full">
-                <img src={p.photo} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                {p.photo ? (
+                  <img src={p.photo} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                ) : (
+                  <div className="absolute inset-0" style={{ background: p.color, opacity: 0.5 }} />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                 <div
                   className="absolute top-2 right-2 text-[10px] uppercase tracking-widest rounded-full px-2 py-0.5 text-white backdrop-blur"
@@ -96,15 +128,15 @@ function AppHome() {
             </Link>
           ))}
         </div>
+        )}
       </motion.section>
 
-      <div className="mt-9 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard label={t("home.stat.bonds")} value="52" hint={t("home.stat.bonds.hint")} />
-        <StatCard label={t("home.stat.memories")} value="284" hint={t("home.stat.memories.hint")} />
-        <StatCard label={t("home.stat.capsules")} value="7" hint={t("home.stat.capsules.hint")} />
-        <StatCard label={t("home.stat.health")} value="84" hint={t("home.stat.health.hint")} highlight />
+      <div className="mt-9 grid grid-cols-2 gap-4">
+        <StatCard label={t("home.stat.bonds")} value={String(stats.matches)} hint={t("home.stat.bonds.hint")} />
+        <StatCard label={t("home.stat.memories")} value={String(stats.messages)} hint={t("home.stat.memories.hint")} highlight />
       </div>
 
+      {people.length > 0 && (
       <div className="mt-10 grid lg:grid-cols-3 gap-6">
         <section className="lg:col-span-2">
           <div className="flex items-end justify-between mb-5">
@@ -118,7 +150,7 @@ function AppHome() {
           <div className="grid sm:grid-cols-2 gap-4">
             {people.map((p, i) => (
               <motion.div
-                key={p.name}
+                key={p.id}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.04 }}
@@ -129,13 +161,11 @@ function AppHome() {
                   style={{ background: p.color }}
                 />
                 <div className="relative flex items-center gap-4">
-                  <img
-                    src={p.photo}
-                    alt={p.name}
-                    loading="lazy"
-                    className="h-12 w-12 rounded-full object-cover ring-2"
-                    style={{ boxShadow: `0 0 0 2px color-mix(in oklab, ${p.color} 30%, transparent)` }}
-                  />
+                  {p.photo ? (
+                    <img src={p.photo} alt={p.name} loading="lazy" className="h-12 w-12 rounded-full object-cover ring-2" style={{ boxShadow: `0 0 0 2px color-mix(in oklab, ${p.color} 30%, transparent)` }} />
+                  ) : (
+                    <div className="h-12 w-12 rounded-full" style={{ background: p.color, opacity: 0.5 }} />
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="font-medium">{p.name}</div>
                     <div className="text-xs text-muted-foreground truncate">{p.note}</div>
@@ -164,8 +194,7 @@ function AppHome() {
               {t("home.ai.body")}
             </p>
             <div className="mt-5 flex gap-2">
-              <button className="rounded-full bg-ivory text-midnight text-xs px-3.5 py-2 font-medium">{t("home.ai.draft")}</button>
-              <button className="rounded-full bg-white/10 border border-white/15 text-xs px-3.5 py-2 font-medium">{t("home.ai.later")}</button>
+              <Link to="/app/messages" className="rounded-full bg-ivory text-midnight text-xs px-3.5 py-2 font-medium">{t("home.ai.draft")}</Link>
             </div>
           </div>
 
@@ -175,13 +204,12 @@ function AppHome() {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </div>
             <ol className="space-y-4">
-              {timeline.map((t) => (
-                <li key={t.title} className="flex gap-3">
-                  <span className="mt-1.5 h-2 w-2 rounded-full shrink-0" style={{ background: t.color }} />
+              {people.slice(0, 4).map((p) => (
+                <li key={p.id} className="flex gap-3">
+                  <span className="mt-1.5 h-2 w-2 rounded-full shrink-0" style={{ background: p.color }} />
                   <div>
-                    <div className="text-[11px] uppercase tracking-widest text-muted-foreground">{t.when}</div>
-                    <div className="text-sm font-medium mt-0.5">{t.title}</div>
-                    <div className="text-xs text-muted-foreground">{t.body}</div>
+                    <div className="text-[11px] uppercase tracking-widest text-muted-foreground">{p.note}</div>
+                    <div className="text-sm font-medium mt-0.5">{p.name}</div>
                   </div>
                 </li>
               ))}
@@ -189,44 +217,7 @@ function AppHome() {
           </div>
         </aside>
       </div>
-
-      {/* Demo gallery — visual moments across all bond categories */}
-      <section className="mt-12">
-        <div className="flex items-end justify-between mb-5">
-          <div>
-            <h2 className="font-display text-2xl font-medium">{t("home.moments")}</h2>
-            <p className="text-sm text-muted-foreground mt-1">{t("home.moments.sub")}</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-          {[
-            { src: sceneRomance, label: t("discover.intent.romance"), tone: "var(--color-romantic)" },
-            { src: sceneFriends, label: t("discover.intent.friendship"), tone: "var(--color-friends)" },
-            { src: sceneNetworking, label: t("discover.intent.networking"), tone: "var(--color-pro)" },
-            { src: sceneCommunity, label: t("discover.intent.community"), tone: "var(--color-family)" },
-            { src: sceneMemory, label: t("landing.cat.memories"), tone: "var(--color-memory)" },
-          ].map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
-              className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-border/60 shadow-soft"
-            >
-              <img src={s.src} alt={s.label} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-3 text-white">
-                <span
-                  className="text-[10px] uppercase tracking-widest rounded-full px-2 py-0.5 backdrop-blur"
-                  style={{ background: `color-mix(in oklab, ${s.tone} 70%, transparent)` }}
-                >
-                  {s.label}
-                </span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      )}
     </>
   );
 }
