@@ -50,6 +50,8 @@ function Discover() {
   const minAge = profile?.min_age ?? 18;
   const maxAge = profile?.max_age ?? 80;
   const seeking = profile?.seeking ?? null;
+  const myCity = profile?.city ?? null;
+  const myInterestsKey = (profile?.interests ?? []).join("|");
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -90,13 +92,15 @@ function Discover() {
       if (a !== null && (a < minAge || a > maxAge)) return false;
       return true;
     });
+    const me = { interests: profile?.interests ?? null, city: myCity, min_age: minAge, max_age: maxAge };
     const scored = filtered
-      .map((p) => ({ ...p, score: affinityScore(profile ?? {}, p) }))
+      .map((p) => ({ ...p, score: affinityScore(me, p) }))
       .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
     setCandidates(scored);
     setIndex(0);
     setLoading(false);
-  }, [userId, minAge, maxAge, seeking, profile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, minAge, maxAge, seeking, myCity, myInterestsKey]);
 
   useEffect(() => {
     load();
@@ -114,17 +118,12 @@ function Discover() {
           const m = payload.new as { user_a: string; user_b: string };
           if (m.user_a !== userId && m.user_b !== userId) return;
           const otherId = m.user_a === userId ? m.user_b : m.user_a;
-          // Avoid duplicate modal if we already detected it locally
-          setMatchPerson((curr) => {
-            if (curr && curr.id === otherId) return curr;
-            return curr;
-          });
           const { data } = await supabase
             .from("profiles")
             .select("id,display_name,bio,birthdate,city,interests,photos")
             .eq("id", otherId)
             .maybeSingle();
-          if (data) setMatchPerson(data as Candidate);
+          if (data) setMatchPerson((curr) => (curr && curr.id === otherId ? curr : (data as Candidate)));
         }
       )
       .subscribe();
