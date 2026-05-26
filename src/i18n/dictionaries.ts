@@ -216,6 +216,11 @@ const en: Dict = {
   "premium.toggle.on": "Premium unlocked",
   "premium.toggle.off": "Free plan",
   "premium.toggle.hint": "Demo switch — keep it on until you're ready to publish.",
+  // Match modal
+  "match.title": "It's a Bond!",
+  "match.body": "You and {name} liked each other. Start the conversation while the moment is warm.",
+  "match.cta.message": "Send a message",
+  "match.cta.keep": "Keep discovering",
   // Misc
   "common.locale": "EN · PT · ES · FR · DE · IT · JA · KO",
 };
