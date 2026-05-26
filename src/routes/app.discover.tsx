@@ -314,6 +314,11 @@ function SwipeCard({ person, onDecide }: { person: Candidate; onDecide: (a: "lik
         <div className="font-display text-3xl font-medium mt-1">
           {person.display_name}{age ? <>, <span className="opacity-80">{age}</span></> : null}
         </div>
+        {typeof person.score === "number" && person.score > 0 && (
+          <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-white/15 backdrop-blur text-[11px] px-2.5 py-1">
+            <Sparkles className="h-3 w-3" /> {person.score}% affinity
+          </div>
+        )}
         {person.bio && <p className="mt-2 text-sm leading-relaxed opacity-90 line-clamp-3">{person.bio}</p>}
         {person.interests && person.interests.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1.5">
