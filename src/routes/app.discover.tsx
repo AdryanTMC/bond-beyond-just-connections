@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
-import { Heart, X, Star, MapPin, Sparkles, Users, Briefcase, Home, SlidersHorizontal } from "lucide-react";
+import { Heart, X, Star, MapPin, Sparkles, Users, Briefcase, Home, SlidersHorizontal, MessageCircle } from "lucide-react";
 import { useLang } from "@/i18n";
 import marianaImg from "@/assets/person-mariana.jpg";
 import lucasImg from "@/assets/person-lucas.jpg";
@@ -114,6 +114,7 @@ function Discover() {
   const [intent, setIntent] = useState<(typeof intentions)[number]["key"]>("romance");
   const [index, setIndex] = useState(0);
   const [decisions, setDecisions] = useState<{ name: string; action: "like" | "pass" | "super" }[]>([]);
+  const [matchPerson, setMatchPerson] = useState<Person | null>(null);
 
   const filtered = useMemo(() => {
     return cards.filter((p) => {
@@ -140,6 +141,10 @@ function Discover() {
   const decide = (action: "like" | "pass" | "super") => {
     if (!current) return;
     setDecisions((d) => [{ name: current.name, action }, ...d].slice(0, 5));
+    // ~55% chance of mutual match on like/super (mocked dating-app behavior)
+    if ((action === "like" || action === "super") && Math.random() < 0.55) {
+      setMatchPerson(current);
+    }
     setIndex((i) => i + 1);
   };
 
@@ -271,6 +276,12 @@ function Discover() {
           )}
         </aside>
       </div>
+
+      <AnimatePresence>
+        {matchPerson && (
+          <MatchModal person={matchPerson} onClose={() => setMatchPerson(null)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -370,5 +381,90 @@ function ActionBtn({ children, onClick, aria, tone }: { children: React.ReactNod
     >
       {children}
     </button>
+  );
+}
+
+function MatchModal({ person, onClose }: { person: Person; onClose: () => void }) {
+  const { t } = useLang();
+  const body = t("match.body").replace("{name}", person.name);
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-midnight/85 backdrop-blur-md"
+      onClick={onClose}
+    >
+      {/* Floating hearts */}
+      {Array.from({ length: 18 }).map((_, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 40, scale: 0.4 }}
+          animate={{
+            opacity: [0, 1, 0.8, 0],
+            y: [40, -340 - Math.random() * 200],
+            x: (Math.random() - 0.5) * 240,
+            scale: [0.4, 1, 0.9, 0.6],
+            rotate: (Math.random() - 0.5) * 60,
+          }}
+          transition={{ duration: 3 + Math.random() * 2, delay: Math.random() * 0.8, repeat: Infinity, repeatDelay: 1 }}
+          className="absolute text-coral pointer-events-none"
+          style={{ left: `${10 + Math.random() * 80}%`, bottom: "10%" }}
+        >
+          <Heart className="h-6 w-6 fill-coral" strokeWidth={1.5} />
+        </motion.span>
+      ))}
+
+      <motion.div
+        initial={{ scale: 0.85, y: 30 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 260, damping: 22 }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-sm rounded-[2rem] bg-gradient-hero p-8 text-ivory shadow-elegant"
+      >
+        <div className="flex justify-center mb-6">
+          <motion.div
+            initial={{ rotate: -8, scale: 0.9 }}
+            animate={{ rotate: [0, -6, 6, 0], scale: 1 }}
+            transition={{ duration: 0.9 }}
+            className="relative"
+          >
+            <span className="absolute -inset-4 rounded-full bg-coral/40 blur-2xl" />
+            <div className="relative h-20 w-20 rounded-full bg-gradient-coral flex items-center justify-center shadow-glow">
+              <Heart className="h-9 w-9 text-white fill-white" strokeWidth={2} />
+            </div>
+          </motion.div>
+        </div>
+
+        <h2 className="font-display text-4xl font-medium text-center text-gradient-gold">
+          {t("match.title")}
+        </h2>
+
+        <div className="mt-6 flex items-center justify-center gap-3">
+          <img src={person.photo} alt={person.name} className="h-16 w-16 rounded-full object-cover ring-2 ring-white/40" />
+          <Sparkles className="h-5 w-5 text-gold" />
+          <div className="h-16 w-16 rounded-full bg-ivory/15 flex items-center justify-center text-2xl">💛</div>
+        </div>
+
+        <p className="mt-6 text-center text-sm opacity-90 leading-relaxed">{body}</p>
+
+        <div className="mt-7 flex flex-col gap-2.5">
+          <Link
+            to="/app/messages"
+            onClick={onClose}
+            className="w-full rounded-full bg-ivory text-midnight py-3 text-sm font-medium hover:opacity-95 transition-opacity inline-flex items-center justify-center gap-2"
+          >
+            <MessageCircle className="h-4 w-4" /> {t("match.cta.message")}
+          </Link>
+          <button
+            onClick={onClose}
+            className="w-full rounded-full border border-ivory/30 py-3 text-sm hover:bg-ivory/10 transition-colors"
+          >
+            {t("match.cta.keep")}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }

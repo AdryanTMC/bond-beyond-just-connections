@@ -216,6 +216,11 @@ const en: Dict = {
   "premium.toggle.on": "Premium unlocked",
   "premium.toggle.off": "Free plan",
   "premium.toggle.hint": "Demo switch — keep it on until you're ready to publish.",
+  // Match modal
+  "match.title": "It's a Bond!",
+  "match.body": "You and {name} liked each other. Start the conversation while the moment is warm.",
+  "match.cta.message": "Send a message",
+  "match.cta.keep": "Keep discovering",
   // Misc
   "common.locale": "EN · PT · ES · FR · DE · IT · JA · KO",
 };
@@ -364,6 +369,10 @@ const ptOver: Dict = {
   "premium.disclaimer": "Cancele a qualquer momento · Reembolso em 14 dias · As memórias que você cria são suas para sempre.",
   "premium.toggle.on": "Premium liberado", "premium.toggle.off": "Plano gratuito",
   "premium.toggle.hint": "Switch de demonstração — deixe ligado até você publicar.",
+  "match.title": "É um Laço!",
+  "match.body": "Você e {name} se curtiram. Comece a conversa enquanto o momento está quente.",
+  "match.cta.message": "Enviar mensagem",
+  "match.cta.keep": "Continuar descobrindo",
 };
 
 const esOver: Dict = {
@@ -495,6 +504,10 @@ const esOver: Dict = {
   "premium.disclaimer": "Cancela cuando quieras · Reembolso en 14 días · Los recuerdos son tuyos para siempre.",
   "premium.toggle.on": "Premium desbloqueado", "premium.toggle.off": "Plan gratuito",
   "premium.toggle.hint": "Interruptor demo — déjalo activo hasta publicar.",
+  "match.title": "¡Es un Bond!",
+  "match.body": "Tú y {name} se gustaron. Empieza la conversación mientras el momento sigue cálido.",
+  "match.cta.message": "Enviar mensaje",
+  "match.cta.keep": "Seguir descubriendo",
 };
 
 const frOver: Dict = {
@@ -625,6 +638,10 @@ const frOver: Dict = {
   "premium.disclaimer": "Annule à tout moment · Remboursé sous 14 jours · Tes souvenirs sont à toi pour toujours.",
   "premium.toggle.on": "Premium débloqué", "premium.toggle.off": "Plan gratuit",
   "premium.toggle.hint": "Bouton démo — laisse-le activé jusqu'à publication.",
+  "match.title": "C'est un Bond !",
+  "match.body": "Vous et {name} vous êtes plu. Lancez la conversation tant que le moment est tendre.",
+  "match.cta.message": "Envoyer un message",
+  "match.cta.keep": "Continuer à découvrir",
 };
 
 const deOver: Dict = {
@@ -755,6 +772,10 @@ const deOver: Dict = {
   "premium.disclaimer": "Jederzeit kündbar · 14-Tage-Rückerstattung · Deine Erinnerungen gehören dir für immer.",
   "premium.toggle.on": "Premium aktiviert", "premium.toggle.off": "Kostenloser Plan",
   "premium.toggle.hint": "Demo-Schalter — lass ihn an, bis du veröffentlichst.",
+  "match.title": "Es ist ein Bond!",
+  "match.body": "Du und {name} mögt euch. Beginne das Gespräch, solange der Moment frisch ist.",
+  "match.cta.message": "Nachricht senden",
+  "match.cta.keep": "Weiter entdecken",
 };
 
 const itOver: Dict = {
@@ -885,6 +906,10 @@ const itOver: Dict = {
   "premium.disclaimer": "Cancella in qualsiasi momento · Rimborso entro 14 giorni · I tuoi ricordi sono per sempre.",
   "premium.toggle.on": "Premium sbloccato", "premium.toggle.off": "Piano gratuito",
   "premium.toggle.hint": "Switch demo — lascialo attivo fino alla pubblicazione.",
+  "match.title": "È un Bond!",
+  "match.body": "Tu e {name} vi siete piaciuti. Inizia la conversazione finché il momento è caldo.",
+  "match.cta.message": "Invia messaggio",
+  "match.cta.keep": "Continua a scoprire",
 };
 
 const jaOver: Dict = {
@@ -1015,6 +1040,10 @@ const jaOver: Dict = {
   "premium.disclaimer": "いつでもキャンセル · 14日返金 · 思い出は永遠にあなたのもの。",
   "premium.toggle.on": "プレミアム有効", "premium.toggle.off": "無料プラン",
   "premium.toggle.hint": "デモスイッチ — 公開準備が整うまでオンに。",
+  "match.title": "ボンド成立！",
+  "match.body": "あなたと{name}がお互いを気に入りました。気持ちが温かいうちに会話を始めましょう。",
+  "match.cta.message": "メッセージを送る",
+  "match.cta.keep": "探索を続ける",
 };
 
 const koOver: Dict = {
@@ -1145,6 +1174,10 @@ const koOver: Dict = {
   "premium.disclaimer": "언제든 취소 · 14일 환불 · 추억은 영원히 당신의 것.",
   "premium.toggle.on": "프리미엄 활성", "premium.toggle.off": "무료 플랜",
   "premium.toggle.hint": "데모 스위치 — 게시 준비될 때까지 켜두세요.",
+  "match.title": "본드 성사!",
+  "match.body": "당신과 {name}이(가) 서로를 좋아했어요. 따뜻한 순간에 대화를 시작하세요.",
+  "match.cta.message": "메시지 보내기",
+  "match.cta.keep": "계속 둘러보기",
 };
 
 // ============================================================
