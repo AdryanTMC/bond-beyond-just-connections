@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Check, Crown, Infinity as InfinityIcon, Sparkles } from "lucide-react";
-import { usePremium } from "@/hooks/use-premium";
 import { useLang } from "@/i18n";
 
 export const Route = createFileRoute("/app/premium")({
@@ -49,7 +48,6 @@ const tiers: Tier[] = [
 ];
 
 function Premium() {
-  const { premium, toggle } = usePremium();
   const { t, plan } = useLang();
   return (
     <div>
@@ -63,16 +61,6 @@ function Premium() {
         <p className="mt-5 text-muted-foreground">
           {t("premium.sub")}
         </p>
-        <button
-          onClick={toggle}
-          className={`mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all ${
-            premium ? "bg-gradient-coral text-white shadow-glow" : "bg-muted text-foreground"
-          }`}
-        >
-          <Crown className="h-4 w-4" />
-          {premium ? t("premium.toggle.on") : t("premium.toggle.off")}
-        </button>
-        <p className="mt-2 text-xs text-muted-foreground">{t("premium.toggle.hint")}</p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-5">
@@ -91,11 +79,6 @@ function Premium() {
             {t.featured && (
               <div className="absolute top-5 right-5 text-[10px] uppercase tracking-widest rounded-full bg-white/15 backdrop-blur px-2.5 py-1">
                 {t.featured ? "Most loved" : ""}
-              </div>
-            )}
-            {premium && (
-              <div className="absolute top-5 left-5 text-[10px] uppercase tracking-widest rounded-full bg-white/15 backdrop-blur px-2.5 py-1 inline-flex items-center gap-1">
-                <Check className="h-3 w-3" /> Active
               </div>
             )}
             <div className="relative">
@@ -117,7 +100,7 @@ function Premium() {
                 ))}
               </ul>
               <button className="mt-8 w-full rounded-full bg-white text-midnight py-3 text-sm font-medium hover:opacity-95 transition-opacity">
-                {premium ? "Active · demo" : "Choose " + t.name.split(" ")[1]}
+                Choose {t.name.split(" ")[1]}
               </button>
             </div>
           </motion.div>
