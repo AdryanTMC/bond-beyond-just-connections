@@ -1,9 +1,10 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
-  Heart, Home, Compass, MessageCircle, User, Crown, Bell, Plus, Sparkles, Fingerprint, Settings as SettingsIcon,
+  Heart, Home, Compass, MessageCircle, User, Crown, Bell, Plus, Sparkles, Fingerprint, Settings as SettingsIcon, LogOut, Loader2,
 } from "lucide-react";
 import { useLang, LANGUAGES, type Lang } from "@/i18n";
 import { usePremium } from "@/hooks/use-premium";
+import { useAuth } from "@/hooks/use-auth";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
@@ -31,9 +32,23 @@ const nav = [
 function AppLayout() {
   const { t, lang, setLang } = useLang();
   const { premium, toggle } = usePremium();
+  const { user, loading, signOut } = useAuth();
+  const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
+
+  useEffect(() => {
+    if (!loading && !user) navigate({ to: "/login", replace: true });
+  }, [loading, user, navigate]);
+
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -96,6 +111,13 @@ function AppLayout() {
               <button className="relative h-10 w-10 rounded-full bg-muted flex items-center justify-center">
                 <Bell className="h-4 w-4" />
                 <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-coral" />
+              </button>
+              <button
+                onClick={() => signOut().then(() => navigate({ to: "/login", replace: true }))}
+                title="Sign out"
+                className="h-10 w-10 rounded-full bg-muted flex items-center justify-center hover:bg-foreground/10 transition-colors"
+              >
+                <LogOut className="h-4 w-4" />
               </button>
               <button className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-foreground text-background px-4 py-2.5 text-sm font-medium">
                 <Plus className="h-4 w-4" /> {t("app.newBond")}
