@@ -291,13 +291,6 @@ function Onboarding() {
                   maxLength={60}
                   className="w-full rounded-xl border border-border bg-card px-4 py-3.5 text-base focus:outline-none focus:border-foreground/40 mb-3"
                 />
-                <input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder={t.phPhone}
-                  maxLength={30}
-                  className="w-full rounded-xl border border-border bg-card px-4 py-3.5 text-base focus:outline-none focus:border-foreground/40 mb-3"
-                />
                 <textarea
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
