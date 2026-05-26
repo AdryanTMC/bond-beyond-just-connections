@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { MapPin, Camera } from "lucide-react";
 import { useLang } from "@/i18n";
@@ -40,9 +40,12 @@ function Profile() {
           <p className="text-sm text-muted-foreground mt-1.5 max-w-xl">{profile?.bio || t("profile.bio")}</p>
         </div>
         <div className="flex gap-2">
-          <button className="rounded-full bg-foreground text-background text-sm px-4 py-2.5 inline-flex items-center gap-1.5">
+          <Link
+            to="/onboarding"
+            className="rounded-full bg-foreground text-background text-sm px-4 py-2.5 inline-flex items-center gap-1.5 hover:opacity-90 transition"
+          >
             <Camera className="h-4 w-4" /> {t("profile.edit")}
-          </button>
+          </Link>
         </div>
       </div>
 
