@@ -11,7 +11,6 @@ export type Profile = {
   seeking: string | null;
   city: string | null;
   country: string | null;
-  phone: string | null;
   interests: string[] | null;
   photos: string[] | null;
   min_age: number | null;
@@ -40,12 +39,12 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       return;
     }
     setLoading(true);
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .maybeSingle();
-    setProfile((data as Profile | null) ?? null);
+    // Use security-definer RPC so the owner can read sensitive fields
+    // (birthdate, seeking, min_age, max_age, last_seen_at, onboarding_completed)
+    // that are not exposed via column-level grants.
+    const { data } = await supabase.rpc("get_my_profile");
+    const row = Array.isArray(data) ? data[0] : data;
+    setProfile((row as Profile | null) ?? null);
     setLoading(false);
   }, [user]);
 

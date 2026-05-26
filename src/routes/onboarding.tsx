@@ -83,7 +83,7 @@ function Onboarding() {
   const [gender, setGender] = useState<string>("");
   const [seeking, setSeeking] = useState<string>("");
   const [city, setCity] = useState("");
-  const [phone, setPhone] = useState("");
+  // phone removed for privacy
   const [bio, setBio] = useState("");
   const [interests, setInterests] = useState<string[]>([]);
   const [photos, setPhotos] = useState<string[]>([]);
@@ -101,7 +101,6 @@ function Onboarding() {
       setGender(profile.gender ?? "");
       setSeeking(profile.seeking ?? "");
       setCity(profile.city ?? "");
-      setPhone(profile.phone ?? "");
       setBio(profile.bio ?? "");
       setInterests(profile.interests ?? []);
       setPhotos(profile.photos ?? []);
@@ -176,7 +175,6 @@ function Onboarding() {
       gender,
       seeking,
       city: city.trim(),
-      phone: phone.trim() || null,
       bio: bio.trim() || null,
       interests,
       photos,
