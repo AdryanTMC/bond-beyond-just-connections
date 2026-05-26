@@ -128,7 +128,6 @@ function Messages() {
     const { error } = await supabase.from("messages").insert({ match_id: active, sender_id: userId, body });
     setSending(false);
     if (error) {
-      console.error(error);
       setDraft(body);
     }
   };
@@ -164,7 +163,7 @@ function Messages() {
                   active === th.id ? "bg-foreground/[0.04]" : ""
                 }`}
               >
-                <div className="h-11 w-11 shrink-0 rounded-full bg-gradient-coral overflow-hidden flex items-center justify-center text-white text-sm font-medium">
+                <div className="h-11 w-11 shrink-0 rounded-full bg-muted overflow-hidden flex items-center justify-center text-foreground text-sm font-medium">
                   {th.other.photos?.[0] ? (
                     <img src={th.other.photos[0]} alt="" loading="lazy" className="h-full w-full object-cover" />
                   ) : (
@@ -184,7 +183,7 @@ function Messages() {
           {thread ? (
             <>
               <div className="px-5 py-4 border-b border-border/60 flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-gradient-coral overflow-hidden flex items-center justify-center text-white text-sm font-medium">
+                <div className="h-10 w-10 rounded-full bg-muted overflow-hidden flex items-center justify-center text-foreground text-sm font-medium">
                   {thread.other.photos?.[0] ? (
                     <img src={thread.other.photos[0]} alt="" loading="lazy" className="h-full w-full object-cover" />
                   ) : (
@@ -199,7 +198,7 @@ function Messages() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-gradient-soft">
+              <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-background">
                 {hasMore && (
                   <div className="flex justify-center pb-2">
                     <button
@@ -251,7 +250,7 @@ function Messages() {
                 <button
                   onClick={send}
                   disabled={sending || !draft.trim()}
-                  className="h-10 w-10 rounded-full bg-gradient-coral text-white flex items-center justify-center shadow-glow disabled:opacity-50"
+                  className="h-10 w-10 rounded-full bg-foreground text-background flex items-center justify-center disabled:opacity-50"
                 >
                   <Send className="h-4 w-4" />
                 </button>

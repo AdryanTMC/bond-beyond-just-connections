@@ -4,9 +4,8 @@ type Ctx = { premium: boolean; setPremium: (v: boolean) => void; toggle: () => v
 const PremiumContext = createContext<Ctx | null>(null);
 
 export function PremiumProvider({ children }: { children: ReactNode }) {
-  // Demo mode default ON so the user can preview the full premium experience
-  // until they explicitly disable it.
-  const [premium, setPremiumState] = useState<boolean>(true);
+  // Real product behavior: users start on the Free plan until they upgrade.
+  const [premium, setPremiumState] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -28,6 +27,6 @@ export function PremiumProvider({ children }: { children: ReactNode }) {
 
 export function usePremium() {
   const ctx = useContext(PremiumContext);
-  if (!ctx) return { premium: true, setPremium: () => {}, toggle: () => {} };
+  if (!ctx) return { premium: false, setPremium: () => {}, toggle: () => {} };
   return ctx;
 }
