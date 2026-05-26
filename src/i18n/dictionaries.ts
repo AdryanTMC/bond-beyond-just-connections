@@ -1213,6 +1213,9 @@ const CURRENCY: Record<string, PriceFmt> = {
   AR: { symbol: "AR$", mult: 1000 },
   JP: { symbol: "¥", mult: 150 },
   KR: { symbol: "₩", mult: 1350 },
+  IN: { symbol: "₹", mult: 83 },
+  AU: { symbol: "A$", mult: 1.55 },
+  CH: { symbol: "CHF ", mult: 0.9 },
 };
 
 export function formatPrice(usd: number, country: string): string {
@@ -1222,4 +1225,35 @@ export function formatPrice(usd: number, country: string): string {
   // simple thousands separator
   const formatted = val.toLocaleString("en-US");
   return `${c.symbol}${formatted}`;
+}
+
+// ============================================================
+// Premium plan pricing — official tiers per country (monthly)
+// Falls back to USD if country isn't mapped.
+// ============================================================
+export type PlanTier = "plus" | "gold" | "infinity";
+type PlanPriceMap = Record<PlanTier, string>;
+
+const PLAN_PRICES: Record<string, PlanPriceMap> = {
+  BR: { plus: "R$19,90", gold: "R$39,90", infinity: "R$79,90" },
+  PT: { plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
+  ES: { plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
+  FR: { plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
+  DE: { plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
+  IT: { plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
+  NL: { plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
+  GB: { plus: "£5.99", gold: "£10.99", infinity: "£21.99" },
+  US: { plus: "$7.99", gold: "$14.99", infinity: "$29.99" },
+  CA: { plus: "CA$10.99", gold: "CA$20.99", infinity: "CA$39.99" },
+  AU: { plus: "A$11.99", gold: "A$22.99", infinity: "A$44.99" },
+  MX: { plus: "MX$139", gold: "MX$259", infinity: "MX$499" },
+  AR: { plus: "AR$7.990", gold: "AR$14.990", infinity: "AR$29.990" },
+  JP: { plus: "¥1.200", gold: "¥2.300", infinity: "¥4.500" },
+  KR: { plus: "₩10.900", gold: "₩19.900", infinity: "₩39.900" },
+  IN: { plus: "₹149", gold: "₹299", infinity: "₹599" },
+};
+
+export function planPrice(tier: PlanTier, country: string): string {
+  const m = PLAN_PRICES[country?.toUpperCase()] ?? PLAN_PRICES.US;
+  return m[tier];
 }
