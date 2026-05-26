@@ -1,4 +1,5 @@
 import { useLang } from "@/i18n";
+import { BondLogo } from "@/components/bond-logo";
 
 export function SiteFooter() {
   const { t } = useLang();
@@ -6,7 +7,10 @@ export function SiteFooter() {
     <footer className="border-t border-border/60 bg-background">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-14 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
-          <div className="font-display text-2xl font-semibold">{t("brand.name")}</div>
+          <div className="flex items-center gap-2.5">
+            <BondLogo size={36} />
+            <span className="font-display text-2xl font-semibold">{t("brand.name")}</span>
+          </div>
           <p className="mt-3 text-sm text-muted-foreground max-w-sm">{t("footer.tagline")}</p>
         </div>
         <div>

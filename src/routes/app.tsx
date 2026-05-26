@@ -9,6 +9,7 @@ import { useProfile } from "@/hooks/use-profile";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { BondLogo } from "@/components/bond-logo";
 
 export const Route = createFileRoute("/app")({
   head: () => ({
@@ -61,9 +62,7 @@ function AppLayout() {
         {/* Sidebar */}
         <aside className="hidden lg:flex flex-col w-60 shrink-0 border-r border-border/60 min-h-screen p-5 sticky top-0 self-start">
           <Link to="/" className="flex items-center gap-2 mb-9">
-            <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-coral shadow-glow">
-              <Heart className="h-4 w-4 text-white" strokeWidth={2.5} />
-            </span>
+            <BondLogo size={36} />
             <span className="font-display text-xl font-semibold">{t("brand.name")}</span>
           </Link>
 

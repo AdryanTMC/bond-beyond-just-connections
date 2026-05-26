@@ -104,6 +104,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://api.fontshare.com/v2/css?f[]=general-sans@500,600,700&display=swap",
       },
+      { rel: "icon", type: "image/png", href: "/bond-logo.png" },
+      { rel: "apple-touch-icon", href: "/bond-logo.png" },
     ],
   }),
   shellComponent: RootShell,
