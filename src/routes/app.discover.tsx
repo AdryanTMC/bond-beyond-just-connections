@@ -24,6 +24,10 @@ function Discover() {
   const { t } = useLang();
   const { user } = useAuth();
   const { profile } = useProfile();
+  const userId = user?.id;
+  const minAge = profile?.min_age ?? 18;
+  const maxAge = profile?.max_age ?? 80;
+  const seeking = profile?.seeking ?? null;
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -31,14 +35,12 @@ function Discover() {
   const [recent, setRecent] = useState<{ name: string; action: "like" | "pass" | "super" }[]>([]);
 
   const load = useCallback(async () => {
-    if (!user) return;
+    if (!userId) return;
     setLoading(true);
     // Get IDs already swiped to exclude
-    const { data: swiped } = await supabase.from("swipes").select("target_id").eq("swiper_id", user.id);
+    const { data: swiped } = await supabase.from("swipes").select("target_id").eq("swiper_id", userId);
     const excluded = new Set<string>((swiped ?? []).map((s) => s.target_id));
-    excluded.add(user.id);
-    const minAge = profile?.min_age ?? 18;
-    const maxAge = profile?.max_age ?? 80;
+    excluded.add(userId);
 
     let query = supabase
       .from("profiles")
@@ -48,8 +50,8 @@ function Discover() {
       .limit(50);
 
     // Reciprocal gender filter
-    if (profile?.seeking && profile.seeking !== "everyone") {
-      const wanted = profile.seeking === "women" ? "woman" : profile.seeking === "men" ? "man" : null;
+    if (seeking && seeking !== "everyone") {
+      const wanted = seeking === "women" ? "woman" : seeking === "men" ? "man" : null;
       if (wanted) query = query.eq("gender", wanted);
     }
 
@@ -69,7 +71,7 @@ function Discover() {
     setCandidates(filtered);
     setIndex(0);
     setLoading(false);
-  }, [user, profile]);
+  }, [userId, minAge, maxAge, seeking]);
 
   useEffect(() => {
     load();
