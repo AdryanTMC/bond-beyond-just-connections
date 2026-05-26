@@ -84,9 +84,7 @@ function LoginPage() {
         className="w-full max-w-md rounded-3xl border border-border/70 bg-card p-8 shadow-elegant"
       >
         <Link to="/" className="flex items-center gap-2 justify-center mb-6">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-coral shadow-glow">
-            <Heart className="h-5 w-5 text-white" strokeWidth={2.5} />
-          </span>
+          <BondLogo size={40} />
           <span className="font-display text-2xl font-semibold">{t("brand.name")}</span>
         </Link>
 
