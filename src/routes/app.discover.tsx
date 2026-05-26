@@ -79,16 +79,16 @@ function Discover() {
 
   // Realtime: detect new matches involving the current user
   useEffect(() => {
-    if (!user) return;
+    if (!userId) return;
     const channel = supabase
-      .channel(`matches:${user.id}`)
+      .channel(`matches:${userId}`)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "matches" },
         async (payload) => {
           const m = payload.new as { user_a: string; user_b: string };
-          if (m.user_a !== user.id && m.user_b !== user.id) return;
-          const otherId = m.user_a === user.id ? m.user_b : m.user_a;
+          if (m.user_a !== userId && m.user_b !== userId) return;
+          const otherId = m.user_a === userId ? m.user_b : m.user_a;
           // Avoid duplicate modal if we already detected it locally
           setMatchPerson((curr) => {
             if (curr && curr.id === otherId) return curr;
@@ -106,18 +106,18 @@ function Discover() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user]);
+  }, [userId]);
 
   const current = candidates[index] ?? null;
 
   const decide = async (action: "like" | "pass" | "super") => {
-    if (!current || !user) return;
+    if (!current || !userId) return;
     const liked = action !== "pass";
     setRecent((r) => [{ name: current.display_name ?? "", action }, ...r].slice(0, 5));
     setIndex((i) => i + 1);
 
     const { error } = await supabase.from("swipes").insert({
-      swiper_id: user.id,
+      swiper_id: userId,
       target_id: current.id,
       liked,
     });
@@ -127,8 +127,8 @@ function Discover() {
     }
     if (liked) {
       // Check if a match was created by the trigger
-      const a = user.id < current.id ? user.id : current.id;
-      const b = user.id < current.id ? current.id : user.id;
+      const a = userId < current.id ? userId : current.id;
+      const b = userId < current.id ? current.id : userId;
       const { data: match } = await supabase
         .from("matches")
         .select("id")
