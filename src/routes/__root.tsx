@@ -12,6 +12,7 @@ import appCss from "../styles.css?url";
 import { LanguageProvider } from "@/i18n";
 import { PremiumProvider } from "@/hooks/use-premium";
 import { AuthProvider } from "@/hooks/use-auth";
+import { ProfileProvider } from "@/hooks/use-profile";
 
 function NotFoundComponent() {
   return (
@@ -131,11 +132,13 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <LanguageProvider>
-          <PremiumProvider>
-            <Outlet />
-          </PremiumProvider>
-        </LanguageProvider>
+        <ProfileProvider>
+          <LanguageProvider>
+            <PremiumProvider>
+              <Outlet />
+            </PremiumProvider>
+          </LanguageProvider>
+        </ProfileProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
