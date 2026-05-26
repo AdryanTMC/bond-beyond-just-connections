@@ -18,16 +18,17 @@ function AppHome() {
   const [people, setPeople] = useState<Person[]>([]);
   const [stats, setStats] = useState({ matches: 0, messages: 0 });
 
+  const userId = user?.id;
   useEffect(() => {
-    if (!user) return;
+    if (!userId) return;
     (async () => {
       const { data: matches } = await supabase
         .from("matches")
         .select("id, user_a, user_b, created_at")
-        .or(`user_a.eq.${user.id},user_b.eq.${user.id}`)
+        .or(`user_a.eq.${userId},user_b.eq.${userId}`)
         .order("created_at", { ascending: false })
         .limit(12);
-      const otherIds = (matches ?? []).map((m) => (m.user_a === user.id ? m.user_b : m.user_a));
+      const otherIds = (matches ?? []).map((m) => (m.user_a === userId ? m.user_b : m.user_a));
       let profilesMap = new Map<string, { display_name: string | null; photos: string[] | null }>();
       if (otherIds.length) {
         const { data: profs } = await supabase
@@ -39,7 +40,7 @@ function AppHome() {
       const tones = ["var(--color-romantic)", "var(--color-inner)", "var(--color-friends)", "var(--color-memory)", "var(--color-pro)"];
       setPeople(
         (matches ?? []).map((m, i) => {
-          const otherId = m.user_a === user.id ? m.user_b : m.user_a;
+          const otherId = m.user_a === userId ? m.user_b : m.user_a;
           const p = profilesMap.get(otherId);
           return {
             id: otherId,
@@ -54,10 +55,10 @@ function AppHome() {
       const { count: msgCount } = await supabase
         .from("messages")
         .select("id", { count: "exact", head: true })
-        .eq("sender_id", user.id);
+        .eq("sender_id", userId);
       setStats({ matches: matches?.length ?? 0, messages: msgCount ?? 0 });
     })();
-  }, [user]);
+  }, [userId]);
 
   return (
     <>
