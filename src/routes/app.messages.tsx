@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
-import { Send, Heart, Loader2 } from "lucide-react";
+import { Send, Heart, Loader2, ChevronUp } from "lucide-react";
 import { useLang } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -20,6 +20,8 @@ type Other = { id: string; display_name: string | null; photos: string[] | null 
 type Thread = MatchRow & { other: Other };
 type Msg = { id: string; sender_id: string; body: string; created_at: string };
 
+const PAGE_SIZE = 30;
+
 function Messages() {
   const { t } = useLang();
   const { user } = useAuth();
@@ -29,10 +31,13 @@ function Messages() {
   const [draft, setDraft] = useState("");
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const userId = user?.id;
 
   const loadThreads = useCallback(async () => {
-    if (!user) return;
+    if (!userId) return;
     setLoading(true);
     const { data: matches } = await supabase
       .from("matches")
@@ -43,7 +48,7 @@ function Messages() {
       setLoading(false);
       return;
     }
-    const otherIds = matches.map((m) => (m.user_a === user.id ? m.user_b : m.user_a));
+    const otherIds = matches.map((m) => (m.user_a === userId ? m.user_b : m.user_a));
     const { data: profiles } = await supabase
       .from("profiles")
       .select("id,display_name,photos")
@@ -51,22 +56,42 @@ function Messages() {
     const map = new Map<string, Other>();
     (profiles ?? []).forEach((p) => map.set(p.id, p as Other));
     const built: Thread[] = matches.map((m) => {
-      const otherId = m.user_a === user.id ? m.user_b : m.user_a;
+      const otherId = m.user_a === userId ? m.user_b : m.user_a;
       return { ...m, other: map.get(otherId) ?? { id: otherId, display_name: null, photos: null } };
     });
     setThreads(built);
-    if (!active && built.length > 0) setActive(built[0].id);
+    setActive((curr) => curr ?? built[0]?.id ?? null);
     setLoading(false);
-  }, [user, active]);
+  }, [userId]);
 
   const loadMessages = useCallback(async (matchId: string) => {
     const { data } = await supabase
       .from("messages")
       .select("id,sender_id,body,created_at")
       .eq("match_id", matchId)
-      .order("created_at", { ascending: true });
-    setMessages((data as Msg[]) ?? []);
+      .order("created_at", { ascending: false })
+      .limit(PAGE_SIZE);
+    const rows = ((data as Msg[]) ?? []).slice().reverse();
+    setMessages(rows);
+    setHasMore(rows.length === PAGE_SIZE);
   }, []);
+
+  const loadOlder = useCallback(async () => {
+    if (!active || loadingMore || messages.length === 0) return;
+    setLoadingMore(true);
+    const oldest = messages[0].created_at;
+    const { data } = await supabase
+      .from("messages")
+      .select("id,sender_id,body,created_at")
+      .eq("match_id", active)
+      .lt("created_at", oldest)
+      .order("created_at", { ascending: false })
+      .limit(PAGE_SIZE);
+    const rows = ((data as Msg[]) ?? []).slice().reverse();
+    setMessages((m) => [...rows, ...m]);
+    setHasMore(rows.length === PAGE_SIZE);
+    setLoadingMore(false);
+  }, [active, loadingMore, messages]);
 
   useEffect(() => {
     loadThreads();
@@ -81,7 +106,8 @@ function Messages() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages", filter: `match_id=eq.${active}` },
         (payload) => {
-          setMessages((m) => [...m, payload.new as Msg]);
+          const incoming = payload.new as Msg;
+          setMessages((m) => (m.some((x) => x.id === incoming.id) ? m : [...m, incoming]));
         },
       )
       .subscribe();
@@ -95,11 +121,11 @@ function Messages() {
   }, [messages]);
 
   const send = async () => {
-    if (!draft.trim() || !active || !user || sending) return;
+    if (!draft.trim() || !active || !userId || sending) return;
     const body = draft.trim();
     setDraft("");
     setSending(true);
-    const { error } = await supabase.from("messages").insert({ match_id: active, sender_id: user.id, body });
+    const { error } = await supabase.from("messages").insert({ match_id: active, sender_id: userId, body });
     setSending(false);
     if (error) {
       console.error(error);
@@ -107,7 +133,7 @@ function Messages() {
     }
   };
 
-  const thread = threads.find((th) => th.id === active);
+  const thread = useMemo(() => threads.find((th) => th.id === active), [threads, active]);
 
   return (
     <div>
