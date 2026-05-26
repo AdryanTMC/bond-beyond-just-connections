@@ -73,7 +73,7 @@ function Onboarding() {
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: pLoading, refresh } = useProfile();
   const { lang } = useLang();
-  const t = (I18N as Record<string, typeof I18N.en>)[lang] ?? I18N.en;
+  const t = ((I18N as unknown) as Record<string, typeof I18N.en>)[lang] ?? I18N.en;
   const [step, setStep] = useState<Step>(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
