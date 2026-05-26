@@ -9,6 +9,7 @@ import { useProfile } from "@/hooks/use-profile";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { BondLogo } from "@/components/bond-logo";
 
 export const Route = createFileRoute("/app")({
   head: () => ({
