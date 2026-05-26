@@ -9,8 +9,9 @@ type Props = {
 };
 
 /**
- * Logo oficial Bond. O arquivo de origem já contém o coração + wordmark.
- * Para variant="mark" recortamos visualmente só a parte do coração (top ~60%).
+ * Logo oficial Bond.
+ * - variant="mark": só o coração (recortado via background-position do PNG).
+ * - variant="full": coração + wordmark "bond" (PNG completo).
  */
 export function BondLogo({ variant = "mark", size = 32, className = "" }: Props) {
   if (variant === "full") {
@@ -18,8 +19,6 @@ export function BondLogo({ variant = "mark", size = 32, className = "" }: Props)
       <img
         src={bondLogo}
         alt="Bond"
-        width={size * 2.4}
-        height={size}
         loading="eager"
         decoding="async"
         className={`object-contain ${className}`}
@@ -27,26 +26,20 @@ export function BondLogo({ variant = "mark", size = 32, className = "" }: Props)
       />
     );
   }
-  // mark: usa a imagem inteira mas com aspect 1:1 e recorte focado no coração
+  // O PNG original tem o coração na metade superior centralizado.
+  // Recortamos via background para isolar só o coração em um quadrado.
   return (
     <span
-      className={`inline-block ${className}`}
-      style={{ width: size, height: size }}
-    >
-      <img
-        src={bondLogo}
-        alt="Bond"
-        loading="eager"
-        decoding="async"
-        style={{
-          width: "180%",
-          height: "180%",
-          objectFit: "contain",
-          objectPosition: "center top",
-          transform: "translate(-22%, -8%)",
-          display: "block",
-        }}
-      />
-    </span>
+      aria-label="Bond"
+      role="img"
+      className={`inline-block bg-no-repeat bg-center ${className}`}
+      style={{
+        width: size,
+        height: size,
+        backgroundImage: `url(${bondLogo})`,
+        backgroundSize: "210% auto",
+        backgroundPosition: "center 22%",
+      }}
+    />
   );
 }
