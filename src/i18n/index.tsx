@@ -48,6 +48,11 @@ function detectCountry(): string {
     if (tz.includes("Berlin")) return "DE";
     if (tz.includes("Rome")) return "IT";
     if (tz.includes("Madrid")) return "ES";
+    if (tz.includes("Kolkata") || tz.includes("Calcutta") || tz.includes("Mumbai") || tz.includes("Delhi")) return "IN";
+    if (tz.includes("London")) return "GB";
+    if (tz.includes("Mexico_City")) return "MX";
+    if (tz.includes("Sydney") || tz.includes("Melbourne")) return "AU";
+    if (tz.includes("Toronto") || tz.includes("Vancouver")) return "CA";
   } catch {}
   const loc = (navigator.language || "en-US").split("-");
   return (loc[1] || "US").toUpperCase();
