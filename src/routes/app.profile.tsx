@@ -27,13 +27,12 @@ function Profile() {
   return (
     <div>
       {/* Cover */}
-      <div className="relative rounded-[2rem] overflow-hidden h-56 sm:h-72 bg-gradient-hero">
+      <div className="relative rounded-[2rem] overflow-hidden h-40 sm:h-52 bg-gradient-hero">
         <div className="absolute inset-0 opacity-30"
              style={{ backgroundImage: "radial-gradient(circle at 25% 30%, white 0.6px, transparent 1.2px), radial-gradient(circle at 75% 60%, white 0.6px, transparent 1.2px)", backgroundSize: "50px 50px, 80px 80px" }} />
-        <div className="absolute -bottom-1 inset-x-0 h-24 bg-gradient-to-b from-transparent to-background" />
       </div>
 
-      <div className="-mt-16 px-2 sm:px-6 flex flex-col sm:flex-row sm:items-end gap-5">
+      <div className="mt-6 px-2 sm:px-6 flex flex-col sm:flex-row sm:items-center gap-5">
         <img src={avatarUrl} alt="Profile" className="h-28 w-28 rounded-full object-cover ring-4 ring-background shadow-elegant" />
         <div className="flex-1">
           <div className="flex items-center gap-2 text-xs text-muted-foreground"><MapPin className="h-3 w-3" /> {location}</div>
@@ -47,12 +46,12 @@ function Profile() {
         </div>
       </div>
 
-      {/* Voice intro */}
+      {/* Info cards */}
       <div className="mt-10 grid lg:grid-cols-2 gap-6">
         <div className="rounded-3xl border border-border/70 bg-card p-6">
           <div className="text-xs uppercase tracking-widest text-muted-foreground">{t("profile.intent")}</div>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            <span className="text-xs rounded-full px-3 py-1.5 bg-foreground text-background border border-transparent capitalize">
+            <span className="text-xs rounded-full px-3 py-1.5 bg-foreground text-background capitalize">
               {profile?.seeking || t("discover.intent.romance")}
             </span>
           </div>
@@ -67,9 +66,14 @@ function Profile() {
         </div>
 
         <div className="rounded-3xl border border-border/70 bg-card p-6">
-          <div className="text-xs uppercase tracking-widest text-muted-foreground">{t("profile.intent")}</div>
-          <div className="mt-3 text-sm text-muted-foreground">
-            {profile?.min_age ?? 18}–{profile?.max_age ?? 60} · {location}
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">Preferências</div>
+          <div className="mt-3 text-sm">
+            <span className="text-muted-foreground">Idade: </span>
+            <span className="font-medium">{profile?.min_age ?? 18}–{profile?.max_age ?? 60}</span>
+          </div>
+          <div className="mt-2 text-sm flex items-center gap-1.5">
+            <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="font-medium">{location}</span>
           </div>
         </div>
       </div>
