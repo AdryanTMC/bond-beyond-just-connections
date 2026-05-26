@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { Check, Crown, Infinity as InfinityIcon, Sparkles } from "lucide-react";
+import { Check, Crown, Infinity as InfinityIcon, Sparkles, Heart } from "lucide-react";
 import { useLang } from "@/i18n";
 
 export const Route = createFileRoute("/app/premium")({
@@ -20,6 +20,19 @@ type Tier = {
 };
 
 const tiers: Tier[] = [
+  {
+    tier: "free",
+    nameKey: "premium.tier.free.name",
+    taglineKey: "premium.tier.free.tagline",
+    icon: Heart,
+    gradient: "linear-gradient(135deg, #1f2937, #475569)",
+    featureKeys: [
+      "premium.feat.limitedLikes",
+      "premium.feat.basicMatching",
+      "premium.feat.basicMessages",
+      "premium.feat.dailyPicks",
+    ],
+  },
   {
     tier: "plus",
     nameKey: "premium.tier.plus.name",
@@ -63,7 +76,7 @@ function Premium() {
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-5">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
         {tiers.map((tier, i) => (
           <motion.div
             key={tier.tier}
@@ -88,8 +101,12 @@ function Premium() {
               <div className="mt-5 font-display text-3xl font-medium">{t(tier.nameKey)}</div>
               <div className="text-sm opacity-80">{t(tier.taglineKey)}</div>
               <div className="mt-6 flex items-baseline gap-1.5">
-                <span className="font-display text-5xl">{plan(tier.tier)}</span>
-                <span className="text-sm opacity-70">{t("premium.month")}</span>
+                <span className="font-display text-5xl">
+                  {tier.tier === "free" ? t("premium.tier.free.price") : plan(tier.tier)}
+                </span>
+                {tier.tier !== "free" && (
+                  <span className="text-sm opacity-70">{t("premium.month")}</span>
+                )}
               </div>
               <ul className="mt-7 space-y-2.5 text-sm">
                 {tier.featureKeys.map((fk) => (
@@ -99,8 +116,11 @@ function Premium() {
                   </li>
                 ))}
               </ul>
-              <button className="mt-8 w-full rounded-full bg-white text-midnight py-3 text-sm font-medium hover:opacity-95 transition-opacity">
-                {t("premium.choose")} {t(tier.nameKey)}
+              <button
+                disabled={tier.tier === "free"}
+                className="mt-8 w-full rounded-full bg-white text-midnight py-3 text-sm font-medium hover:opacity-95 transition-opacity disabled:opacity-70 disabled:cursor-default"
+              >
+                {tier.tier === "free" ? t("premium.current") : `${t("premium.choose")} ${t(tier.nameKey)}`}
               </button>
             </div>
           </motion.div>
