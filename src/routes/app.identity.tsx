@@ -10,6 +10,7 @@ import {
   Smile, Moon, Sun, Sprout, Church, Compass,
 } from "lucide-react";
 import { useLang } from "@/i18n";
+import { identityHeader, tagLabel } from "@/i18n/identity-tags";
 
 export const Route = createFileRoute("/app/identity")({
   component: Identity,
@@ -180,7 +181,7 @@ const sections: { key: string; titleKey: string; tags: Tag[] }[] = [
 ];
 
 function Identity() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [selected, setSelected] = useState<Set<string>>(() => new Set(["travelers", "minimalists", "books", "coffee", "intellectual"]));
 
   const toggle = (key: string) => {
@@ -198,7 +199,7 @@ function Identity() {
     <div className="pb-24">
       <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
         <div>
-          <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Identity</div>
+          <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{identityHeader[lang]}</div>
           <h1 className="font-display text-3xl sm:text-4xl font-medium mt-2 max-w-2xl leading-tight">
             {t("identity.title")}
           </h1>
@@ -244,7 +245,7 @@ function Identity() {
                     >
                       <tag.icon className="h-3 w-3" strokeWidth={2.25} />
                     </span>
-                    {tag.label}
+                    {tagLabel(tag.key, lang, tag.label)}
                     <AnimatePresence>
                       {active && (
                         <motion.span

@@ -51,32 +51,32 @@
 :root {
   --radius: 0.75rem;
 
-  /* Light mode — pure white canvas, near-black ink (Tinder/Hinge style) */
-  --background: oklch(1 0 0);                   /* pure white */
-  --foreground: oklch(0.18 0.01 260);           /* near-black */
+  /* Light mode — Hinge-style: white canvas, near-black ink, coral as accent only */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.16 0.01 260);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.01 260);
+  --card-foreground: oklch(0.16 0.01 260);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.01 260);
+  --popover-foreground: oklch(0.16 0.01 260);
 
-  /* Primary = Tinder hot pink/red */
-  --primary: oklch(0.66 0.22 12);               /* #FD267A-ish */
+  /* Primary = near-black (neutral, balanced). Coral lives in --accent / --coral. */
+  --primary: oklch(0.18 0.01 260);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0.003 260);
-  --secondary-foreground: oklch(0.18 0.01 260);
-  --muted: oklch(0.96 0.003 260);               /* light gray */
+  --secondary-foreground: oklch(0.16 0.01 260);
+  --muted: oklch(0.96 0.003 260);
   --muted-foreground: oklch(0.5 0.01 260);
-  --accent: oklch(0.66 0.22 12);
+  --accent: oklch(0.65 0.19 22);                /* warm coral, less pink */
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.92 0.003 260);              /* hairline gray */
+  --border: oklch(0.92 0.003 260);
   --input: oklch(0.92 0.003 260);
-  --ring: oklch(0.66 0.22 12);
+  --ring: oklch(0.16 0.01 260);
 
-  --midnight: oklch(0.18 0.01 260);
-  --coral: oklch(0.66 0.22 12);                 /* hot pink-red */
+  --midnight: oklch(0.16 0.01 260);
+  --coral: oklch(0.65 0.19 22);                 /* warm coral, balanced */
   --gold: oklch(0.78 0.13 75);
   --ivory: oklch(1 0 0);
 
@@ -87,22 +87,22 @@
   --inner: oklch(0.62 0.2 295);                 /* #8B5CF6 */
   --memory: oklch(0.82 0.11 88);                /* #E6C068 */
 
-  /* Tinder signature gradient: hot pink → orange-red */
-  --gradient-hero: linear-gradient(135deg, oklch(0.7 0.21 350) 0%, oklch(0.66 0.22 12) 100%);
+  /* Balanced hero: deep ink → warm coral (not pink-only) */
+  --gradient-hero: linear-gradient(135deg, oklch(0.18 0.01 260) 0%, oklch(0.65 0.19 22) 100%);
   --gradient-soft: linear-gradient(180deg, oklch(1 0 0) 0%, oklch(0.97 0.003 260) 100%);
   --gradient-gold: linear-gradient(135deg, oklch(0.82 0.13 80), oklch(0.72 0.14 60));
-  --gradient-coral: linear-gradient(135deg, oklch(0.7 0.21 350), oklch(0.66 0.22 12));
+  --gradient-coral: linear-gradient(135deg, oklch(0.72 0.17 35), oklch(0.62 0.2 18));
 
   /* Flat, native-feeling shadows — minimal blur, no neon glow */
   --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.06), 0 1px 3px oklch(0 0 0 / 0.04);
   --shadow-elegant: 0 4px 12px -2px oklch(0 0 0 / 0.08), 0 2px 4px oklch(0 0 0 / 0.04);
-  --shadow-glow: 0 4px 14px -2px oklch(0.66 0.22 12 / 0.35);
+  --shadow-glow: 0 4px 14px -2px oklch(0.65 0.19 22 / 0.3);
 
   --transition-smooth: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dark {
-  --background: oklch(0.14 0.005 260);          /* near-black */
+  --background: oklch(0.14 0.005 260);
   --foreground: oklch(0.98 0.003 260);
 
   --card: oklch(0.18 0.006 260);
@@ -110,19 +110,19 @@
   --popover: oklch(0.18 0.006 260);
   --popover-foreground: oklch(0.98 0.003 260);
 
-  --primary: oklch(0.7 0.22 12);
+  --primary: oklch(0.98 0.003 260);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.22 0.006 260);
   --secondary-foreground: oklch(0.98 0.003 260);
   --muted: oklch(0.22 0.006 260);
   --muted-foreground: oklch(0.65 0.01 260);
-  --accent: oklch(0.7 0.22 12);
+  --accent: oklch(0.7 0.19 22);
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.65 0.2 22);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(1 0 0 / 8%);
   --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.7 0.22 12);
+  --ring: oklch(0.98 0.003 260);
 
   --gradient-soft: linear-gradient(180deg, oklch(0.14 0.005 260) 0%, oklch(0.18 0.006 260) 100%);
   --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.4);
