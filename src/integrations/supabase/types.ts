@@ -82,6 +82,8 @@ export type Database = {
           last_seen_at: string | null
           max_age: number | null
           min_age: number | null
+          onboarding_completed: boolean
+          phone: string | null
           photos: string[] | null
           seeking: string | null
           updated_at: string
@@ -100,6 +102,8 @@ export type Database = {
           last_seen_at?: string | null
           max_age?: number | null
           min_age?: number | null
+          onboarding_completed?: boolean
+          phone?: string | null
           photos?: string[] | null
           seeking?: string | null
           updated_at?: string
@@ -118,6 +122,8 @@ export type Database = {
           last_seen_at?: string | null
           max_age?: number | null
           min_age?: number | null
+          onboarding_completed?: boolean
+          phone?: string | null
           photos?: string[] | null
           seeking?: string | null
           updated_at?: string
