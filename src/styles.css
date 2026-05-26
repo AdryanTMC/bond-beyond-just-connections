@@ -49,35 +49,36 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.75rem;
 
-  /* Light mode — ivory canvas, midnight ink */
-  --background: oklch(0.985 0.005 80);          /* ivory #F8F7F4 */
-  --foreground: oklch(0.22 0.04 265);           /* midnight */
+  /* Light mode — pure white canvas, near-black ink (Tinder/Hinge style) */
+  --background: oklch(1 0 0);                   /* pure white */
+  --foreground: oklch(0.18 0.01 260);           /* near-black */
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.04 265);
+  --card-foreground: oklch(0.18 0.01 260);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.04 265);
+  --popover-foreground: oklch(0.18 0.01 260);
 
-  --primary: oklch(0.22 0.04 265);              /* midnight #0F172A */
-  --primary-foreground: oklch(0.985 0.005 80);
-  --secondary: oklch(0.95 0.01 80);
-  --secondary-foreground: oklch(0.22 0.04 265);
-  --muted: oklch(0.95 0.008 80);
-  --muted-foreground: oklch(0.5 0.02 265);
-  --accent: oklch(0.72 0.17 25);                /* coral */
+  /* Primary = Tinder hot pink/red */
+  --primary: oklch(0.66 0.22 12);               /* #FD267A-ish */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.97 0.003 260);
+  --secondary-foreground: oklch(0.18 0.01 260);
+  --muted: oklch(0.96 0.003 260);               /* light gray */
+  --muted-foreground: oklch(0.5 0.01 260);
+  --accent: oklch(0.66 0.22 12);
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9 0.01 80);
-  --input: oklch(0.9 0.01 80);
-  --ring: oklch(0.72 0.17 25);
+  --border: oklch(0.92 0.003 260);              /* hairline gray */
+  --input: oklch(0.92 0.003 260);
+  --ring: oklch(0.66 0.22 12);
 
-  --midnight: oklch(0.22 0.04 265);
-  --coral: oklch(0.72 0.17 25);                 /* #FF6B6B */
-  --gold: oklch(0.78 0.1 85);                   /* #D6B36A */
-  --ivory: oklch(0.985 0.005 80);
+  --midnight: oklch(0.18 0.01 260);
+  --coral: oklch(0.66 0.22 12);                 /* hot pink-red */
+  --gold: oklch(0.78 0.13 75);
+  --ivory: oklch(1 0 0);
 
   --romantic: oklch(0.74 0.16 18);              /* #FF7A8A */
   --family: oklch(0.81 0.13 75);                /* #F4B860 */
@@ -86,44 +87,46 @@
   --inner: oklch(0.62 0.2 295);                 /* #8B5CF6 */
   --memory: oklch(0.82 0.11 88);                /* #E6C068 */
 
-  --gradient-hero: linear-gradient(135deg, oklch(0.22 0.04 265) 0%, oklch(0.35 0.08 285) 40%, oklch(0.72 0.17 25) 100%);
-  --gradient-soft: linear-gradient(180deg, oklch(0.985 0.005 80) 0%, oklch(0.95 0.02 30) 100%);
-  --gradient-gold: linear-gradient(135deg, oklch(0.82 0.11 88), oklch(0.7 0.13 65));
-  --gradient-coral: linear-gradient(135deg, oklch(0.74 0.16 18), oklch(0.72 0.17 25));
+  /* Tinder signature gradient: hot pink → orange-red */
+  --gradient-hero: linear-gradient(135deg, oklch(0.7 0.21 350) 0%, oklch(0.66 0.22 12) 100%);
+  --gradient-soft: linear-gradient(180deg, oklch(1 0 0) 0%, oklch(0.97 0.003 260) 100%);
+  --gradient-gold: linear-gradient(135deg, oklch(0.82 0.13 80), oklch(0.72 0.14 60));
+  --gradient-coral: linear-gradient(135deg, oklch(0.7 0.21 350), oklch(0.66 0.22 12));
 
-  --shadow-soft: 0 4px 20px -8px oklch(0.22 0.04 265 / 0.12);
-  --shadow-elegant: 0 20px 60px -20px oklch(0.22 0.04 265 / 0.25);
-  --shadow-glow: 0 0 80px -10px oklch(0.72 0.17 25 / 0.4);
+  /* Flat, native-feeling shadows — minimal blur, no neon glow */
+  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.06), 0 1px 3px oklch(0 0 0 / 0.04);
+  --shadow-elegant: 0 4px 12px -2px oklch(0 0 0 / 0.08), 0 2px 4px oklch(0 0 0 / 0.04);
+  --shadow-glow: 0 4px 14px -2px oklch(0.66 0.22 12 / 0.35);
 
   --transition-smooth: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dark {
-  --background: oklch(0.18 0.03 265);
-  --foreground: oklch(0.97 0.01 80);
+  --background: oklch(0.14 0.005 260);          /* near-black */
+  --foreground: oklch(0.98 0.003 260);
 
-  --card: oklch(0.24 0.035 265);
-  --card-foreground: oklch(0.97 0.01 80);
-  --popover: oklch(0.24 0.035 265);
-  --popover-foreground: oklch(0.97 0.01 80);
+  --card: oklch(0.18 0.006 260);
+  --card-foreground: oklch(0.98 0.003 260);
+  --popover: oklch(0.18 0.006 260);
+  --popover-foreground: oklch(0.98 0.003 260);
 
-  --primary: oklch(0.97 0.01 80);
-  --primary-foreground: oklch(0.18 0.03 265);
-  --secondary: oklch(0.28 0.04 265);
-  --secondary-foreground: oklch(0.97 0.01 80);
-  --muted: oklch(0.26 0.03 265);
-  --muted-foreground: oklch(0.72 0.02 265);
-  --accent: oklch(0.72 0.17 25);
+  --primary: oklch(0.7 0.22 12);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.22 0.006 260);
+  --secondary-foreground: oklch(0.98 0.003 260);
+  --muted: oklch(0.22 0.006 260);
+  --muted-foreground: oklch(0.65 0.01 260);
+  --accent: oklch(0.7 0.22 12);
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.65 0.2 22);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.72 0.17 25);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.7 0.22 12);
 
-  --gradient-soft: linear-gradient(180deg, oklch(0.18 0.03 265) 0%, oklch(0.22 0.05 285) 100%);
-  --shadow-soft: 0 4px 20px -8px oklch(0 0 0 / 0.5);
-  --shadow-elegant: 0 20px 60px -20px oklch(0 0 0 / 0.6);
+  --gradient-soft: linear-gradient(180deg, oklch(0.14 0.005 260) 0%, oklch(0.18 0.006 260) 100%);
+  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.4);
+  --shadow-elegant: 0 4px 12px -2px oklch(0 0 0 / 0.5);
 }
 
 @layer base {
@@ -160,15 +163,15 @@
   .shadow-elegant { box-shadow: var(--shadow-elegant); }
   .shadow-glow { box-shadow: var(--shadow-glow); }
   .glass {
-    background: color-mix(in oklab, var(--color-card) 60%, transparent);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid color-mix(in oklab, var(--color-foreground) 8%, transparent);
+    background: color-mix(in oklab, var(--color-card) 92%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--color-border);
   }
   .glass-dark {
-    background: color-mix(in oklab, oklch(0.18 0.03 265) 50%, transparent);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid oklch(1 0 0 / 0.12);
+    background: color-mix(in oklab, oklch(0.14 0.005 260) 85%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid oklch(1 0 0 / 0.08);
   }
 }
