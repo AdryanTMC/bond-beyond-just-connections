@@ -83,7 +83,6 @@ export type Database = {
           max_age: number | null
           min_age: number | null
           onboarding_completed: boolean
-          phone: string | null
           photos: string[] | null
           seeking: string | null
           updated_at: string
@@ -103,7 +102,6 @@ export type Database = {
           max_age?: number | null
           min_age?: number | null
           onboarding_completed?: boolean
-          phone?: string | null
           photos?: string[] | null
           seeking?: string | null
           updated_at?: string
@@ -123,7 +121,6 @@ export type Database = {
           max_age?: number | null
           min_age?: number | null
           onboarding_completed?: boolean
-          phone?: string | null
           photos?: string[] | null
           seeking?: string | null
           updated_at?: string
@@ -180,6 +177,34 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_my_profile: {
+        Args: never
+        Returns: {
+          bio: string | null
+          birthdate: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          display_name: string | null
+          gender: string | null
+          id: string
+          interests: string[] | null
+          is_active: boolean
+          last_seen_at: string | null
+          max_age: number | null
+          min_age: number | null
+          onboarding_completed: boolean
+          photos: string[] | null
+          seeking: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

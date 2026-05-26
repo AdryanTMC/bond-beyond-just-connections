@@ -37,25 +37,20 @@ function langFromLocale(loc: string): Lang | null {
   return null;
 }
 
-function detectCountry(): string {
-  if (typeof window === "undefined") return "US";
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-    if (tz.includes("Sao_Paulo") || tz.includes("Brazil")) return "BR";
-    if (tz.includes("Tokyo")) return "JP";
-    if (tz.includes("Seoul")) return "KR";
-    if (tz.includes("Paris")) return "FR";
-    if (tz.includes("Berlin")) return "DE";
-    if (tz.includes("Rome")) return "IT";
-    if (tz.includes("Madrid")) return "ES";
-    if (tz.includes("Kolkata") || tz.includes("Calcutta") || tz.includes("Mumbai") || tz.includes("Delhi")) return "IN";
-    if (tz.includes("London")) return "GB";
-    if (tz.includes("Mexico_City")) return "MX";
-    if (tz.includes("Sydney") || tz.includes("Melbourne")) return "AU";
-    if (tz.includes("Toronto") || tz.includes("Vancouver")) return "CA";
-  } catch {}
-  const loc = (navigator.language || "en-US").split("-");
-  return (loc[1] || "US").toUpperCase();
+// Currency/country always follows the selected language so prices update
+// instantly when the user switches the language in the header.
+const LANG_TO_COUNTRY: Record<Lang, string> = {
+  en: "US",
+  pt: "BR",
+  es: "ES",
+  fr: "FR",
+  de: "DE",
+  it: "IT",
+  ja: "JP",
+  ko: "KR",
+};
+function countryForLang(l: Lang): string {
+  return LANG_TO_COUNTRY[l] ?? "US";
 }
 
 function detectLang(): Lang {
@@ -72,11 +67,9 @@ function detectLang(): Lang {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("en");
-  const [country, setCountry] = useState<string>("US");
 
   useEffect(() => {
     setLangState(detectLang());
-    setCountry(detectCountry());
   }, []);
 
   const setLang = (l: Lang) => {
@@ -90,6 +83,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof document !== "undefined") document.documentElement.lang = lang;
   }, [lang]);
+
+  const country = countryForLang(lang);
 
   const value = useMemo<Ctx>(() => ({
     lang,
