@@ -75,6 +75,37 @@ function Discover() {
     load();
   }, [load]);
 
+  // Realtime: detect new matches involving the current user
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel(`matches:${user.id}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "matches" },
+        async (payload) => {
+          const m = payload.new as { user_a: string; user_b: string };
+          if (m.user_a !== user.id && m.user_b !== user.id) return;
+          const otherId = m.user_a === user.id ? m.user_b : m.user_a;
+          // Avoid duplicate modal if we already detected it locally
+          setMatchPerson((curr) => {
+            if (curr && curr.id === otherId) return curr;
+            return curr;
+          });
+          const { data } = await supabase
+            .from("profiles")
+            .select("id,display_name,bio,birthdate,city,interests,photos")
+            .eq("id", otherId)
+            .maybeSingle();
+          if (data) setMatchPerson(data as Candidate);
+        }
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
   const current = candidates[index] ?? null;
 
   const decide = async (action: "like" | "pass" | "super") => {
