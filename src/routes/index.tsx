@@ -7,6 +7,7 @@ import {
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CinematicHero } from "@/components/cinematic-hero";
+import { FloatingCharms } from "@/components/floating-charms";
 import { useLang } from "@/i18n";
 
 export const Route = createFileRoute("/")({
@@ -45,7 +46,8 @@ function Landing() {
       <CinematicHero />
 
       {/* CATEGORIES */}
-      <section id="circles" className="py-28 bg-gradient-soft">
+      <section id="circles" className="relative py-28 bg-gradient-soft overflow-hidden">
+        <FloatingCharms count={10} />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="max-w-2xl">
             <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{t("landing.categories.eyebrow")}</span>
@@ -139,7 +141,8 @@ function Landing() {
       </section>
 
       {/* PRICING */}
-      <section id="pricing" className="py-28">
+      <section id="pricing" className="relative py-28 overflow-hidden">
+        <FloatingCharms count={8} />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{t("landing.pricing.eyebrow")}</span>
@@ -178,7 +181,8 @@ function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="py-28">
+      <section className="relative py-28 overflow-hidden">
+        <FloatingCharms count={10} />
         <div className="mx-auto max-w-5xl px-6">
           <div className="relative rounded-[2.5rem] overflow-hidden p-12 sm:p-16 text-center text-ivory bg-gradient-hero shadow-elegant">
             <h3 className="font-display text-4xl sm:text-5xl font-medium leading-tight">
