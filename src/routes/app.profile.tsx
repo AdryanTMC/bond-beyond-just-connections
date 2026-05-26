@@ -3,6 +3,8 @@ import { motion } from "motion/react";
 import { Mic, MapPin, Heart, Sparkles, Camera, Calendar } from "lucide-react";
 import { useLang } from "@/i18n";
 import avatar from "@/assets/person-sofia.jpg";
+import { useProfile } from "@/hooks/use-profile";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/app/profile")({
   component: Profile,
@@ -19,6 +21,17 @@ const moments = [
 
 function Profile() {
   const { t } = useLang();
+  const { profile } = useProfile();
+  const { user } = useAuth();
+
+  const fullName = profile?.display_name?.trim() || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "—";
+  const age = profile?.birthdate
+    ? Math.floor((Date.now() - new Date(profile.birthdate).getTime()) / (365.25 * 24 * 3600 * 1000))
+    : null;
+  const location = [profile?.city, profile?.country].filter(Boolean).join(", ") || t("profile.location");
+  const avatarUrl = profile?.photos?.[0] || (user?.user_metadata?.avatar_url as string | undefined) || avatar;
+  const userInterests = profile?.interests && profile.interests.length > 0 ? profile.interests : null;
+
   return (
     <div>
       {/* Cover */}
@@ -29,11 +42,11 @@ function Profile() {
       </div>
 
       <div className="-mt-16 px-2 sm:px-6 flex flex-col sm:flex-row sm:items-end gap-5">
-        <img src={avatar} alt="Profile" className="h-28 w-28 rounded-full object-cover ring-4 ring-background shadow-elegant" />
+        <img src={avatarUrl} alt="Profile" className="h-28 w-28 rounded-full object-cover ring-4 ring-background shadow-elegant" />
         <div className="flex-1">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground"><MapPin className="h-3 w-3" /> {t("profile.location")}</div>
-          <h1 className="font-display text-3xl sm:text-4xl font-medium mt-1">Alex Moreira, 29</h1>
-          <p className="text-sm text-muted-foreground mt-1.5 max-w-xl">{t("profile.bio")}</p>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground"><MapPin className="h-3 w-3" /> {location}</div>
+          <h1 className="font-display text-3xl sm:text-4xl font-medium mt-1">{fullName}{age ? `, ${age}` : ""}</h1>
+          <p className="text-sm text-muted-foreground mt-1.5 max-w-xl">{profile?.bio || t("profile.bio")}</p>
         </div>
         <div className="flex gap-2">
           <button className="rounded-full bg-foreground text-background text-sm px-4 py-2.5 inline-flex items-center gap-1.5">
@@ -78,7 +91,7 @@ function Profile() {
           </div>
           <div className="text-xs uppercase tracking-widest text-muted-foreground mt-5">{t("profile.interests")}</div>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {["Architecture", "Vinyl", "Slow food", "Cinema", "Mountains", "Letters", "Espresso"].map((tag) => (
+            {(userInterests ?? ["Architecture", "Vinyl", "Slow food", "Cinema", "Mountains"]).map((tag) => (
               <span key={tag} className="text-xs rounded-full px-3 py-1.5 bg-muted">{tag}</span>
             ))}
           </div>
