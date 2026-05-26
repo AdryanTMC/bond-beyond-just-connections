@@ -27,10 +27,7 @@ function Profile() {
   return (
     <div>
       {/* Cover */}
-      <div className="relative rounded-[2rem] overflow-hidden h-40 sm:h-52 bg-gradient-hero">
-        <div className="absolute inset-0 opacity-30"
-             style={{ backgroundImage: "radial-gradient(circle at 25% 30%, white 0.6px, transparent 1.2px), radial-gradient(circle at 75% 60%, white 0.6px, transparent 1.2px)", backgroundSize: "50px 50px, 80px 80px" }} />
-      </div>
+      <div className="relative rounded-[2rem] overflow-hidden h-40 sm:h-52 bg-muted" />
 
       <div className="mt-6 px-2 sm:px-6 flex flex-col sm:flex-row sm:items-center gap-5">
         <img src={avatarUrl} alt="Profile" className="h-28 w-28 rounded-full object-cover ring-4 ring-background shadow-elegant" />

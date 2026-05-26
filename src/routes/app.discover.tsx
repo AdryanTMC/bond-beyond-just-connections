@@ -81,7 +81,6 @@ function Discover() {
 
     const { data, error } = await query;
     if (error) {
-      console.error(error);
       setCandidates([]);
       setLoading(false);
       return;
@@ -146,7 +145,6 @@ function Discover() {
       liked,
     });
     if (error) {
-      console.error(error);
       return;
     }
     if (liked) {
@@ -190,7 +188,6 @@ function Discover() {
               </div>
             ) : current ? (
               <>
-                <div className="absolute inset-x-4 top-4 bottom-0 rounded-[2rem] bg-card border border-border/60 shadow-soft scale-[0.97] opacity-70" />
                 <AnimatePresence initial={false}>
                   <SwipeCard key={`${current.id}-${index}`} person={current} onDecide={decide} />
                 </AnimatePresence>
@@ -198,14 +195,13 @@ function Discover() {
                   <ActionBtn onClick={() => decide("pass")} aria="Pass" tone="bg-card text-foreground border border-border">
                     <X className="h-5 w-5" />
                   </ActionBtn>
-                  <ActionBtn onClick={() => decide("super")} aria="Super bond" tone="bg-gradient-gold text-midnight">
+                  <ActionBtn onClick={() => decide("super")} aria="Super bond" tone="bg-card text-gold border border-border">
                     <Star className="h-5 w-5" />
                   </ActionBtn>
-                  <ActionBtn onClick={() => decide("like")} aria="Bond" tone="bg-gradient-coral text-white shadow-glow">
+                  <ActionBtn onClick={() => decide("like")} aria="Bond" tone="bg-coral text-white">
                     <Heart className="h-5 w-5" />
                   </ActionBtn>
                 </div>
-                <div className="pointer-events-none absolute -inset-12 -z-10 bg-gradient-coral opacity-20 blur-3xl rounded-full" />
               </>
             ) : (
               <div className="absolute inset-0 rounded-[2rem] border border-dashed border-border/70 bg-card/50 flex flex-col items-center justify-center text-center p-8">
@@ -285,7 +281,7 @@ function SwipeCard({ person, onDecide }: { person: Candidate; onDecide: (a: "lik
         if (info.offset.x > 140) onDecide("like");
         else if (info.offset.x < -140) onDecide("pass");
       }}
-      className="absolute inset-0 rounded-[2rem] overflow-hidden shadow-elegant cursor-grab active:cursor-grabbing z-20 bg-gradient-coral"
+      className="absolute inset-0 rounded-[2rem] overflow-hidden shadow-soft cursor-grab active:cursor-grabbing z-20 bg-muted"
       transition={{ type: "spring", stiffness: 280, damping: 28 }}
     >
       {photo ? (
