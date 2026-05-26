@@ -11,13 +11,35 @@ export const Route = createFileRoute("/app/discover")({
   component: Discover,
 });
 
-type Candidate = Pick<Profile, "id" | "display_name" | "bio" | "birthdate" | "city" | "interests" | "photos">;
+type Candidate = Pick<Profile, "id" | "display_name" | "bio" | "birthdate" | "city" | "interests" | "photos"> & { score?: number };
 
 function ageFromBirthdate(b: string | null): number | null {
   if (!b) return null;
   const d = new Date(b);
   if (isNaN(d.getTime())) return null;
   return Math.floor((Date.now() - d.getTime()) / (365.25 * 24 * 3600 * 1000));
+}
+
+function affinityScore(
+  me: { interests?: string[] | null; city?: string | null; min_age?: number | null; max_age?: number | null },
+  other: { interests?: string[] | null; city?: string | null; birthdate?: string | null }
+): number {
+  let score = 0;
+  const mine = new Set((me.interests ?? []).map((x) => x.toLowerCase()));
+  const theirs = (other.interests ?? []).map((x) => x.toLowerCase());
+  const shared = theirs.filter((i) => mine.has(i)).length;
+  // Up to 60 pts from interests (12 per shared, capped)
+  score += Math.min(shared * 12, 60);
+  // Same city: 25 pts
+  if (me.city && other.city && me.city.trim().toLowerCase() === other.city.trim().toLowerCase()) score += 25;
+  // Age within preferred range: 15 pts; otherwise scaled penalty
+  const a = ageFromBirthdate(other.birthdate ?? null);
+  if (a !== null) {
+    const min = me.min_age ?? 18;
+    const max = me.max_age ?? 80;
+    if (a >= min && a <= max) score += 15;
+  }
+  return score;
 }
 
 function Discover() {
@@ -68,10 +90,13 @@ function Discover() {
       if (a !== null && (a < minAge || a > maxAge)) return false;
       return true;
     });
-    setCandidates(filtered);
+    const scored = filtered
+      .map((p) => ({ ...p, score: affinityScore(profile ?? {}, p) }))
+      .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    setCandidates(scored);
     setIndex(0);
     setLoading(false);
-  }, [userId, minAge, maxAge, seeking]);
+  }, [userId, minAge, maxAge, seeking, profile]);
 
   useEffect(() => {
     load();
@@ -289,6 +314,11 @@ function SwipeCard({ person, onDecide }: { person: Candidate; onDecide: (a: "lik
         <div className="font-display text-3xl font-medium mt-1">
           {person.display_name}{age ? <>, <span className="opacity-80">{age}</span></> : null}
         </div>
+        {typeof person.score === "number" && person.score > 0 && (
+          <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-white/15 backdrop-blur text-[11px] px-2.5 py-1">
+            <Sparkles className="h-3 w-3" /> {person.score}% affinity
+          </div>
+        )}
         {person.bio && <p className="mt-2 text-sm leading-relaxed opacity-90 line-clamp-3">{person.bio}</p>}
         {person.interests && person.interests.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1.5">
