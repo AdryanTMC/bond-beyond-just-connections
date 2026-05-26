@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { Mic, MapPin, Heart, Sparkles, Camera, Calendar } from "lucide-react";
+import { MapPin, Camera } from "lucide-react";
 import { useLang } from "@/i18n";
 import avatar from "@/assets/person-sofia.jpg";
 import { useProfile } from "@/hooks/use-profile";
@@ -9,15 +9,6 @@ import { useAuth } from "@/hooks/use-auth";
 export const Route = createFileRoute("/app/profile")({
   component: Profile,
 });
-
-const moments = [
-  { title: "Lisbon · summer", tone: "var(--color-romantic)", when: "2022" },
-  { title: "Friends reunion", tone: "var(--color-friends)", when: "2023" },
-  { title: "Mountain trail", tone: "var(--color-friends)", when: "2024" },
-  { title: "Studio opening", tone: "var(--color-pro)", when: "2024" },
-  { title: "Birthday letter", tone: "var(--color-memory)", when: "2025" },
-  { title: "Quiet morning", tone: "var(--color-inner)", when: "2025" },
-];
 
 function Profile() {
   const { t } = useLang();
@@ -31,6 +22,7 @@ function Profile() {
   const location = [profile?.city, profile?.country].filter(Boolean).join(", ") || t("profile.location");
   const avatarUrl = profile?.photos?.[0] || (user?.user_metadata?.avatar_url as string | undefined) || avatar;
   const userInterests = profile?.interests && profile.interests.length > 0 ? profile.interests : null;
+  const extraPhotos = (profile?.photos ?? []).slice(1);
 
   return (
     <div>
@@ -56,88 +48,57 @@ function Profile() {
       </div>
 
       {/* Voice intro */}
-      <div className="mt-10 grid lg:grid-cols-3 gap-6">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-          className="rounded-3xl border border-border/70 bg-card p-6">
-          <div className="flex items-center justify-between">
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">{t("profile.voice")}</div>
-            <Mic className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <div className="mt-4 flex items-center gap-3">
-            <button className="h-12 w-12 rounded-full bg-gradient-coral text-white flex items-center justify-center shadow-glow">
-              <Mic className="h-5 w-5" />
-            </button>
-            <div className="flex-1 flex items-end gap-0.5 h-10">
-              {Array.from({ length: 32 }).map((_, i) => (
-                <span key={i} className="flex-1 rounded-sm" style={{
-                  background: "var(--color-coral)",
-                  height: `${20 + Math.abs(Math.sin(i)) * 70}%`,
-                  opacity: 0.4 + (i % 5) * 0.1,
-                }} />
-              ))}
-            </div>
-            <span className="text-xs text-muted-foreground">0:24</span>
-          </div>
-        </motion.div>
-
+      <div className="mt-10 grid lg:grid-cols-2 gap-6">
         <div className="rounded-3xl border border-border/70 bg-card p-6">
           <div className="text-xs uppercase tracking-widest text-muted-foreground">{t("profile.intent")}</div>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {[t("discover.intent.romance"), t("discover.intent.friendship"), t("discover.intent.networking"), t("discover.intent.community")].map((g, i) => (
-              <span key={g} className={`text-xs rounded-full px-3 py-1.5 border ${i < 2 ? "bg-foreground text-background border-transparent" : "text-muted-foreground"}`}>
-                {g}
-              </span>
-            ))}
+            <span className="text-xs rounded-full px-3 py-1.5 bg-foreground text-background border border-transparent capitalize">
+              {profile?.seeking || t("discover.intent.romance")}
+            </span>
           </div>
           <div className="text-xs uppercase tracking-widest text-muted-foreground mt-5">{t("profile.interests")}</div>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {(userInterests ?? ["Architecture", "Vinyl", "Slow food", "Cinema", "Mountains"]).map((tag) => (
-              <span key={tag} className="text-xs rounded-full px-3 py-1.5 bg-muted">{tag}</span>
-            ))}
+            {userInterests
+              ? userInterests.map((tag) => (
+                  <span key={tag} className="text-xs rounded-full px-3 py-1.5 bg-muted">{tag}</span>
+                ))
+              : <span className="text-xs text-muted-foreground">—</span>}
           </div>
         </div>
 
-        <div className="rounded-3xl bg-gradient-gold text-midnight p-6">
-          <div className="flex items-center gap-2 text-xs uppercase tracking-widest opacity-80">
-            <Sparkles className="h-3.5 w-3.5" /> {t("profile.health")}
+        <div className="rounded-3xl border border-border/70 bg-card p-6">
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">{t("profile.intent")}</div>
+          <div className="mt-3 text-sm text-muted-foreground">
+            {profile?.min_age ?? 18}–{profile?.max_age ?? 60} · {location}
           </div>
-          <div className="mt-3 font-display text-5xl">84</div>
-          <div className="text-xs mt-2 opacity-80">{t("profile.health.body")}</div>
         </div>
       </div>
 
       {/* Memory highlights */}
+      {extraPhotos.length > 0 && (
       <div className="mt-10">
         <div className="flex items-end justify-between mb-5">
           <div>
             <h2 className="font-display text-2xl font-medium">{t("profile.memories.title")}</h2>
             <p className="text-sm text-muted-foreground">{t("profile.memories.sub")}</p>
           </div>
-          <button className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5">
-            <Calendar className="h-4 w-4" /> {t("profile.timeline")}
-          </button>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-          {moments.map((m, i) => (
+          {extraPhotos.map((src, i) => (
             <motion.div
-              key={m.title}
+              key={src}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.04 }}
               className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-soft"
-              style={{ background: `linear-gradient(135deg, ${m.tone}, color-mix(in oklab, ${m.tone} 40%, black))` }}
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-3 left-3 right-3 text-white">
-                <div className="text-[10px] uppercase tracking-widest opacity-80">{m.when}</div>
-                <div className="font-display text-sm leading-tight mt-0.5">{m.title}</div>
-              </div>
-              <Heart className="absolute top-3 right-3 h-3.5 w-3.5 text-white/80" />
+              <img src={src} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
             </motion.div>
           ))}
         </div>
       </div>
+      )}
     </div>
   );
 }
