@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Heart, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { LANGUAGES, useLang, type Lang } from "@/i18n";
+import { BondLogo } from "@/components/bond-logo";
 
 export function SiteHeader() {
   const { t, lang, setLang } = useLang();
@@ -19,9 +20,7 @@ export function SiteHeader() {
       <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 transition-all ${scrolled ? "py-2.5" : "py-4"}`}>
         <div className={`glass rounded-full flex items-center justify-between gap-3 px-3 sm:px-5 py-2.5 transition-shadow ${scrolled ? "shadow-elegant" : "shadow-soft"}`}>
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-coral shadow-glow">
-              <Heart className="h-4 w-4 text-white" strokeWidth={2.5} />
-            </span>
+            <BondLogo size={32} />
             <span className="font-display text-xl font-semibold tracking-tight">{t("brand.name")}</span>
             <span className="hidden sm:inline text-xs text-muted-foreground ml-1">{t("brand.tagline")}</span>
           </Link>
