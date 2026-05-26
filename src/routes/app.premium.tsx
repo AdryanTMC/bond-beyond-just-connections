@@ -31,6 +31,7 @@ const tiers: Tier[] = [
       "premium.feat.basicMatching",
       "premium.feat.basicMessages",
       "premium.feat.dailyPicks",
+      "premium.feat.blurredLikers",
     ],
   },
   {
