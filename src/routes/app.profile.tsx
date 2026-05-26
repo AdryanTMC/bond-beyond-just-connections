@@ -47,12 +47,12 @@ function Profile() {
         </div>
       </div>
 
-      {/* Voice intro */}
+      {/* Info cards */}
       <div className="mt-10 grid lg:grid-cols-2 gap-6">
         <div className="rounded-3xl border border-border/70 bg-card p-6">
           <div className="text-xs uppercase tracking-widest text-muted-foreground">{t("profile.intent")}</div>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            <span className="text-xs rounded-full px-3 py-1.5 bg-foreground text-background border border-transparent capitalize">
+            <span className="text-xs rounded-full px-3 py-1.5 bg-foreground text-background capitalize">
               {profile?.seeking || t("discover.intent.romance")}
             </span>
           </div>
@@ -67,9 +67,14 @@ function Profile() {
         </div>
 
         <div className="rounded-3xl border border-border/70 bg-card p-6">
-          <div className="text-xs uppercase tracking-widest text-muted-foreground">{t("profile.intent")}</div>
-          <div className="mt-3 text-sm text-muted-foreground">
-            {profile?.min_age ?? 18}–{profile?.max_age ?? 60} · {location}
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">Preferências</div>
+          <div className="mt-3 text-sm">
+            <span className="text-muted-foreground">Idade: </span>
+            <span className="font-medium">{profile?.min_age ?? 18}–{profile?.max_age ?? 60}</span>
+          </div>
+          <div className="mt-2 text-sm flex items-center gap-1.5">
+            <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="font-medium">{location}</span>
           </div>
         </div>
       </div>
