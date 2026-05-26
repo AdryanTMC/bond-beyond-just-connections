@@ -200,6 +200,18 @@ function Messages() {
               </div>
 
               <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-gradient-soft">
+                {hasMore && (
+                  <div className="flex justify-center pb-2">
+                    <button
+                      onClick={loadOlder}
+                      disabled={loadingMore}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[11px] text-muted-foreground hover:text-foreground disabled:opacity-50"
+                    >
+                      {loadingMore ? <Loader2 className="h-3 w-3 animate-spin" /> : <ChevronUp className="h-3 w-3" />}
+                      Load earlier
+                    </button>
+                  </div>
+                )}
                 {messages.length === 0 ? (
                   <p className="text-sm text-muted-foreground text-center py-10">Say hi 👋</p>
                 ) : (
