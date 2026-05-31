@@ -14,6 +14,7 @@ export type Profile = {
   interests: string[] | null;
   photos: string[] | null;
   highlights: string[] | null;
+  cover_url: string | null;
   min_age: number | null;
   max_age: number | null;
   is_active: boolean;
