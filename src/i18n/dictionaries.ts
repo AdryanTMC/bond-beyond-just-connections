@@ -1701,32 +1701,56 @@ export function formatPrice(usd: number, country: string): string {
 }
 
 // ============================================================
-// Premium plan pricing — official tiers per country (monthly)
-// Falls back to USD if country isn't mapped.
+// Premium plan pricing — per country, per billing period.
+// Periods: 1 week / 1 month / 3 months. Falls back to USD.
 // ============================================================
 export type PlanTier = "free" | "plus" | "gold" | "infinity";
+export type BillingPeriod = "week" | "month" | "quarter";
 type PlanPriceMap = Record<PlanTier, string>;
+type PeriodPriceMap = Record<BillingPeriod, PlanPriceMap>;
 
-const PLAN_PRICES: Record<string, PlanPriceMap> = {
-  BR: { free: "0", plus: "R$19,90", gold: "R$39,90", infinity: "R$79,90" },
-  PT: { free: "0", plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
-  ES: { free: "0", plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
-  FR: { free: "0", plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
-  DE: { free: "0", plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
-  IT: { free: "0", plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
-  NL: { free: "0", plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
-  GB: { free: "0", plus: "£5.99", gold: "£10.99", infinity: "£21.99" },
-  US: { free: "0", plus: "$7.99", gold: "$14.99", infinity: "$29.99" },
-  CA: { free: "0", plus: "CA$10.99", gold: "CA$20.99", infinity: "CA$39.99" },
-  AU: { free: "0", plus: "A$11.99", gold: "A$22.99", infinity: "A$44.99" },
-  MX: { free: "0", plus: "MX$139", gold: "MX$259", infinity: "MX$499" },
-  AR: { free: "0", plus: "AR$7.990", gold: "AR$14.990", infinity: "AR$29.990" },
-  JP: { free: "0", plus: "¥1.200", gold: "¥2.300", infinity: "¥4.500" },
-  KR: { free: "0", plus: "₩10.900", gold: "₩19.900", infinity: "₩39.900" },
-  IN: { free: "0", plus: "₹149", gold: "₹299", infinity: "₹599" },
+const PERIOD_PRICES: Record<string, PeriodPriceMap> = {
+  BR: {
+    week: { free: "0", plus: "R$9,90", gold: "R$14,90", infinity: "R$24,90" },
+    month: { free: "0", plus: "R$19,90", gold: "R$39,90", infinity: "R$79,90" },
+    quarter: { free: "0", plus: "R$49,90", gold: "R$99,90", infinity: "R$119,90" },
+  },
+  EU: {
+    week: { free: "0", plus: "€3,49", gold: "€5,99", infinity: "€9,99" },
+    month: { free: "0", plus: "€6,99", gold: "€12,99", infinity: "€24,99" },
+    quarter: { free: "0", plus: "€17,99", gold: "€32,99", infinity: "€59,99" },
+  },
+  GB: {
+    week: { free: "0", plus: "£2.99", gold: "£4.99", infinity: "£8.99" },
+    month: { free: "0", plus: "£5.99", gold: "£10.99", infinity: "£21.99" },
+    quarter: { free: "0", plus: "£14.99", gold: "£27.99", infinity: "£54.99" },
+  },
+  US: {
+    week: { free: "0", plus: "$2.99", gold: "$4.99", infinity: "$8.99" },
+    month: { free: "0", plus: "$7.99", gold: "$14.99", infinity: "$29.99" },
+    quarter: { free: "0", plus: "$19.99", gold: "$39.99", infinity: "$74.99" },
+  },
+  JP: {
+    week: { free: "0", plus: "¥450", gold: "¥750", infinity: "¥1.350" },
+    month: { free: "0", plus: "¥1.200", gold: "¥2.300", infinity: "¥4.500" },
+    quarter: { free: "0", plus: "¥2.990", gold: "¥5.990", infinity: "¥11.900" },
+  },
+  KR: {
+    week: { free: "0", plus: "₩3.900", gold: "₩6.900", infinity: "₩12.900" },
+    month: { free: "0", plus: "₩10.900", gold: "₩19.900", infinity: "₩39.900" },
+    quarter: { free: "0", plus: "₩27.900", gold: "₩49.900", infinity: "₩99.900" },
+  },
 };
 
-export function planPrice(tier: PlanTier, country: string): string {
-  const m = PLAN_PRICES[country?.toUpperCase()] ?? PLAN_PRICES.US;
-  return m[tier];
+const EU_COUNTRIES = ["PT", "ES", "FR", "DE", "IT", "NL"];
+
+function priceMapFor(country: string): PeriodPriceMap {
+  const code = country?.toUpperCase();
+  if (PERIOD_PRICES[code]) return PERIOD_PRICES[code];
+  if (EU_COUNTRIES.includes(code)) return PERIOD_PRICES.EU;
+  return PERIOD_PRICES.US;
+}
+
+export function planPrice(tier: PlanTier, country: string, period: BillingPeriod = "month"): string {
+  return priceMapFor(country)[period][tier];
 }
