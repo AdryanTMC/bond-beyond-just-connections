@@ -3,7 +3,6 @@ import {
   Heart, Home, Compass, MessageCircle, User, Crown, Bell, Plus, Sparkles, Fingerprint, Settings as SettingsIcon, LogOut, Loader2,
 } from "lucide-react";
 import { useLang, LANGUAGES, type Lang } from "@/i18n";
-import { usePremium } from "@/hooks/use-premium";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { AnimatePresence, motion } from "motion/react";
