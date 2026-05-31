@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "motion/react";
-import { MapPin, Camera } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { MapPin, Camera, Plus, Loader2, X, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { useLang } from "@/i18n";
 import avatar from "@/assets/person-sofia.jpg";
 import { useProfile } from "@/hooks/use-profile";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/app/profile")({
   component: Profile,
@@ -45,6 +47,9 @@ function Profile() {
           </Link>
         </div>
       </div>
+
+      {/* Highlights (Instagram-style) */}
+      <Highlights />
 
       {/* Info cards */}
       <div className="mt-10 grid lg:grid-cols-2 gap-6">
@@ -104,5 +109,190 @@ function Profile() {
       </div>
       )}
     </div>
+  );
+}
+
+function Highlights() {
+  const { profile, refresh } = useProfile();
+  const { user } = useAuth();
+  const highlights = profile?.highlights ?? [];
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [viewer, setViewer] = useState<number | null>(null);
+  const MAX = 10;
+
+  const persist = async (next: string[]) => {
+    if (!user) return;
+    const { error: e } = await supabase.from("profiles").update({ highlights: next }).eq("id", user.id);
+    if (e) {
+      setError(e.message);
+      return;
+    }
+    await refresh();
+  };
+
+  const onPick = async (file: File) => {
+    if (!user) return;
+    if (highlights.length >= MAX) {
+      setError(`Máximo de ${MAX} destaques`);
+      return;
+    }
+    setUploading(true);
+    setError(null);
+    try {
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${user.id}/highlights/${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("profile-photos").upload(path, file, { upsert: false });
+      if (upErr) throw upErr;
+      const { data } = supabase.storage.from("profile-photos").getPublicUrl(path);
+      await persist([...highlights, data.publicUrl]);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Upload falhou");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeAt = async (i: number) => {
+    const next = highlights.filter((_, idx) => idx !== i);
+    await persist(next);
+    setViewer((v) => {
+      if (v === null) return v;
+      if (next.length === 0) return null;
+      return Math.min(v, next.length - 1);
+    });
+  };
+
+  return (
+    <div className="mt-8">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-display text-lg font-medium">Destaques</h2>
+        <span className="text-xs text-muted-foreground">{highlights.length}/{MAX}</span>
+      </div>
+
+      <div className="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1">
+        {/* Add button */}
+        {highlights.length < MAX && (
+          <label className="shrink-0 flex flex-col items-center gap-2 cursor-pointer group">
+            <span className="h-[72px] w-[72px] rounded-full border-2 border-dashed border-border flex items-center justify-center text-muted-foreground group-hover:border-foreground/40 group-hover:text-foreground transition-colors">
+              {uploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Plus className="h-5 w-5" />}
+            </span>
+            <span className="text-[11px] text-muted-foreground">Novo</span>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) onPick(f);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        )}
+
+        {highlights.map((src, i) => (
+          <button
+            key={src}
+            onClick={() => setViewer(i)}
+            className="shrink-0 flex flex-col items-center gap-2 group"
+          >
+            <span className="h-[72px] w-[72px] rounded-full p-[3px] bg-gradient-coral">
+              <span className="block h-full w-full rounded-full p-[2px] bg-background">
+                <img src={src} alt={`Destaque ${i + 1}`} loading="lazy" className="h-full w-full rounded-full object-cover" />
+              </span>
+            </span>
+            <span className="text-[11px] text-muted-foreground">#{i + 1}</span>
+          </button>
+        ))}
+
+        {highlights.length === 0 && (
+          <p className="self-center text-sm text-muted-foreground">Adicione fotos em destaque, como no Instagram.</p>
+        )}
+      </div>
+
+      {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
+
+      <AnimatePresence>
+        {viewer !== null && highlights[viewer] && (
+          <HighlightViewer
+            photos={highlights}
+            index={viewer}
+            onIndex={setViewer}
+            onClose={() => setViewer(null)}
+            onRemove={removeAt}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function HighlightViewer({
+  photos, index, onIndex, onClose, onRemove,
+}: {
+  photos: string[];
+  index: number;
+  onIndex: (i: number) => void;
+  onClose: () => void;
+  onRemove: (i: number) => void;
+}) {
+  const prev = () => onIndex(index > 0 ? index - 1 : photos.length - 1);
+  const next = () => onIndex(index < photos.length - 1 ? index + 1 : 0);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 bg-midnight/90 backdrop-blur flex items-center justify-center px-4"
+      onClick={onClose}
+    >
+      {/* Progress bars */}
+      <div className="absolute top-4 inset-x-0 px-4 flex gap-1.5 max-w-md mx-auto">
+        {photos.map((_, i) => (
+          <span key={i} className="h-1 flex-1 rounded-full bg-white/25 overflow-hidden">
+            <span className={`block h-full rounded-full bg-white ${i <= index ? "w-full" : "w-0"}`} />
+          </span>
+        ))}
+      </div>
+
+      <button onClick={onClose} className="absolute top-10 right-4 h-10 w-10 rounded-full bg-white/10 text-white flex items-center justify-center">
+        <X className="h-5 w-5" />
+      </button>
+      <button
+        onClick={(e) => { e.stopPropagation(); onRemove(index); }}
+        className="absolute top-10 left-4 h-10 w-10 rounded-full bg-white/10 text-white flex items-center justify-center"
+        aria-label="Remover destaque"
+      >
+        <Trash2 className="h-5 w-5" />
+      </button>
+
+      <button
+        onClick={(e) => { e.stopPropagation(); prev(); }}
+        className="absolute left-2 sm:left-6 h-11 w-11 rounded-full bg-white/10 text-white flex items-center justify-center"
+        aria-label="Anterior"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      <button
+        onClick={(e) => { e.stopPropagation(); next(); }}
+        className="absolute right-2 sm:right-6 h-11 w-11 rounded-full bg-white/10 text-white flex items-center justify-center"
+        aria-label="Próximo"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
+
+      <motion.img
+        key={photos[index]}
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.2 }}
+        src={photos[index]}
+        alt={`Destaque ${index + 1}`}
+        onClick={(e) => e.stopPropagation()}
+        className="max-h-[80vh] max-w-md w-full object-contain rounded-2xl"
+      />
+    </motion.div>
   );
 }
