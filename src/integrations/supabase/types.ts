@@ -73,6 +73,7 @@ export type Database = {
           birthdate: string | null
           city: string | null
           country: string | null
+          cover_url: string | null
           created_at: string
           display_name: string | null
           gender: string | null
@@ -93,6 +94,7 @@ export type Database = {
           birthdate?: string | null
           city?: string | null
           country?: string | null
+          cover_url?: string | null
           created_at?: string
           display_name?: string | null
           gender?: string | null
@@ -113,6 +115,7 @@ export type Database = {
           birthdate?: string | null
           city?: string | null
           country?: string | null
+          cover_url?: string | null
           created_at?: string
           display_name?: string | null
           gender?: string | null
@@ -214,6 +217,7 @@ export type Database = {
           birthdate: string | null
           city: string | null
           country: string | null
+          cover_url: string | null
           created_at: string
           display_name: string | null
           gender: string | null
