@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { dictionaries, formatPrice, planPrice, type Lang, type PlanTier } from "./dictionaries";
+import { dictionaries, formatPrice, planPrice, type Lang, type PlanTier, type BillingPeriod } from "./dictionaries";
 
 export type { Lang } from "./dictionaries";
 
@@ -20,7 +20,7 @@ type Ctx = {
   setLang: (l: Lang) => void;
   t: (k: string) => string;
   price: (usd: number) => string;
-  plan: (tier: PlanTier) => string;
+  plan: (tier: PlanTier, period?: BillingPeriod) => string;
 };
 const LanguageContext = createContext<Ctx | null>(null);
 
@@ -92,7 +92,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLang,
     t: (k) => dictionaries[lang][k] ?? dictionaries.en[k] ?? k,
     price: (usd) => formatPrice(usd, country),
-    plan: (tier) => planPrice(tier, country),
+    plan: (tier, period) => planPrice(tier, country, period),
   }), [lang, country]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
@@ -106,7 +106,7 @@ export function useLang() {
     setLang: () => {},
     t: (k: string) => dictionaries.en[k] ?? k,
     price: (usd: number) => formatPrice(usd, "US"),
-    plan: (tier: PlanTier) => planPrice(tier, "US"),
+    plan: (tier: PlanTier, period?: BillingPeriod) => planPrice(tier, "US", period),
   };
   return ctx;
 }
