@@ -3,7 +3,6 @@ import {
   Heart, Home, Compass, MessageCircle, User, Crown, Bell, Plus, Sparkles, Fingerprint, Settings as SettingsIcon, LogOut, Loader2,
 } from "lucide-react";
 import { useLang, LANGUAGES, type Lang } from "@/i18n";
-import { usePremium } from "@/hooks/use-premium";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { AnimatePresence, motion } from "motion/react";
@@ -33,7 +32,6 @@ const nav = [
 
 function AppLayout() {
   const { t, lang, setLang } = useLang();
-  const { premium, toggle } = usePremium();
   const { user, loading, signOut } = useAuth();
   const { profile, loading: pLoading } = useProfile();
   const navigate = useNavigate();
@@ -100,18 +98,6 @@ function AppLayout() {
             <div className="px-4 sm:px-6 lg:px-10 py-3.5 flex items-center gap-3">
               <div className="flex-1" />
               <AppLangSelector lang={lang} onChange={setLang} />
-              <button
-                onClick={toggle}
-                title={t("premium.toggle.hint")}
-                className={`hidden sm:inline-flex items-center gap-1.5 h-10 rounded-full px-3 text-xs font-medium transition-all ${
-                  premium
-                    ? "bg-gradient-coral text-white shadow-glow"
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                <Crown className="h-3.5 w-3.5" />
-                {premium ? t("premium.toggle.on") : t("premium.toggle.off")}
-              </button>
               <button className="relative h-10 w-10 rounded-full bg-muted flex items-center justify-center">
                 <Bell className="h-4 w-4" />
                 <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-coral" />

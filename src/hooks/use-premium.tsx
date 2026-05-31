@@ -1,25 +1,47 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 
-type Ctx = { premium: boolean; setPremium: (v: boolean) => void; toggle: () => void };
+export type PlanTier = "free" | "plus" | "gold" | "infinity";
+
+type Ctx = { premium: boolean; tier: PlanTier; loading: boolean; refresh: () => Promise<void> };
 const PremiumContext = createContext<Ctx | null>(null);
 
+const PAID_TIERS: PlanTier[] = ["plus", "gold", "infinity"];
+
 export function PremiumProvider({ children }: { children: ReactNode }) {
-  // Real product behavior: users start on the Free plan until they upgrade.
-  const [premium, setPremiumState] = useState<boolean>(false);
+  const { user } = useAuth();
+  // Entitlement is read from the server (public.subscriptions) and cannot be
+  // set from the client. Users can only read their own row via RLS, and no
+  // INSERT/UPDATE policy exists — so premium status can never be self-granted.
+  const [tier, setTier] = useState<PlanTier>("free");
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    if (!user) {
+      setTier("free");
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    const { data } = await supabase
+      .from("subscriptions")
+      .select("tier,status")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    const active = data?.status === "active" || data?.status === "trialing";
+    setTier(active ? ((data?.tier as PlanTier) ?? "free") : "free");
+    setLoading(false);
+  }, [user]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = window.localStorage.getItem("bond.premium");
-    if (stored !== null) setPremiumState(stored === "1");
-  }, []);
+    load();
+  }, [load]);
 
-  const setPremium = (v: boolean) => {
-    setPremiumState(v);
-    if (typeof window !== "undefined") window.localStorage.setItem("bond.premium", v ? "1" : "0");
-  };
+  const premium = PAID_TIERS.includes(tier);
 
   return (
-    <PremiumContext.Provider value={{ premium, setPremium, toggle: () => setPremium(!premium) }}>
+    <PremiumContext.Provider value={{ premium, tier, loading, refresh: load }}>
       {children}
     </PremiumContext.Provider>
   );
@@ -27,6 +49,6 @@ export function PremiumProvider({ children }: { children: ReactNode }) {
 
 export function usePremium() {
   const ctx = useContext(PremiumContext);
-  if (!ctx) return { premium: false, setPremium: () => {}, toggle: () => {} };
+  if (!ctx) return { premium: false, tier: "free" as PlanTier, loading: false, refresh: async () => {} };
   return ctx;
 }
