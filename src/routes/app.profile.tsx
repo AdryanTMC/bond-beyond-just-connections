@@ -113,6 +113,60 @@ function Profile() {
 }
 
 function Highlights() {
+  return <HighlightsInner />;
+}
+
+function Cover() {
+  const { profile, refresh } = useProfile();
+  const { user } = useAuth();
+  const coverUrl = profile?.cover_url || null;
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const onPick = async (file: File) => {
+    if (!user) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${user.id}/cover/${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("profile-photos").upload(path, file, { upsert: false });
+      if (upErr) throw upErr;
+      const { data } = supabase.storage.from("profile-photos").getPublicUrl(path);
+      const { error: e } = await supabase.from("profiles").update({ cover_url: data.publicUrl }).eq("id", user.id);
+      if (e) throw e;
+      await refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Upload falhou");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="relative rounded-[2rem] overflow-hidden h-40 sm:h-52 bg-muted">
+      {coverUrl && <img src={coverUrl} alt="Capa" className="absolute inset-0 h-full w-full object-cover" />}
+      {coverUrl && <div className="absolute inset-0 bg-gradient-to-t from-midnight/30 to-transparent" />}
+      <label className="absolute bottom-4 right-4 cursor-pointer rounded-full bg-background/90 backdrop-blur text-foreground text-sm px-4 py-2 inline-flex items-center gap-1.5 shadow-elegant hover:bg-background transition">
+        {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
+        {coverUrl ? "Trocar capa" : "Adicionar capa"}
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) onPick(f);
+            e.target.value = "";
+          }}
+        />
+      </label>
+      {error && <p className="absolute bottom-2 left-4 text-xs text-red-200">{error}</p>}
+    </div>
+  );
+}
+
+function HighlightsInner() {
   const { profile, refresh } = useProfile();
   const { user } = useAuth();
   const highlights = profile?.highlights ?? [];
