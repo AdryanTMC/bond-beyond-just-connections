@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "motion/react";
-import { MapPin, Camera } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { MapPin, Camera, Plus, Loader2, X, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { useLang } from "@/i18n";
 import avatar from "@/assets/person-sofia.jpg";
 import { useProfile } from "@/hooks/use-profile";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/app/profile")({
   component: Profile,
@@ -45,6 +47,9 @@ function Profile() {
           </Link>
         </div>
       </div>
+
+      {/* Highlights (Instagram-style) */}
+      <Highlights />
 
       {/* Info cards */}
       <div className="mt-10 grid lg:grid-cols-2 gap-6">
