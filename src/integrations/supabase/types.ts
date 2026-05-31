@@ -76,6 +76,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           gender: string | null
+          highlights: string[]
           id: string
           interests: string[] | null
           is_active: boolean
@@ -95,6 +96,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           gender?: string | null
+          highlights?: string[]
           id: string
           interests?: string[] | null
           is_active?: boolean
@@ -114,6 +116,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           gender?: string | null
+          highlights?: string[]
           id?: string
           interests?: string[] | null
           is_active?: boolean
@@ -214,6 +217,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           gender: string | null
+          highlights: string[]
           id: string
           interests: string[] | null
           is_active: boolean
