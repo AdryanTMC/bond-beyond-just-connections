@@ -29,7 +29,7 @@ function Profile() {
   return (
     <div>
       {/* Cover */}
-      <div className="relative rounded-[2rem] overflow-hidden h-40 sm:h-52 bg-muted" />
+      <Cover />
 
       <div className="mt-6 px-2 sm:px-6 flex flex-col sm:flex-row sm:items-center gap-5">
         <img src={avatarUrl} alt="Profile" className="h-28 w-28 rounded-full object-cover ring-4 ring-background shadow-elegant" />
