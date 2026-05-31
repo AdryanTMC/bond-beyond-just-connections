@@ -76,6 +76,24 @@ function LoginPage() {
     if (res.error) setError(res.error.message);
   };
 
+  const demoLogin = async () => {
+    setError(null);
+    setInfo(null);
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: "demo@bond.app",
+        password: "demobond123",
+      });
+      if (error) throw error;
+      navigate({ to: "/app", replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-10">
       <motion.div
@@ -95,6 +113,15 @@ function LoginPage() {
         <p className="text-sm text-muted-foreground text-center mt-1">
           {mode === "signin" ? "Sign in to continue your bonds." : mode === "signup" ? "Start finding people who matter." : "We'll send you a reset link."}
         </p>
+
+        <button
+          onClick={demoLogin}
+          disabled={loading}
+          className="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-coral text-white px-4 py-3 text-sm font-medium shadow-glow disabled:opacity-60"
+        >
+          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+          Explorar como visitante (demo)
+        </button>
 
         {mode !== "forgot" && (
           <>
