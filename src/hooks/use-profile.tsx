@@ -13,6 +13,7 @@ export type Profile = {
   country: string | null;
   interests: string[] | null;
   photos: string[] | null;
+  highlights: string[] | null;
   min_age: number | null;
   max_age: number | null;
   is_active: boolean;
