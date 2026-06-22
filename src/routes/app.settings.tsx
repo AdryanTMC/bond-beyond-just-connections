@@ -201,7 +201,7 @@ function SettingsPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <div className="text-xs text-muted-foreground mb-1">Min</div>
+                  <div className="text-xs text-muted-foreground mb-1">{t("settings.min")}</div>
                   <input
                     type="range" min={18} max={ageMax - 1} value={ageMin}
                     onChange={(e) => setAgeMin(Number(e.target.value))}
@@ -209,7 +209,7 @@ function SettingsPage() {
                   />
                 </div>
                 <div>
-                  <div className="text-xs text-muted-foreground mb-1">Max</div>
+                  <div className="text-xs text-muted-foreground mb-1">{t("settings.max")}</div>
                   <input
                     type="range" min={ageMin + 1} max={80} value={ageMax}
                     onChange={(e) => setAgeMax(Number(e.target.value))}
