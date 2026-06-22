@@ -208,13 +208,13 @@ function Discover() {
                 <Sparkles className="h-8 w-8 text-muted-foreground mb-4" />
                 <div className="font-display text-xl">{t("discover.empty.title")}</div>
                 <p className="text-sm text-muted-foreground mt-2 max-w-xs">
-                  No one new right now. Adjust your preferences or come back later.
+                  {t("discover.empty.body2")}
                 </p>
                 <Link
                   to="/app/settings"
                   className="mt-6 inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:opacity-90"
                 >
-                  <SlidersHorizontal className="h-4 w-4" /> Open settings
+                  <SlidersHorizontal className="h-4 w-4" /> {t("discover.openSettings")}
                 </Link>
               </div>
             )}
@@ -227,10 +227,10 @@ function Discover() {
               <Sparkles className="h-3.5 w-3.5" /> {t("discover.why")}
             </div>
             <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-              Matches scored by shared interests, age range and intent. Be authentic — depth beats volume.
+              {t("discover.why.body")}
             </p>
             <div className="mt-4 text-xs text-muted-foreground">
-              <span className="text-foreground font-medium">{candidates.length - index}</span> people in your queue
+              <span className="text-foreground font-medium">{candidates.length - index}</span> {t("discover.queue")}
             </div>
           </div>
 
@@ -311,7 +311,7 @@ function SwipeCard({ person, onDecide }: { person: Candidate; onDecide: (a: "lik
         </div>
         {typeof person.score === "number" && person.score > 0 && (
           <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-white/15 backdrop-blur text-[11px] px-2.5 py-1">
-            <Sparkles className="h-3 w-3" /> {person.score}% affinity
+            <Sparkles className="h-3 w-3" /> {person.score}% {useLang().t("discover.affinity")}
           </div>
         )}
         {person.bio && <p className="mt-2 text-sm leading-relaxed opacity-90 line-clamp-3">{person.bio}</p>}

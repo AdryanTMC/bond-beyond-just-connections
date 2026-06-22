@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { Sparkles, Clock, Heart, X, Star, Flame } from "lucide-react";
+import { Clock, Heart, X, Star, Flame } from "lucide-react";
 import { useLang } from "@/i18n";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
