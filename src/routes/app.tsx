@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
-  Heart, Home, Compass, MessageCircle, User, Crown, Bell, Plus, Sparkles, Fingerprint, Settings as SettingsIcon, LogOut, Loader2,
+  Heart, Home, Compass, MessageCircle, User, Crown, Bell, Plus, Sparkles, Fingerprint, Settings as SettingsIcon, LogOut, Loader2, MapPin,
 } from "lucide-react";
 import { useLang, LANGUAGES, type Lang } from "@/i18n";
 import { useAuth } from "@/hooks/use-auth";
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/app")({
 const nav = [
   { to: "/app", labelKey: "app.nav.home", icon: Home, exact: true },
   { to: "/app/discover", labelKey: "app.nav.discover", icon: Compass },
+  { to: "/app/map", labelKey: "app.nav.map", icon: MapPin },
   { to: "/app/identity", labelKey: "app.nav.identity", icon: Fingerprint },
   { to: "/app/messages", labelKey: "app.nav.messages", icon: MessageCircle },
   { to: "/app/profile", labelKey: "app.nav.profile", icon: User },
