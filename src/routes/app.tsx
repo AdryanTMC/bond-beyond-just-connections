@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
-  Heart, Home, Compass, MessageCircle, User, Crown, Bell, Plus, Sparkles, Fingerprint, Settings as SettingsIcon, LogOut, Loader2,
+  Heart, Home, Compass, MessageCircle, User, Crown, Bell, Plus, Sparkles, Fingerprint, Settings as SettingsIcon, LogOut, Loader2, MapPin,
 } from "lucide-react";
 import { useLang, LANGUAGES, type Lang } from "@/i18n";
 import { useAuth } from "@/hooks/use-auth";
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/app")({
 const nav = [
   { to: "/app", labelKey: "app.nav.home", icon: Home, exact: true },
   { to: "/app/discover", labelKey: "app.nav.discover", icon: Compass },
+  { to: "/app/map", labelKey: "app.nav.map", icon: MapPin },
   { to: "/app/identity", labelKey: "app.nav.identity", icon: Fingerprint },
   { to: "/app/messages", labelKey: "app.nav.messages", icon: MessageCircle },
   { to: "/app/profile", labelKey: "app.nav.profile", icon: User },
@@ -123,7 +124,7 @@ function AppLayout() {
 
       {/* Mobile bottom nav */}
       <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 border-t border-border/60 bg-background/85 backdrop-blur-xl">
-        <div className="grid grid-cols-7">
+        <div className="grid grid-cols-8">
           {nav.map((n) => {
             const active = isActive(n.to, "exact" in n ? n.exact : false);
             return (

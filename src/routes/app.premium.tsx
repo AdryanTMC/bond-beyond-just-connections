@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Check, Crown, Infinity as InfinityIcon, Sparkles, Heart } from "lucide-react";
+import { useState } from "react";
 import { useLang } from "@/i18n";
+import type { BillingPeriod } from "@/i18n/dictionaries";
 
 export const Route = createFileRoute("/app/premium")({
   component: Premium,
@@ -40,7 +42,15 @@ const tiers: Tier[] = [
     taglineKey: "premium.tier.plus.tagline",
     icon: Sparkles,
     gradient: "linear-gradient(135deg, #69A7FF, #8B5CF6)",
-    featureKeys: ["premium.feat.unlimitedLikes", "premium.feat.aiSuggestions", "premium.feat.advancedRecs", "premium.feat.readReceipts"],
+    featureKeys: [
+      "premium.feat.unlimitedLikes",
+      "premium.feat.superPlus",
+      "premium.feat.seeWhoLiked",
+      "premium.feat.rewind",
+      "premium.feat.detailedSearch",
+      "premium.feat.mapUnlock",
+      "premium.feat.boost",
+    ],
   },
   {
     tier: "gold",
@@ -48,7 +58,13 @@ const tiers: Tier[] = [
     taglineKey: "premium.tier.gold.tagline",
     icon: Crown,
     gradient: "linear-gradient(135deg, #D6B36A, #FF7A8A)",
-    featureKeys: ["premium.feat.everythingPlus", "premium.feat.priorityVisibility", "premium.feat.aiBoosts", "premium.feat.coupleSpaces", "premium.feat.memoryCapsules"],
+    featureKeys: [
+      "premium.feat.everythingPlus",
+      "premium.feat.superGold",
+      "premium.feat.priorityVisibility",
+      "premium.feat.readReceipts",
+      "premium.feat.coupleSpaces",
+    ],
     featured: true,
   },
   {
@@ -57,12 +73,21 @@ const tiers: Tier[] = [
     taglineKey: "premium.tier.infinity.tagline",
     icon: InfinityIcon,
     gradient: "linear-gradient(135deg, #0F172A, #FF6B6B)",
-    featureKeys: ["premium.feat.everythingGold", "premium.feat.profileOpt", "premium.feat.aiCoach", "premium.feat.travelMode", "premium.feat.concierge"],
+    featureKeys: [
+      "premium.feat.everythingGold",
+      "premium.feat.superInfinity",
+      "premium.feat.nearbyMap",
+      "premium.feat.travelMode",
+      "premium.feat.concierge",
+    ],
   },
 ];
 
+const PERIODS: BillingPeriod[] = ["week", "month", "quarter"];
+
 function Premium() {
   const { t, plan } = useLang();
+  const [period, setPeriod] = useState<BillingPeriod>("month");
   return (
     <div>
       <div className="text-center max-w-2xl mx-auto mb-12">
@@ -75,6 +100,22 @@ function Premium() {
         <p className="mt-5 text-muted-foreground">
           {t("premium.sub")}
         </p>
+        <div className="mt-7 inline-flex flex-col items-center gap-3">
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">{t("premium.billing")}</div>
+          <div className="flex gap-1.5 p-1.5 rounded-full bg-muted">
+            {PERIODS.map((p) => (
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                className={`rounded-full px-4 py-2 text-sm whitespace-nowrap transition-all ${
+                  period === p ? "bg-background shadow-soft text-foreground" : "text-muted-foreground"
+                }`}
+              >
+                {t(`premium.period.${p}`)}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -103,10 +144,10 @@ function Premium() {
               <div className="text-sm opacity-80">{t(tier.taglineKey)}</div>
               <div className="mt-6 flex items-baseline gap-1.5">
                 <span className="font-display text-5xl">
-                  {tier.tier === "free" ? t("premium.tier.free.price") : plan(tier.tier)}
+                  {tier.tier === "free" ? t("premium.tier.free.price") : plan(tier.tier, period)}
                 </span>
                 {tier.tier !== "free" && (
-                  <span className="text-sm opacity-70">{t("premium.month")}</span>
+                  <span className="text-sm opacity-70">{t(`premium.per.${period}`)}</span>
                 )}
               </div>
               <ul className="mt-7 space-y-2.5 text-sm">

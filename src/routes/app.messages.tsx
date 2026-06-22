@@ -146,13 +146,13 @@ function Messages() {
       <div className="grid lg:grid-cols-12 gap-5 rounded-3xl border border-border/70 bg-card overflow-hidden h-[640px]">
         <aside className="lg:col-span-4 border-r border-border/60 overflow-y-auto">
           <div className="p-4 border-b border-border/60 text-xs uppercase tracking-widest text-muted-foreground">
-            Your matches
+            {t("msg.matches")}
           </div>
           {loading ? (
             <div className="p-6 flex justify-center"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
           ) : threads.length === 0 ? (
             <div className="p-6 text-sm text-muted-foreground text-center">
-              No matches yet. Keep swiping in Discover.
+              {t("msg.none")}
             </div>
           ) : (
             threads.map((th) => (
@@ -171,8 +171,8 @@ function Messages() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm">{th.other.display_name ?? "Someone"}</div>
-                  <div className="text-[11px] text-muted-foreground">Matched · {new Date(th.created_at).toLocaleDateString()}</div>
+                  <div className="font-medium text-sm">{th.other.display_name ?? t("msg.someone")}</div>
+                  <div className="text-[11px] text-muted-foreground">{t("msg.matched")} · {new Date(th.created_at).toLocaleDateString()}</div>
                 </div>
               </button>
             ))
@@ -191,9 +191,9 @@ function Messages() {
                   )}
                 </div>
                 <div>
-                  <div className="font-medium">{thread.other.display_name ?? "Someone"}</div>
+                  <div className="font-medium">{thread.other.display_name ?? t("msg.someone")}</div>
                   <div className="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                    <Heart className="h-3 w-3 text-coral" /> Matched
+                    <Heart className="h-3 w-3 text-coral" /> {t("msg.matched")}
                   </div>
                 </div>
               </div>
@@ -207,12 +207,12 @@ function Messages() {
                       className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[11px] text-muted-foreground hover:text-foreground disabled:opacity-50"
                     >
                       {loadingMore ? <Loader2 className="h-3 w-3 animate-spin" /> : <ChevronUp className="h-3 w-3" />}
-                      Load earlier
+                      {t("msg.loadEarlier")}
                     </button>
                   </div>
                 )}
                 {messages.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-10">Say hi 👋</p>
+                  <p className="text-sm text-muted-foreground text-center py-10">{t("msg.sayHi")}</p>
                 ) : (
                   messages.map((m) => {
                     const mine = m.sender_id === user?.id;
@@ -258,7 +258,7 @@ function Messages() {
             </>
           ) : (
             <div className="flex-1 flex items-center justify-center text-sm text-muted-foreground">
-              Select a match to start chatting
+              {t("msg.selectThread")}
             </div>
           )}
         </section>
