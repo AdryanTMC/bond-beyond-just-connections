@@ -187,18 +187,6 @@ function AppHome() {
         </section>
 
         <aside className="space-y-6">
-          <div className="rounded-3xl p-6 bg-gradient-hero text-ivory shadow-elegant">
-            <div className="flex items-center gap-2 text-xs uppercase tracking-widest opacity-80">
-              <Sparkles className="h-3.5 w-3.5" /> {t("home.ai.title")}
-            </div>
-            <p className="mt-4 font-display text-lg leading-snug">
-              {t("home.ai.body")}
-            </p>
-            <div className="mt-5 flex gap-2">
-              <Link to="/app/messages" className="rounded-full bg-ivory text-midnight text-xs px-3.5 py-2 font-medium">{t("home.ai.draft")}</Link>
-            </div>
-          </div>
-
           <div className="rounded-3xl border border-border/70 bg-card p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display text-lg font-medium">{t("home.timeline.title")}</h3>
