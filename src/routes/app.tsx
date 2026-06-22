@@ -124,7 +124,7 @@ function AppLayout() {
 
       {/* Mobile bottom nav */}
       <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 border-t border-border/60 bg-background/85 backdrop-blur-xl">
-        <div className="grid grid-cols-7">
+        <div className="grid grid-cols-8">
           {nav.map((n) => {
             const active = isActive(n.to, "exact" in n ? n.exact : false);
             return (
