@@ -19,6 +19,7 @@ import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppProfileRouteImport } from './routes/app.profile'
 import { Route as AppPremiumRouteImport } from './routes/app.premium'
 import { Route as AppMessagesRouteImport } from './routes/app.messages'
+import { Route as AppMapRouteImport } from './routes/app.map'
 import { Route as AppIdentityRouteImport } from './routes/app.identity'
 import { Route as AppDiscoverRouteImport } from './routes/app.discover'
 
@@ -72,6 +73,11 @@ const AppMessagesRoute = AppMessagesRouteImport.update({
   path: '/messages',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMapRoute = AppMapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppIdentityRoute = AppIdentityRouteImport.update({
   id: '/identity',
   path: '/identity',
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/app/discover': typeof AppDiscoverRoute
   '/app/identity': typeof AppIdentityRoute
+  '/app/map': typeof AppMapRoute
   '/app/messages': typeof AppMessagesRoute
   '/app/premium': typeof AppPremiumRoute
   '/app/profile': typeof AppProfileRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/app/discover': typeof AppDiscoverRoute
   '/app/identity': typeof AppIdentityRoute
+  '/app/map': typeof AppMapRoute
   '/app/messages': typeof AppMessagesRoute
   '/app/premium': typeof AppPremiumRoute
   '/app/profile': typeof AppProfileRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/app/discover': typeof AppDiscoverRoute
   '/app/identity': typeof AppIdentityRoute
+  '/app/map': typeof AppMapRoute
   '/app/messages': typeof AppMessagesRoute
   '/app/premium': typeof AppPremiumRoute
   '/app/profile': typeof AppProfileRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/app/discover'
     | '/app/identity'
+    | '/app/map'
     | '/app/messages'
     | '/app/premium'
     | '/app/profile'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/app/discover'
     | '/app/identity'
+    | '/app/map'
     | '/app/messages'
     | '/app/premium'
     | '/app/profile'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/app/discover'
     | '/app/identity'
+    | '/app/map'
     | '/app/messages'
     | '/app/premium'
     | '/app/profile'
@@ -249,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMessagesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/map': {
+      id: '/app/map'
+      path: '/map'
+      fullPath: '/app/map'
+      preLoaderRoute: typeof AppMapRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/identity': {
       id: '/app/identity'
       path: '/identity'
@@ -269,6 +288,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppDiscoverRoute: typeof AppDiscoverRoute
   AppIdentityRoute: typeof AppIdentityRoute
+  AppMapRoute: typeof AppMapRoute
   AppMessagesRoute: typeof AppMessagesRoute
   AppPremiumRoute: typeof AppPremiumRoute
   AppProfileRoute: typeof AppProfileRoute
@@ -279,6 +299,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppDiscoverRoute: AppDiscoverRoute,
   AppIdentityRoute: AppIdentityRoute,
+  AppMapRoute: AppMapRoute,
   AppMessagesRoute: AppMessagesRoute,
   AppPremiumRoute: AppPremiumRoute,
   AppProfileRoute: AppProfileRoute,
